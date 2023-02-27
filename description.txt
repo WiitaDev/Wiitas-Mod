@@ -1,0 +1,23 @@
+!! This Mod Is Very VERY Early Access !!
+
+Wiita's Mod is a fairly cool mod that adds content to the base game
+The following stuff is:
+
+- Hamis from Noita :)
+- 4 new bows
+- 1 new summoner weapon
+- 2 new accessories
+
+< Developers >
+- Wiita (Main dev, programming, some art & everything else)
+- meganaisson (Main artist & has provided with ideas for stuff)
+
+Contact me on Discord if you have any questions or suggestions
+- JohnKnee#8273
+
+Changelog:
+0.1.1:
+- Added Galactic Bass Bow
+- Added Hamis :)
+- Fixed some balancing issues
+

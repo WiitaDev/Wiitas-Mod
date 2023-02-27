@@ -1,0 +1,4 @@
+displayName = Wiita's Mod
+author = Wiita
+version = 0.1.1
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, Old\*
