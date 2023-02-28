@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "WzfPDHOZcUfk9KW4uJ5eF1m03EKtmWic0YKeVGwK9cp7sJ+/HBEanBXXrsYuGy7P2H5SflZMWmEptL/4AYKTeA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Joni\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\WiitaMod\\WiitaMod.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Joni\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}
