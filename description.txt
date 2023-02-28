@@ -20,4 +20,3 @@ Changelog:
 - Added Galactic Bass Bow
 - Added Hamis :)
 - Fixed some balancing issues
-
