@@ -10,6 +10,7 @@ using Terraria.Graphics;
 namespace WiitaMod.Effects
 {
     [StructLayout(LayoutKind.Sequential, Size = 1)]
+    // THANK YOU SO MUCH "ThePaperLuigi" or "The-Stars-Above" FOR THIS CODE!!
 
     public struct SlashEffect
     {

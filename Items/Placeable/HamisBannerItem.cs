@@ -1,6 +1,6 @@
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent.Creative;
 using WiitaMod.Tiles;
 
 namespace WiitaMod.Items.Placeable

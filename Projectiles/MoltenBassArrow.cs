@@ -1,45 +1,45 @@
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace WiitaMod.Projectiles
 {
-	public class MoltenBassArrow : ModProjectile
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Molten Bass Arrow");
+    public class MoltenBassArrow : ModProjectile
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Molten Bass Arrow");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 25;    //The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;        //The recording mode
         }
 
-		public override void SetDefaults()
-		{
-			Projectile.width = 18;
-			Projectile.height = 16;
-			Projectile.DamageType = DamageClass.Ranged;
-			Projectile.aiStyle = 1;
-			Projectile.knockBack = 2f;
-			Projectile.tileCollide = true;
-			Projectile.penetrate = 1;
+        public override void SetDefaults()
+        {
+            Projectile.width = 18;
+            Projectile.height = 16;
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.aiStyle = 1;
+            Projectile.knockBack = 2f;
+            Projectile.tileCollide = true;
+            Projectile.penetrate = 1;
             Projectile.friendly = true;
-		}
+        }
 
-		public override void OnSpawn(IEntitySource source)
-		{
+        public override void OnSpawn(IEntitySource source)
+        {
             for (int i = 0; i < 5; i++)
             {
-                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Smoke, Projectile.velocity.X, Projectile.velocity.Y ,0, default(Color), 1f);
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Smoke, Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), 1f);
                 Main.dust[dustHit].scale = (float)Main.rand.Next(135, 160) * 0.013f;
                 Main.dust[dustHit].noGravity = true;
             }
         }
 
-		public override void AI()
-		{
+        public override void AI()
+        {
             Projectile.spriteDirection = Projectile.direction;
 
             if (Projectile.wet)
@@ -71,12 +71,12 @@ namespace WiitaMod.Projectiles
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
+        {
             target.AddBuff(BuffID.OnFire, 240);
         }
 
-		public override void Kill(int timeLeft)
-		{
+        public override void Kill(int timeLeft)
+        {
             Player Owner = Main.player[Projectile.owner];
             if (Main.myPlayer == Owner.whoAmI)
             {
@@ -92,7 +92,7 @@ namespace WiitaMod.Projectiles
                 Main.dust[dustHit].scale = (float)Main.rand.Next(135, 180) * 0.013f;
                 Main.dust[dustHit].noGravity = true;
             }
-            SoundEngine.PlaySound(SoundID.Item14.WithVolumeScale(0.75f).WithPitchOffset(0.1f), Projectile.Center) ;
+            SoundEngine.PlaySound(SoundID.Item14.WithVolumeScale(0.75f).WithPitchOffset(0.1f), Projectile.Center);
         }
-	}
+    }
 }

@@ -1,14 +1,10 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Buffs;
-using WiitaMod.Common;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Projectiles
 {
@@ -51,7 +47,7 @@ namespace WiitaMod.Projectiles
             {
                 Projectile.spriteDirection = -Projectile.direction;
             }
-            else 
+            else
             {
                 Projectile.spriteDirection = Projectile.direction;
             }

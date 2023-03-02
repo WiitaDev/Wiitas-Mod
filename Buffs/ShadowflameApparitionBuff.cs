@@ -1,12 +1,5 @@
-using Microsoft.Xna.Framework;
-using System;
-using Terraria.DataStructures;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using WiitaMod.Items;
-using static Terraria.ModLoader.PlayerDrawLayer;
 using WiitaMod.Projectiles;
 
 namespace WiitaMod.Buffs
@@ -36,4 +29,4 @@ namespace WiitaMod.Buffs
     }
 
 }
-    
+

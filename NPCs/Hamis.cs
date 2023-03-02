@@ -1,16 +1,12 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using WiitaMod.Tiles;
 using WiitaMod.Items.Placeable;
-using System;
-using tModPorter;
-using Steamworks;
-using System.Runtime.Intrinsics.X86;
 
 namespace WiitaMod.NPCs
 {
@@ -210,14 +206,14 @@ namespace WiitaMod.NPCs
                     {
                         NPC.frame.Y = (int)Frame.Idle5 * frameHeight;
                     }
-                    else if(AI_Timer > 10)
+                    else if (AI_Timer > 10)
                     {
                         NPC.frame.Y = (int)Frame.Idle3 * frameHeight;
                     }
 
                     break;
 
-                 case (float)ActionState.Jump:
+                case (float)ActionState.Jump:
                     NPC.frameCounter++;
 
                     if (NPC.frameCounter < 10)
@@ -232,7 +228,7 @@ namespace WiitaMod.NPCs
                     {
                         NPC.frame.Y = (int)Frame.Jump3 * frameHeight;
                     }
-                    else if(NPC.frameCounter < 40) 
+                    else if (NPC.frameCounter < 40)
                     {
                         AI_State = (float)ActionState.Fall;
                         AI_Timer = 0;
@@ -325,7 +321,7 @@ namespace WiitaMod.NPCs
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
             }
-            if(NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 800f && Main.player[NPC.target].Distance(NPC.Center) > 300f) 
+            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 800f && Main.player[NPC.target].Distance(NPC.Center) > 300f)
             {
                 AI_State = (float)ActionState.Run;
                 AI_Timer = 0;
@@ -342,7 +338,7 @@ namespace WiitaMod.NPCs
                 float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - 40f), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
                 NPC.velocity = new Vector2((float)((Math.Cos(rotation) * (7f + Main.rand.NextFloat(0, 2))) * -1), (float)((Math.Sin(rotation) * (7f + Main.rand.NextFloat(0, 2))) * -1));
             }
-            else if(AI_Timer == 1)
+            else if (AI_Timer == 1)
             {
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
                 float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - 160f), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
@@ -350,13 +346,13 @@ namespace WiitaMod.NPCs
             }
         }
 
-        private void Run() 
+        private void Run()
         {
             Player target = Main.player[NPC.target];
             NPC.TargetClosest(true);
             if (target.position.X < NPC.position.X && NPC.velocity.X > -5 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
             {
-                    NPC.velocity.X -= Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the left
+                NPC.velocity.X -= Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the left
             }
             else if (Main.player[NPC.target].Distance(NPC.Center) < 300f)
             {
@@ -367,7 +363,7 @@ namespace WiitaMod.NPCs
 
             if (target.position.X > NPC.position.X && NPC.velocity.X < 5 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
             {
-                    NPC.velocity.X += Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the right
+                NPC.velocity.X += Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the right
             }
             else if (Main.player[NPC.target].Distance(NPC.Center) < 300f)
             {

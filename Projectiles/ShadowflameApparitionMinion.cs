@@ -5,16 +5,15 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Buffs;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace WiitaMod.Projectiles
 {
-	public class ShadowflameApparitionMinion : ModProjectile
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Shadowflame Apparition");
-             // Denotes that this projectile is a pet or minion
+    public class ShadowflameApparitionMinion : ModProjectile
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Shadowflame Apparition");
+            // Denotes that this projectile is a pet or minion
             Main.projPet[Projectile.type] = true;
             // This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
@@ -25,18 +24,17 @@ namespace WiitaMod.Projectiles
 
         public ref float timer => ref Projectile.ai[0];
         public override void SetDefaults()
-		{
-			Projectile.width = 48;
-			Projectile.height = 38;
-			Projectile.DamageType = DamageClass.Summon;
-			Projectile.knockBack = 3f;
-			Projectile.tileCollide = false;
-			Projectile.ignoreWater = true;
-			Projectile.penetrate = -1;
+        {
+            Projectile.width = 48;
+            Projectile.height = 38;
+            Projectile.DamageType = DamageClass.Summon;
+            Projectile.knockBack = 3f;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
 
             Projectile.CloneDefaults(ProjectileID.Spazmamini);
             Projectile.aiStyle = 66;
-            Projectile.usesLocalNPCImmunity = false;
             Projectile.friendly = true;
             Projectile.minion = true;
             // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
@@ -65,7 +63,7 @@ namespace WiitaMod.Projectiles
 
         bool hasHitEnemy;
         public override void AI()
-		{
+        {
             Player player = Main.player[Projectile.owner];
 
             #region Active check
@@ -182,12 +180,12 @@ namespace WiitaMod.Projectiles
                 {
                     Projectile.velocity = new Vector2(10 * Projectile.direction, 0);
                 }
-                else if (timer <= 34 && timer >= 17) 
+                else if (timer <= 34 && timer >= 17)
                 {
                     Projectile.velocity.X *= 0.98f;
                     Projectile.velocity.Y -= 0.05f;
                 }
-                else if(timer <= 50 && timer >= 34)
+                else if (timer <= 50 && timer >= 34)
                 {
                     Projectile.velocity = new Vector2(Projectile.velocity.X, -7 * Projectile.direction) * Projectile.direction;
                 }
@@ -265,4 +263,4 @@ namespace WiitaMod.Projectiles
             #endregion
         }
     }
-} 
+}
