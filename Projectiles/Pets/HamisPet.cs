@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Systems;
 
-namespace WiitaMod.Projectiles
+namespace WiitaMod.Projectiles.Pets
 {
     public class HamisPet : ModProjectile
     {
@@ -11,7 +11,7 @@ namespace WiitaMod.Projectiles
         {
 
             //DrawOffsetX = -20;
-            DisplayName.SetDefault("Hamis Pet"); // Automatic from .lang files
+            DisplayName.SetDefault("Hamis Pet");
             Main.projFrames[Projectile.type] = 10;
 
             Main.projPet[Projectile.type] = true;
@@ -22,9 +22,9 @@ namespace WiitaMod.Projectiles
             Projectile.CloneDefaults(ProjectileID.MiniMinotaur);
             AIType = ProjectileID.MiniMinotaur;
             Projectile.width = 22;
-            Projectile.height = 20;
+            Projectile.height = 19; // the height is 1 pixel lower because otherwise it had a row of pixels visible on top of it. And this works fine...
             Projectile.scale = 1.5f;
-            //AnimationType = ProjectileID.BabyDino;
+            DrawOriginOffsetY = 4;
         }
 
         public override bool PreAI()
@@ -35,7 +35,6 @@ namespace WiitaMod.Projectiles
         }
         public override void AI()
         {
-            Projectile.velocity.X *= 1.00f;
             Player player = Main.player[Projectile.owner];
 
             if (player.dead)

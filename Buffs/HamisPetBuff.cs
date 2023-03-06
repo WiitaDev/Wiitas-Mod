@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles;
+using WiitaMod.Projectiles.Pets;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Buffs

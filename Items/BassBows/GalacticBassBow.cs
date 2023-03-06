@@ -4,19 +4,18 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles;
+using WiitaMod.Projectiles.BassArrows;
 
 namespace WiitaMod.Items.BassBows
 {
 	public class GalacticBassBow : ModItem
 	{
-		public int comboCounter = 0;
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Galactic Bass Bow");
-			Tooltip.SetDefault("Wooden arrows turn into Galactic Bass" +
-							 "\nWhen you hit an enemy with Galactic Bass, it creates a ring around the enemy" +
-							 "\nThe ring shoots outs Galactic Slashes that deal 75% damage of the weapon");
+			DisplayName.SetDefault("Cosmic Bass Bow");
+			Tooltip.SetDefault("Wooden arrows turn into Cosmic Bass" +
+							 "\nWhen you hit an enemy with Cosmic Bass, it creates a ring around the enemy" +
+							 "\nThe ring shoots outs Cosmic projectiles that deal 75% damage of the weapon");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
@@ -53,16 +52,17 @@ namespace WiitaMod.Items.BassBows
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			int Proj = 1;
-			Vector2 Offset = velocity.RotatedBy(MathHelper.ToRadians(3));
-			for (int i = 0; i < Proj; i++)
+            float numberProjectiles = 2; // 3 shots
+            float rotation = MathHelper.ToRadians(3);//Shoots them in a 3 degree radius.
+			int ProjAi = 0; // This flips the Arrows sprite direction in its code
+            position += Vector2.Normalize(velocity * 3f); //3 should equal whatever number you had on the previous line
+			for (int i = 0; i < numberProjectiles; i++)
 			{
-				if (Main.myPlayer == player.whoAmI)
-				{
-					Projectile.NewProjectile(source, position, Offset, type, damage, knockback, player.whoAmI, ai1: 100);
-				}
+				Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / numberProjectiles)); // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
+				Projectile.NewProjectile(Item.GetSource_FromThis(), position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, Main.myPlayer, ai1: ProjAi); //Creates a new projectile with our new vector for spread.
+				ProjAi = 100;
 			}
-			return true;
+            return false;
 		}
 
 		public override void HoldItem(Player player)

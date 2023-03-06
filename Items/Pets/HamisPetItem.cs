@@ -5,7 +5,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Buffs;
-using WiitaMod.Projectiles;
+using WiitaMod.Projectiles.Pets;
 
 namespace WiitaMod.Items.Pets
 {

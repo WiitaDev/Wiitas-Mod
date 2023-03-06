@@ -6,6 +6,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using WiitaMod.Items.Pets;
 using WiitaMod.Items.Placeable;
 
 namespace WiitaMod.NPCs
@@ -86,6 +87,7 @@ namespace WiitaMod.NPCs
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ItemID.Cobweb, 100, 1, 5)); // 50% chance to drop Cobweb
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<HamisPetItem>(), 1, 1));
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

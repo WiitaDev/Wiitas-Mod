@@ -6,14 +6,14 @@ using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WiitaMod.Projectiles
+namespace WiitaMod.Projectiles.BassArrows
 {
     public class GalacticSlash : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Projectile_{977}";
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Galactic slash");
+            DisplayName.SetDefault("Cosmic slash");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
@@ -38,9 +38,8 @@ namespace WiitaMod.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.PrincessWeapon, new ParticleOrchestraSettings
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.PrincessWeapon, new ParticleOrchestraSettings
             {
-
                 PositionInWorld = Projectile.Center,
                 MovementVector = Projectile.velocity
             });
@@ -48,17 +47,16 @@ namespace WiitaMod.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
             {
                 PositionInWorld = Projectile.Center,
-                MovementVector = Vector2.Zero
+                MovementVector = Vector2.Zero          
             });
         }
 
 
         public override void AI()
         {
-            Projectile.alpha = 255;
             Projectile.velocity *= 0.98f;
             if (Main.rand.NextBool(8))
             {
@@ -78,52 +76,5 @@ namespace WiitaMod.Projectiles
             return true;
         }
 
-    }
-
-    internal class TestingWeapon : ModItem
-    {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Muramasa}";
-
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Testing Weapon");
-            Tooltip.SetDefault("pls i just want to make cool things");
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-        }
-
-        public override void SetDefaults()
-        {
-            Item.autoReuse = true;
-            Item.useTurn = true;
-            Item.useStyle = 1;
-            Item.useTime = 18;
-            Item.useAnimation = 18;
-            Item.width = 40;
-            Item.height = 40;
-            Item.damage = 24;
-            Item.scale = 1f;
-            Item.UseSound = SoundID.Item1;
-            Item.rare = 2;
-            Item.value = Item.buyPrice(0, 1, 0, 0);
-            Item.knockBack = 3f;
-            Item.noMelee = false;
-            Item.DamageType = DamageClass.Melee;
-
-        }
-
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
-        {
-            if (Main.myPlayer == player.whoAmI)
-            {
-                Vector2 v = Main.rand.NextVector2CircularEdge(200f, 200f);
-                if (v.Y < 0f)
-                {
-                    v.Y *= -1f;
-                }
-                v.Y += 100f;
-                Vector2 vector = v.SafeNormalize(Vector2.UnitY) * 9f;
-                Projectile.NewProjectile(Item.GetSource_FromThis(), target.Center - vector * 20f, vector, ModContent.ProjectileType<GalacticSlash>(), (int)((double)damage * 0.75), 0f, Main.myPlayer, 0f, target.Center.Y);
-            }
-        }
     }
 }

@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles;
+using WiitaMod.Projectiles.BassArrows;
 
 namespace WiitaMod.Items.BassBows
 {

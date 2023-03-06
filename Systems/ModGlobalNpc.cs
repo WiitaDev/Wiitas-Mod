@@ -5,7 +5,8 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items;
-using WiitaMod.Projectiles;
+using WiitaMod.Items.CraftingMaterials;
+using WiitaMod.Projectiles.BassArrows;
 
 namespace WiitaMod.Systems
 {
@@ -13,7 +14,6 @@ namespace WiitaMod.Systems
     {
         public override bool InstancePerEntity => true;
 
-        public bool GalacticTargeting;
         public int GalacticBassBowDamage;
         public int GalacticSwipeTimer;
         public int GalacticDeBuffTimer = -1;
@@ -29,7 +29,6 @@ namespace WiitaMod.Systems
 
         public override void ResetEffects(NPC npc)
         {
-            GalacticTargeting = false;
         }
 
         public override void AI(NPC npc)
@@ -43,7 +42,6 @@ namespace WiitaMod.Systems
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
-
             if (GalacticDeBuffTimer > 0)
             {
                 NetMessage.SendData(MessageID.SyncNPC);
@@ -100,5 +98,18 @@ namespace WiitaMod.Systems
 
             npc.netUpdate = true;
         }
+        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        {
+            // This example does not use the AppliesToEntity hook, as such, we can handle multiple npcs here by using if statements.
+            if (type == NPCID.ArmsDealer && NPC.downedPlantBoss && Main.dayTime == false)
+            {
+                // Adding an item to a vanilla NPC is easy:
+                // This item sells for the normal price.
+                shop.item[nextSlot].SetDefaults(ModContent.ItemType<IllegalRocketLauncherParts>());
+                nextSlot++; // Don't forget this line, it is essential.
+            }
+
+        }
+
     }
 }
