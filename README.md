@@ -1,2 +1,4 @@
 # Wiitas-Mod
-A Terraria mod that I am making alone without much knowledge about C#
+Wiita's Mod is a basic content mod that adds some goofy stuff
+
+Im too lazy to write anything long here...
