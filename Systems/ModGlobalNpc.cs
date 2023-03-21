@@ -95,8 +95,6 @@ namespace WiitaMod.Systems
                     d2.noGravity = true;
                 }
             }
-
-            npc.netUpdate = true;
         }
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {

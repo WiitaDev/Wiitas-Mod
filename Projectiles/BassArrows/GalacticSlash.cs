@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -38,8 +37,9 @@ namespace WiitaMod.Projectiles.BassArrows
 
         public override void OnSpawn(IEntitySource source)
         {
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.PrincessWeapon, new ParticleOrchestraSettings
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.PrincessWeapon, new ParticleOrchestraSettings
             {
+
                 PositionInWorld = Projectile.Center,
                 MovementVector = Projectile.velocity
             });
@@ -47,14 +47,12 @@ namespace WiitaMod.Projectiles.BassArrows
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
             {
                 PositionInWorld = Projectile.Center,
-                MovementVector = Vector2.Zero          
+                MovementVector = Vector2.Zero
             });
         }
-
-
         public override void AI()
         {
             Projectile.velocity *= 0.98f;

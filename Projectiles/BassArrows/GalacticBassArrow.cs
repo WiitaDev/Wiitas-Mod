@@ -1,13 +1,10 @@
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using WiitaMod.Systems;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace WiitaMod.Projectiles.BassArrows
 {
