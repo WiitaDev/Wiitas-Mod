@@ -86,8 +86,8 @@ namespace WiitaMod.NPCs
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.Cobweb, 1, 1, 5)); // 100% chance to drop Cobweb
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<HamisPetItem>(), 100, 1));
+            npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1, 1)); // 100% chance to drop Gold Ore
+            npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 50)); // 1% chance to drop in normal mode and 2% in expert/master
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

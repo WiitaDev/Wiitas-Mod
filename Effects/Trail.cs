@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Terraria.Graphics.Shaders;
 using Terraria;
-using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace WiitaMod.Effects
 {
@@ -279,7 +278,7 @@ namespace WiitaMod.Effects
             return MathHelper.Lerp(0f, 32f, num);
         }
     }
-    public struct GalacticBassTrail 
+    public struct GalacticBassTrail
     {
         private static VertexStrip _vertexStrip = new VertexStrip();
 
@@ -733,7 +732,7 @@ namespace WiitaMod.Effects
         }
     }
 
-    public struct GreenTrail
+    public struct JungleBassLeafTrail
     {
         private static VertexStrip _vertexStrip = new VertexStrip();
 
@@ -750,7 +749,7 @@ namespace WiitaMod.Effects
 
         private Color StripColors(float progressOnStrip)
         {
-            Color value = Main.hslToRgb(.225f, .39f, 0.7f);
+            Color value = Main.hslToRgb(.120f, .100f, 0.251f);
             //Color result = Color.Lerp(Color.Black, value, Utils.GetLerpValue(-0.2f, 0.5f, progressOnStrip, clamped: true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
             Color result = Color.DarkGreen;
             result.A = 0;

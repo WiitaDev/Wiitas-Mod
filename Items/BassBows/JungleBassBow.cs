@@ -12,7 +12,9 @@ namespace WiitaMod.Items.BassBows
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Jungle Bass Bow");
-			Tooltip.SetDefault("Wooden arrows turn into spore bass that explode into spore clouds");
+			Tooltip.SetDefault("Wooden arrows turn into Leaf Bass" + 
+							 "\nThe Leaf Bass breaks into homing leaves" +
+							 "\nThe leaves ignore 50 enemy defense");
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
 
@@ -28,15 +30,15 @@ namespace WiitaMod.Items.BassBows
 			Item.scale = 1f;
 			Item.useTime = 26;
 			Item.useAnimation = 26;
-			Item.useStyle = 5;
+			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 1;
-			Item.value = 10000;
+			Item.value = Item.sellPrice(0, 1, 0, 0);
 			Item.rare = ItemRarityID.Blue;
 			Item.UseSound = SoundID.Item5;
 			Item.autoReuse = true;
 			Item.shoot = ProjectileID.WoodenArrowFriendly;
 			Item.useAmmo = AmmoID.Arrow;
-			Item.shootSpeed = 7f;
+			Item.shootSpeed = 8f;
 
 		}
 
@@ -52,8 +54,8 @@ namespace WiitaMod.Items.BassBows
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.Bass, 5);
-			recipe.AddIngredient(ItemID.JungleSpores, 16);
-			recipe.AddIngredient(ItemID.Stinger, 10);
+			recipe.AddIngredient(ItemID.JungleSpores, 12);
+			recipe.AddIngredient(ItemID.Stinger, 6);
 			recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}

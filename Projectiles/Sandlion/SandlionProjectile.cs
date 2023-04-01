@@ -55,13 +55,18 @@ namespace WiitaMod.Projectiles.Sandlion
 			}
             if (Main.myPlayer == Owner.whoAmI)
             {
-                for (int i = 0; i < Main.rand.Next(5, 9); i++)
+                for (int i = 0; i < Main.rand.Next(7, 11); i++)
 				{
 					Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Main.rand.NextVector2CircularEdge(1, 1), Main.rand.Next(61, 64), 1f);
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(5, 11) * -1), ProjectileID.SandBallFalling, Projectile.damage - Projectile.damage / 4, 5, Projectile.owner);
-				}
+                    int Projectile1 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(5, 11) * -1), ProjectileID.SandBallGun, Projectile.damage - Projectile.damage / 4, 5, Projectile.owner);
+					Main.projectile[Projectile1].ai[1] = 60f; // makes it so that the projectile falls down immitiadely
+					Main.projectile[Projectile1].friendly = true;
+					Main.projectile[Projectile1].hostile = false;
+                    Main.projectile[Projectile1].extraUpdates = 1;
+                }
 			}
 			SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
-		}
+            SoundEngine.PlaySound(SoundID.NPCDeath1.WithVolumeScale(0.75f), Projectile.Center);
+        }
 	}
 }

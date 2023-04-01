@@ -30,15 +30,13 @@ namespace WiitaMod.Projectiles
             Projectile.ignoreWater = true;          //Does the projectile's speed be influenced by water?
             Projectile.tileCollide = false;          //Can the projectile collide with tiles?
             AIType = ProjectileID.BulletHighVelocity;           //Act exactly like default Bullet
+            DrawOriginOffsetY = 175;
+            DrawOffsetX = 100;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                DrawOriginOffsetY = 175;
-                DrawOffsetX = 100;
-            }
+            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -90;
         }
 
         public override void AI()
@@ -56,7 +54,6 @@ namespace WiitaMod.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             SoundEngine.PlaySound(SoundID.Item37.WithPitchOffset(-1f), Projectile.Center);
-            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -90;
         }
     }
 
@@ -67,7 +64,7 @@ namespace WiitaMod.Projectiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Palladin's shield");
-            Tooltip.SetDefault("Make big palladin's shield that do damage :)\nThe palladin's shield deals 10% of the enemys health");
+            Tooltip.SetDefault("Make big palladin's shield that do damage :)\nThe palladin's shield deals 10% of the targets health");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -93,7 +90,8 @@ namespace WiitaMod.Projectiles
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.PaladinsShield, 1);
             recipe.AddIngredient(ItemID.PlatinumCoin, 100);
-            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddTile(TileID.TreeNymphButterflyJar);
+            recipe.AddTile(TileID.VoidMonolith);
             recipe.Register();
         }
     }

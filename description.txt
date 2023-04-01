@@ -1,7 +1,7 @@
 !! This Mod Is Very VERY Early Access!! 
    (Due To Some People Wanting Hamis)
 
-<!> Mostly Multiplayer Supported <!>
+<!> Partially Multiplayer Supported <!>
 
 Wiita's Mod is a fairly cool mod that adds content to the base game
 The following stuff is:
@@ -22,7 +22,8 @@ Contact me on Discord if you have any questions or suggestions
 Changelog:
 0.1.2:
 - Added Hamis pet :)
-- Added Sandlion Laucher 
+- Added Sandlion Launcher 
+- Reworked Spore Bass Bow
 
 0.1.1:
 - Added Galactic Bass Bow

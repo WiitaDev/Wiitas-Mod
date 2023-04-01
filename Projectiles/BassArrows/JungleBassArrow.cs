@@ -10,7 +10,7 @@ namespace WiitaMod.Projectiles.BassArrows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Spore Bass Arrow");
+			DisplayName.SetDefault("Leaf Bass Arrow");
 		}
 
 		public override void SetDefaults()
@@ -29,7 +29,7 @@ namespace WiitaMod.Projectiles.BassArrows
 		{
 			Projectile.spriteDirection = Projectile.direction;
 
-			int dust = Dust.NewDust(Projectile.Center, 1, 1, 40, 0f, 0f, 0, default(Color), 1f);
+			int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.JunglePlants, 0f, 0f, 0, default(Color), 1f);
 			Main.dust[dust].scale = (float)Main.rand.Next(100, 135) * 0.013f;
 			Main.dust[dust].noGravity = true;
 
@@ -45,9 +45,9 @@ namespace WiitaMod.Projectiles.BassArrows
 			Player Owner = Main.player[Projectile.owner];
 			if (Main.myPlayer == Owner.whoAmI)
 			{
-				for (int i = 0; i < Main.rand.Next(1, 4); i++)
+				for (int i = 0; i < Main.rand.Next(2, 4); i++)
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-2, 2)), ProjectileID.SporeCloud, Projectile.damage / 2, 0, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(-3, 4)), ModContent.ProjectileType<JungleBassLeaf>(), Projectile.damage / 3, 0, Main.myPlayer);
 				}
 			}
 

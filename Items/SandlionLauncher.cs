@@ -37,7 +37,7 @@ namespace WiitaMod.Items
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<SandlionProjectile>();
 			Item.useAmmo = ModContent.ItemType<SandlionAmmo>();
-			Item.shootSpeed = 8f;
+			Item.shootSpeed = 6f;
 
 		}
 

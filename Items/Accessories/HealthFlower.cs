@@ -20,7 +20,7 @@ namespace WiitaMod.Items.Accessories
 		public override void SetDefaults()
 		{
 			Item.accessory = true;
-			Item.value = Item.buyPrice(0, 1, 0, 0);
+			Item.value = Item.sellPrice(0, 1, 0, 0);
 			Item.rare = ItemRarityID.Orange;
 		}
 

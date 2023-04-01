@@ -37,7 +37,7 @@ namespace WiitaMod.Projectiles.BassArrows
 
         public override void OnSpawn(IEntitySource source)
         {
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.PrincessWeapon, new ParticleOrchestraSettings
+            ParticleOrchestrator.SpawnParticlesDirect(ParticleOrchestraType.PrincessWeapon, new ParticleOrchestraSettings
             {
 
                 PositionInWorld = Projectile.Center,
@@ -47,7 +47,7 @@ namespace WiitaMod.Projectiles.BassArrows
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
+            ParticleOrchestrator.SpawnParticlesDirect(ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
             {
                 PositionInWorld = Projectile.Center,
                 MovementVector = Vector2.Zero

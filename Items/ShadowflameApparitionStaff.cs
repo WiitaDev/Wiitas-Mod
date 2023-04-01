@@ -34,7 +34,7 @@ namespace WiitaMod.Items
             Item.knockBack = 4;
             Item.UseSound = SoundID.Item44;
             Item.rare = ItemRarityID.LightPurple;
-            Item.value = 30000;
+            Item.value = Item.sellPrice(0, 2, 0, 0);
             Item.buffType = ModContent.BuffType<ShadowflameApparitionBuff>();
             Item.shoot = ModContent.ProjectileType<ShadowflameApparitionMinion>();
 

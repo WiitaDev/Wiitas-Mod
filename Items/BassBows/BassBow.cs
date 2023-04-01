@@ -29,7 +29,7 @@ namespace WiitaMod.Items.BassBows
 			Item.useAnimation = 22;
 			Item.useStyle = 5;
 			Item.knockBack = 1;
-			Item.value = 10000;
+			Item.value = Item.sellPrice(0, 0, 20, 0);
 			Item.rare = ItemRarityID.Blue;
 			Item.UseSound = SoundID.Item5;
 			Item.autoReuse = true;

@@ -10,7 +10,6 @@ namespace WiitaMod.Projectiles.BassArrows
 {
     public class GalacticBassArrow : ModProjectile
     {
-        public NPC npcHit = Main.npc[1];
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cosmic Bass Arrow");
@@ -36,8 +35,6 @@ namespace WiitaMod.Projectiles.BassArrows
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.GetGlobalNPC<ModGlobalNPC>().GalacticBassBowDamage = Projectile.damage;
-            target.GetGlobalNPC<ModGlobalNPC>().GalacticDeBuffTimer = 180;
         }
 
         public override void AI()
