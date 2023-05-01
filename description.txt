@@ -1,13 +1,14 @@
 !! This Mod Is Very VERY Early Access!! 
    (Due To Some People Wanting Hamis)
 
-<!> Partially Multiplayer Supported <!>
+<!> Mostly Multiplayer Supported <!>
 
 Wiita's Mod is a fairly cool mod that adds content to the base game
 The following stuff is:
 
 - Hamis and a pet for it from Noita :) 
 - 4 new bows
+- 2 new Flamelasers
 - A post-plantera sandgun upgrade
 - 1 new summoner weapon
 - 2 new accessories
@@ -20,10 +21,15 @@ Contact me on Discord if you have any questions or suggestions
 - JohnKnee#8273
 
 Changelog:
+0.1.3:
+- Small change to Leaf Bass Bow
+- Added Corruption & Crimson Flamelasers
+- Changed Bass Bows to work with all arrows
+
 0.1.2:
 - Added Hamis pet :)
 - Added Sandlion Launcher 
-- Reworked Spore Bass Bow
+- Reworked Leaf Bass Bow
 
 0.1.1:
 - Added Galactic Bass Bow

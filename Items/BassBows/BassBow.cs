@@ -12,7 +12,7 @@ namespace WiitaMod.Items.BassBows
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Bass Bow");
-			Tooltip.SetDefault("Wooden arrows turn into bass");
+			Tooltip.SetDefault("Arrows turn into bass");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
@@ -27,7 +27,7 @@ namespace WiitaMod.Items.BassBows
 			Item.height = 50;
 			Item.useTime = 22;
 			Item.useAnimation = 22;
-			Item.useStyle = 5;
+			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 1;
 			Item.value = Item.sellPrice(0, 0, 20, 0);
 			Item.rare = ItemRarityID.Blue;
@@ -41,10 +41,7 @@ namespace WiitaMod.Items.BassBows
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
-			if (type == ProjectileID.WoodenArrowFriendly)
-			{
-				type = ModContent.ProjectileType<BassArrow>();
-			}
+			type = ModContent.ProjectileType<BassArrow>();
 		}
 
 		public override void AddRecipes()

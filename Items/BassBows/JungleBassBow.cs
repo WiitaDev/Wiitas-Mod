@@ -11,8 +11,8 @@ namespace WiitaMod.Items.BassBows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Jungle Bass Bow");
-			Tooltip.SetDefault("Wooden arrows turn into Leaf Bass" + 
+			DisplayName.SetDefault("Leaf Bass Bow");
+			Tooltip.SetDefault("Arrows turn into Leaf Bass" + 
 							 "\nThe Leaf Bass breaks into homing leaves" +
 							 "\nThe leaves ignore 50 enemy defense");
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -44,11 +44,8 @@ namespace WiitaMod.Items.BassBows
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
-			if (type == ProjectileID.WoodenArrowFriendly)
-			{
-				type = ModContent.ProjectileType<JungleBassArrow>();
-			}
-		}
+            type = ModContent.ProjectileType<JungleBassArrow>();
+        }
 
 		public override void AddRecipes()
 		{

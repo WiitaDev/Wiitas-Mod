@@ -1,10 +1,9 @@
 using Microsoft.Xna.Framework;
 using System;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
+using Terraria.Graphics.Effects;
 using WiitaMod.Projectiles.BassArrows;
 
 namespace WiitaMod.Systems
@@ -33,6 +32,8 @@ namespace WiitaMod.Systems
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
+
+
             float RingShake = (180 - GalacticDeBuffTimer) / 50;
             if (GalacticDeBuffTimer > 0)
             {
