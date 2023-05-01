@@ -4,7 +4,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WiitaMod.Projectiles.BassArrows
+namespace WiitaMod.Projectiles.Ranger.BassArrows
 {
 	public class JungleBassArrow : ModProjectile
 	{

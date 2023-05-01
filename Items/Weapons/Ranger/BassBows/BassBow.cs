@@ -3,9 +3,9 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles.BassArrows;
+using WiitaMod.Projectiles.Ranger.BassArrows;
 
-namespace WiitaMod.Items.BassBows
+namespace WiitaMod.Items.Weapons.Ranger.BassBows
 {
 	public class BassBow : ModItem
 	{

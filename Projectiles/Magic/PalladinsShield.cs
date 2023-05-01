@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Systems;
 
-namespace WiitaMod.Projectiles
+namespace WiitaMod.Projectiles.Magic
 {
     public class PalladinsShieldProjectile: ModProjectile
     {

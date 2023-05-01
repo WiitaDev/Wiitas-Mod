@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Buffs;
 
-namespace WiitaMod.Projectiles.Minions
+namespace WiitaMod.Projectiles.Summon
 {
     public class ShadowflameApparitionMinion : ModProjectile
     {

@@ -5,9 +5,9 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles;
+using WiitaMod.Projectiles.Ranger.Flamelasers;
 
-namespace WiitaMod.Items
+namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 {
 	public class CorruptionFlameLaser : ModItem
 	{

@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WiitaMod.Projectiles.Sandlion
+namespace WiitaMod.Projectiles.Ranger.Sandlion
 {
 	public class SandlionProjectile : ModProjectile
 	{

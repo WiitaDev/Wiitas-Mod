@@ -8,7 +8,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WiitaMod.Projectiles
+namespace WiitaMod.Projectiles.Ranger.Flamelasers
 {
     // The following laser shows a channeled ability, after charging up the laser will be fired
     // Using custom drawing, dust effects, and custom collision checks for tiles
