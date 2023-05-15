@@ -49,6 +49,8 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Ranged;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 5;
             Projectile.hide = true;
         }
 
@@ -106,8 +108,6 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
         // Set custom immunity time on hitting an NPC
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.immune[Projectile.owner] = 5;
-
             target.AddBuff(BuffID.Ichor, 180);
 
             Player player = Main.player[Projectile.owner];

@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles.Minions;
+using WiitaMod.Projectiles.Summon;
 
 namespace WiitaMod.Buffs
 {

@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -11,7 +14,6 @@ using WiitaMod.Items.Placeable;
 
 namespace WiitaMod.NPCs
 {
-    // Party Zombie is a pretty basic clone of a vanilla NPC. To learn how to further adapt vanilla NPC behaviors, see https://github.com/tModLoader/tModLoader/wiki/Advanced-Vanilla-Code-Adaption#example-npc-npc-clone-with-modified-projectile-hoplite
     public class Hamis : ModNPC
     {
         public override void SetStaticDefaults()
@@ -79,6 +81,7 @@ namespace WiitaMod.NPCs
             NPC.aiStyle = -1; // 3 = Fighter AI(zombie, etc.), -1 = custom AI
             NPC.scale = 1.5f;
             NPC.netAlways = true;
+            NPC.npcSlots = 0.5f;
 
             Banner = NPC.type; // Makes this NPC get affected by the normal zombie banner.
             BannerItem = ModContent.ItemType<HamisBannerItem>(); // Makes kills of this NPC go towards dropping the banner it's associated with.
@@ -86,15 +89,24 @@ namespace WiitaMod.NPCs
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1, 1)); // 100% chance to drop Gold Ore
+            npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1)); // 100% chance to drop Gold Ore
             npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 50)); // 1% chance to drop in normal mode and 2% in expert/master
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            return true;
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(0.4f), NPC.Center);
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnCondition.Cavern.Chance * 0.5f; // Spawn with 1/2 the chance of a regular zombie.
+            return SpawnCondition.Cavern.Chance * 0.75f; // Spawn with 3/4 the chance of a regular zombie.
         }
-
         public override int SpawnNPC(int tileX, int tileY)
         {
             return base.SpawnNPC(tileX, tileY);
@@ -135,6 +147,11 @@ namespace WiitaMod.NPCs
                 AI_State = (float)ActionState.Fall;
             }
 
+            int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
+            int tileY = (int)((NPC.position.Y + NPC.height - 1f) / 16f);
+
+            SlopeCheck(tileX, tileY);
+
             switch (AI_State)
             {
                 case (float)ActionState.Idle:
@@ -149,8 +166,16 @@ namespace WiitaMod.NPCs
                 case (float)ActionState.Fall:
                     if (NPC.velocity.Y == 0)
                     {
+                        if (Main.player[NPC.target].Distance(NPC.Center) < 64f)
+                        {
+                            AI_Timer = Main.rand.Next(30, 90) * -1;
+                        }
+                        else 
+                        {
+                            AI_Timer = 0;
+                        }
+
                         AI_State = (float)ActionState.Idle;
-                        AI_Timer = 0;
 
                         NPC.velocity.X = 0;
                     }
@@ -233,7 +258,6 @@ namespace WiitaMod.NPCs
                     else if (NPC.frameCounter < 40)
                     {
                         AI_State = (float)ActionState.Fall;
-                        AI_Timer = 0;
                     }
                     else
                     {
@@ -247,34 +271,35 @@ namespace WiitaMod.NPCs
 
                 case (float)ActionState.Run:
                     AI_Timer++;
+                    NPC.frameCounter++;
 
-                    if (AI_Timer < 10)
+                    if (NPC.frameCounter < 5)
                     {
                         NPC.frame.Y = (int)Frame.Run1 * frameHeight;
                     }
-                    else if (AI_Timer < 20)
+                    else if (NPC.frameCounter < 10)
                     {
                         NPC.frame.Y = (int)Frame.Run2 * frameHeight;
                     }
-                    else if (AI_Timer < 30)
+                    else if (NPC.frameCounter < 15)
                     {
                         NPC.frame.Y = (int)Frame.Run3 * frameHeight;
                     }
-                    else if (AI_Timer < 40)
+                    else if (NPC.frameCounter < 20)
                     {
                         NPC.frame.Y = (int)Frame.Run4 * frameHeight;
                     }
-                    else if (AI_Timer < 50)
+                    else if (NPC.frameCounter < 25)
                     {
                         NPC.frame.Y = (int)Frame.Run5 * frameHeight;
                     }
-                    else if (AI_Timer < 60)
+                    else if (NPC.frameCounter < 30)
                     {
                         NPC.frame.Y = (int)Frame.Run6 * frameHeight;
                     }
                     else
                     {
-                        AI_Timer = 0;
+                        NPC.frameCounter = 0;
                     }
 
                     break;
@@ -284,13 +309,18 @@ namespace WiitaMod.NPCs
 
         private void Notice()
         {
+            if(AI_Timer < 0) 
+            {
+                AI_State = (float)ActionState.Run;
+                return;
+            }
             // If the targeted player is in attack range (250).
             if (Main.player[NPC.target].Distance(NPC.Center) < 300f)
             {
                 // Here we use our Timer to wait .33 seconds before actually jumping. In FindFrame you'll notice AI_Timer also being used to animate the pre-jump crouch
                 AI_Timer++;
 
-                if (AI_Timer >= 40 && NPC.velocity.Y == 0)
+                if (AI_Timer >= Main.rand.Next(20,41) && NPC.velocity.Y == 0)
                 {
                     AI_State = (float)ActionState.Jump;
                     AI_Timer = 0;
@@ -317,34 +347,28 @@ namespace WiitaMod.NPCs
             NPC.TargetClosest(true);
 
             // Now we check the make sure the target is still valid and within our specified notice range (500)
-            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 300f)
+            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0)
             {
                 // Since we have a target in range, we change to the Notice state. (and zero out the Timer for good measure)
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
             }
-            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 800f && Main.player[NPC.target].Distance(NPC.Center) > 300f)
+            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 800f)
             {
                 AI_State = (float)ActionState.Run;
-                AI_Timer = 0;
             }
         }
         private void Jump()
         {
             AI_Timer++;
 
-            if (AI_Timer == 1 && Main.player[NPC.target].Distance(NPC.Center) < 160f)
+            if (AI_Timer == 1)
             {
                 // We apply an initial velocity the first tick we are in the Jump frame. Remember that -Y is up.
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
-                float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - 40f), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
-                NPC.velocity = new Vector2((float)((Math.Cos(rotation) * (7f + Main.rand.NextFloat(0, 2))) * -1), (float)((Math.Sin(rotation) * (7f + Main.rand.NextFloat(0, 2))) * -1));
-            }
-            else if (AI_Timer == 1)
-            {
-                Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
-                float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - 160f), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
-                NPC.velocity = new Vector2((float)((Math.Cos(rotation) * (7f + Main.rand.NextFloat(0, 2))) * -1), (float)((Math.Sin(rotation) * (7f + Main.rand.NextFloat(0, 2))) * -1));
+                float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - Main.player[NPC.target].Distance(NPC.Center)), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
+                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (7f + Main.rand.NextFloat(0, 2)) * -1), (float)(Math.Sin(rotation) * (7f + Main.rand.NextFloat(0, 2)) * -1));
+                SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f), NPC.Center);
             }
         }
 
@@ -352,34 +376,74 @@ namespace WiitaMod.NPCs
         {
             Player target = Main.player[NPC.target];
             NPC.TargetClosest(true);
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -5 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
+
+            if (target.position.X < NPC.position.X && NPC.velocity.X > -3 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
             {
                 NPC.velocity.X -= Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the left
             }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f)
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
-                AI_State = 0;
+                AI_Timer = 0;
             }
 
-            if (target.position.X > NPC.position.X && NPC.velocity.X < 5 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
+            if (target.position.X > NPC.position.X && NPC.velocity.X < 3 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
             {
                 NPC.velocity.X += Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the right
             }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f)
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
-                AI_State = 0;
+                AI_Timer = 0;
             }
             if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 800f)
             {
                 // Out targeted player seems to have left our range, so we'll go back to sleep.
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Idle;
-                AI_Timer = 0;
             }
         }
+        private void SlopeCheck(int tileX, int tileY)
+        {
+            if (NPC.velocity.Y >= 0f)
+            {
+                int num81 = 0;
+                if (NPC.velocity.X < 0f)
+                    num81 = -1;
+                if (NPC.velocity.X > 0f)
+                    num81 = 1;
+                Vector2 position3 = NPC.position;
+                position3.X += NPC.velocity.X;
+                if (tileX * 16 < position3.X + NPC.width && tileX * 16 + 16 > position3.X && (Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && !Main.tile[tileX, tileY - 1].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType] && !Main.tileSolidTop[Main.tile[tileX, tileY].TileType] || Main.tile[tileX, tileY - 1].IsHalfBlock && Main.tile[tileX, tileY - 1].HasUnactuatedTile) && (!Main.tile[tileX, tileY - 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 1].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 1].TileType] || Main.tile[tileX, tileY - 1].IsHalfBlock && (!Main.tile[tileX, tileY - 4].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 4].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 4].TileType])) && (!Main.tile[tileX, tileY - 2].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 2].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 2].TileType]) && (!Main.tile[tileX, tileY - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 3].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 3].TileType]) && (!Main.tile[tileX - num81, tileY - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX - num81, tileY - 3].TileType]))
+                {
+                    float num84 = tileY * 16;
+                    if (Main.tile[tileX, tileY].IsHalfBlock)
+                        num84 += 8f;
+                    if (Main.tile[tileX, tileY - 1].IsHalfBlock)
+                        num84 -= 8f;
+                    if (num84 < position3.Y + NPC.height)
+                    {
+                        float num85 = position3.Y + NPC.height - num84;
+                        float num86 = 16.1f;
+                        if (num85 <= num86)
+                        {
+                            NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
+                            NPC.position.Y = num84 - NPC.height;
+                            if (num85 < 9f)
+                            {
+                                NPC.stepSpeed = 1f;
+                            }
+                            else
+                            {
+                                NPC.stepSpeed = 2f;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

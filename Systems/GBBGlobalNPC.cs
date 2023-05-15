@@ -3,8 +3,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Graphics.Effects;
-using WiitaMod.Projectiles.BassArrows;
+using WiitaMod.Projectiles.Ranger.BassArrows;
 
 namespace WiitaMod.Systems
 {

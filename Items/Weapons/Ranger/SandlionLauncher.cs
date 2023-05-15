@@ -5,9 +5,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items.Ammo;
 using WiitaMod.Items.CraftingMaterials;
-using WiitaMod.Projectiles.Sandlion;
+using WiitaMod.Projectiles.Ranger.Sandlion;
 
-namespace WiitaMod.Items
+namespace WiitaMod.Items.Weapons.Ranger
 {
 	public class SandlionLauncher : ModItem
 	{

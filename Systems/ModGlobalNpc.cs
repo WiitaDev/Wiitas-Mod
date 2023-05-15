@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Items;
+using WiitaMod.Items.Weapons.Summon;
 using WiitaMod.Items.CraftingMaterials;
 
 namespace WiitaMod.Systems

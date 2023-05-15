@@ -22,9 +22,10 @@ Contact me on Discord if you have any questions or suggestions
 
 Changelog:
 0.1.3:
-- Small change to Leaf Bass Bow
+- Small changes to Leaf Bass Bow
 - Added Corruption & Crimson Flamelasers
 - Changed Bass Bows to work with all arrows
+- Improvements to Hamis
 
 0.1.2:
 - Added Hamis pet :)

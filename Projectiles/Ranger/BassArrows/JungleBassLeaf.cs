@@ -8,37 +8,38 @@ using Terraria.ModLoader;
 
 namespace WiitaMod.Projectiles.Ranger.BassArrows
 {
-	public class JungleBassLeaf : ModProjectile
-	{
+    public class JungleBassLeaf : ModProjectile
+    {
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.Leaf}";
         public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Bass Leaf");
-			Main.projFrames[Projectile.type] = 5;
+        {
+            DisplayName.SetDefault("Bass Leaf");
+            Main.projFrames[Projectile.type] = 5;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
 
-		public override void SetDefaults()
-		{
-			Projectile.width = 24;
-			Projectile.height = 14;
-			Projectile.DamageType = DamageClass.Ranged;
-			Projectile.aiStyle = 0;
-			Projectile.knockBack = 2f;
-			Projectile.tileCollide = false;
-			Projectile.penetrate = 1;
-            Projectile.ArmorPenetration = 50;
+        public override void SetDefaults()
+        {
+            Projectile.width = 24;
+            Projectile.height = 14;
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.aiStyle = 0;
+            Projectile.knockBack = 2f;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = 1;
+            Projectile.ArmorPenetration = 20;
             Projectile.CritChance = 0;
             Projectile.timeLeft = 240;
-			Projectile.friendly = true;
+            Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.scale = 1f;
-		}
+        }
 
-		public override void AI()
-		{
-			Projectile.spriteDirection = Projectile.direction;
+        float rotateby = 0.05f;
+        public override void AI()
+        {
+            Projectile.spriteDirection = Projectile.direction;
             Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction);
 
             int frameSpeed = 5;
@@ -54,33 +55,38 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             }
 
             Projectile.ai[0]++;
-			if (Projectile.ai[0] >= 90) 
-			{
+            if (Projectile.ai[0] >= 90)
+            {
                 float maxDetectRadius = 400f; // The maximum radius at which a projectile can detect a target
-                float projSpeed = 12f; // The speed at which the projectile moves towards the target
+                float projSpeed = 5f; // The speed at which the projectile moves towards the target
                 Projectile.friendly = true;
 
                 // Trying to find NPC closest to the projectile
                 NPC closestNPC = FindClosestNPC(maxDetectRadius);
-                if (closestNPC == null) 
+                if (closestNPC == null)
                 {
                     Projectile.timeLeft -= 10;
                     return;
                 }
                 // If found, change the velocity of the projectile and turn it in the direction of the target
                 // Use the SafeNormalize extension method to avoid NaNs returned by Vector2.Normalize when the vector is zero
-                Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * projSpeed;
+                Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * projSpeed * (Projectile.ai[0] / 50);
                 Projectile.rotation = Projectile.velocity.ToRotation();
             }
             else
             {
                 Projectile.velocity *= 0.95f;
                 Projectile.scale += 0.05f;
-                if(Projectile.scale >= 1f) 
+                if (Projectile.scale >= 1f)
                 {
                     Projectile.scale = 1f;
                 }
                 Projectile.friendly = false;
+                if (Projectile.velocity != Vector2.Zero)
+                {
+                    rotateby *= 0.98f;
+                    Projectile.velocity = Projectile.velocity.RotatedBy(rotateby);
+                }
             }
         }
 
@@ -120,11 +126,15 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-		}
+        {
+        }
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 0f;
+            if (Main.rand.NextBool(2))
+            {
+                rotateby *= -1;
+            }
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
@@ -132,15 +142,15 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         }
 
         public override void Kill(int timeLeft)
-		{
-			for (int i = 0; i < 5; i++)
-			{
-				int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Grass, (Main.rand.Next(-2, 3)), (Main.rand.Next(-2, 3)), 0, default(Color), 1f);
-				Main.dust[dustHit].scale = (float)Main.rand.Next(135, 160) * 0.013f;
-				Main.dust[dustHit].noGravity = true;
-			}
-			SoundEngine.PlaySound(SoundID.Grass.WithVolumeScale(0.75f).WithPitchOffset(-0.75f), Projectile.Center);
-		}
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Grass, (Main.rand.Next(-2, 3)), (Main.rand.Next(-2, 3)), 0, default(Color), 1f);
+                Main.dust[dustHit].scale = (float)Main.rand.Next(135, 160) * 0.013f;
+                Main.dust[dustHit].noGravity = true;
+            }
+            SoundEngine.PlaySound(SoundID.Grass.WithVolumeScale(0.75f).WithPitchOffset(-0.75f), Projectile.Center);
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             float maxDetectRadius = 400f;

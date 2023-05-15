@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles.Sandlion;
+using WiitaMod.Projectiles.Ranger.Sandlion;
 
 namespace WiitaMod.Items.Ammo
 {
