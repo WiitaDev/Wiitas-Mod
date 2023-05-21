@@ -11,8 +11,8 @@ namespace WiitaMod.Items.CraftingMaterials
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Illegal Rocket Launcher Parts");
-			Tooltip.SetDefault("'Banned everywhere'");
+			// DisplayName.SetDefault("Illegal Rocket Launcher Parts");
+			// Tooltip.SetDefault("'Banned everywhere'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 

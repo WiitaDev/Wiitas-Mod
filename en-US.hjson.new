@@ -1,0 +1,149 @@
+
+Mods: {
+	WiitaMod: {
+		Buffs: {
+			HamisPetBuff: {
+				DisplayName: Hamis
+				Description: The Hamis is friendly :)
+			}
+
+			ShadowflameApparitionBuff: {
+				DisplayName: Shadowflame Apparition
+				Description: The Shadow Apparition will fight for you
+			}
+		}
+
+		Items: {
+			HealthFlower: {
+				DisplayName: Health Flower
+				Tooltip:
+					'''
+					Automatically use healing potions when taking lethal damage to prevent death
+					Or when your health is under 50% & you take damage from an enemy
+					'''
+			}
+
+			PhilosophersNecklace: {
+				DisplayName: Philosopher's Necklace
+				Tooltip:
+					'''
+					Reduces the cooldown of healing potions by 25%
+					Increases length of invincibility after taking damage
+					'''
+			}
+
+			SandlionAmmo: {
+				DisplayName: Sandlion
+				Tooltip: "'I wonder if i can shoot this...'"
+			}
+
+			IllegalRocketLauncherParts: {
+				DisplayName: Illegal Rocket Launcher Parts
+				Tooltip: "'Banned everywhere'"
+			}
+
+			HamisPetItem: {
+				DisplayName: Chilly Egg
+				Tooltip: Summons a Hamis
+			}
+
+			HamisBannerItem: {
+				DisplayName: Hamis Banner
+				Tooltip: Nearby players get a bonus against: Hamis
+			}
+
+			BassBow: {
+				DisplayName: Bass Bow
+				Tooltip: Arrows turn into bass
+			}
+
+			GalacticBassBow: {
+				DisplayName: Cosmic Bass Bow
+				Tooltip:
+					'''
+					Arrows turn into Cosmic Bass
+					When you hit an enemy with Cosmic Bass, it creates a ring around the enemy
+					The ring shoots outs Cosmic projectiles that deal 75% damage of the weapon
+					'''
+			}
+
+			JungleBassBow: {
+				DisplayName: Leaf Bass Bow
+				Tooltip:
+					'''
+					Arrows turn into Leaf Bass
+					The Leaf Bass breaks into homing leaves
+					The leaves ignore 20 enemy defense
+					'''
+			}
+
+			MoltenBassBow: {
+				DisplayName: Molten Bass Bow
+				Tooltip:
+					'''
+					Arrows turn into Molten Bass that explode spreading fire
+					The Molten Bass gets extinguished when touching water
+					'''
+			}
+
+			CorruptionFlameLaser: {
+				DisplayName: Cursed Flamelaser
+				Tooltip:
+					'''
+					Uses gel for ammo
+					'Is it a Flamethrower or a Laser?'
+					'Stronger but more Sluggish!'
+					'''
+			}
+
+			CrimsonFlameLaser: {
+				DisplayName: Bloody Flamelaser
+				Tooltip:
+					'''
+					Uses gel for ammo
+					'Is it a Flamethrower or a Laser?'
+					'Weaker but more Agile!'
+					'''
+			}
+
+			SandlionLauncher: {
+				DisplayName: Sandlion Launcher
+				Tooltip: "'This is an amazing idea!'"
+			}
+
+			ShadowflameApparitionStaff: {
+				DisplayName: Shadowflame Apparition Staff
+				Tooltip: Summons a shadowflame apparition to fight for you
+			}
+
+			PalladinsShield: {
+				DisplayName: Palladin's shield
+				Tooltip:
+					'''
+					Make big palladin's shield that do damage :)
+					The palladin's shield deals 10% of the targets health
+					'''
+			}
+		}
+
+		NPCs.Hamis.DisplayName: Hamis
+
+		Projectiles: {
+			PalladinsShieldProjectile.DisplayName: Palladin's shield
+			HamisPet.DisplayName: Hamis Pet
+			BassArrow.DisplayName: Bass Arrow
+			GalacticBassArrow.DisplayName: Cosmic Bass Arrow
+			GalacticSlash.DisplayName: Cosmic slash
+			JungleBassArrow.DisplayName: Leaf Bass Arrow
+			JungleBassLeaf.DisplayName: Bass Leaf
+			MoltenBassArrow.DisplayName: Molten Bass Arrow
+			RockyMoltenBassArrow.DisplayName: Rocky Molten Bass Arrow
+			CorruptionFlameLaserlaser.DisplayName: Corruption Flame Laserlaser
+			CrimsonFlameLaserlaser.DisplayName: Crimson Flame Laserlaser
+			SandlionProjectile.DisplayName: Sandlion Rocket
+			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
+		}
+
+		Tiles.HamisBanner.MapEntry: Banner
+	}
+}

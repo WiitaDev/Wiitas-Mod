@@ -11,7 +11,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Molten Bass Arrow");
+            // DisplayName.SetDefault("Molten Bass Arrow");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;    //The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;        //The recording mode
         }
@@ -70,7 +70,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             return true;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 240);
         }

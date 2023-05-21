@@ -13,7 +13,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.Leaf}";
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bass Leaf");
+            // DisplayName.SetDefault("Bass Leaf");
             Main.projFrames[Projectile.type] = 5;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
@@ -35,7 +35,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             Projectile.hostile = false;
             Projectile.scale = 1f;
         }
-
         float rotateby = 0.05f;
         public override void AI()
         {
@@ -125,7 +124,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             return closestNPC;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
         }
         public override void OnSpawn(IEntitySource source)
@@ -136,9 +135,9 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
                 rotateby *= -1;
             }
         }
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            crit = false;
+            modifiers.DisableCrit();
         }
 
         public override void Kill(int timeLeft)

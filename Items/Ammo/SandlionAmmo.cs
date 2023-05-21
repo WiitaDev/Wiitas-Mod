@@ -11,8 +11,8 @@ namespace WiitaMod.Items.Ammo
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Sandlion");
-			Tooltip.SetDefault("'I wonder if i can shoot this...'");
+			// DisplayName.SetDefault("Sandlion");
+			// Tooltip.SetDefault("'I wonder if i can shoot this...'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
 

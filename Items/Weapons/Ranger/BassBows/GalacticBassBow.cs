@@ -12,10 +12,10 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Cosmic Bass Bow");
-			Tooltip.SetDefault("Arrows turn into Cosmic Bass" +
+			// DisplayName.SetDefault("Cosmic Bass Bow");
+			/* Tooltip.SetDefault("Arrows turn into Cosmic Bass" +
 							 "\nWhen you hit an enemy with Cosmic Bass, it creates a ring around the enemy" +
-							 "\nThe ring shoots outs Cosmic projectiles that deal 75% damage of the weapon");
+							 "\nThe ring shoots outs Cosmic projectiles that deal 75% damage of the weapon"); */
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 

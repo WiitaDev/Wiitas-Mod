@@ -11,7 +11,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bass Arrow");
+			// DisplayName.SetDefault("Bass Arrow");
 		}
 
 		public override void SetDefaults()
@@ -43,7 +43,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			for (int i = 0; i < 5; i++)
 			{

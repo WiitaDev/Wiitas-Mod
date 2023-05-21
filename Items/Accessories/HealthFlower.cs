@@ -10,9 +10,9 @@ namespace WiitaMod.Items.Accessories
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Health Flower");
-			Tooltip.SetDefault("Automatically use healing potions when taking lethal damage to prevent death" +
-							 "\nOr when your health is under 50% & you take damage from an enemy");
+			// DisplayName.SetDefault("Health Flower");
+			/* Tooltip.SetDefault("Automatically use healing potions when taking lethal damage to prevent death" +
+							 "\nOr when your health is under 50% & you take damage from an enemy"); */
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 		}

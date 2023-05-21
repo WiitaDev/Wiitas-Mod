@@ -27,8 +27,8 @@ namespace WiitaMod.Tiles
             TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.SolidBottom, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.StyleWrapLimit = 111;
             TileObjectData.addTile(Type);
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Banner");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Banner");
             AddMapEntry(new Color(13, 88, 130), name);
             TileID.Sets.DisableSmartCursor[Type] = true;
         }

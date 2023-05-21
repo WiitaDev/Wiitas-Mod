@@ -14,7 +14,7 @@ namespace WiitaMod.Projectiles.Magic
         public override string Texture => $"Terraria/Images/Item_{ItemID.PaladinsShield}";
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Palladin's shield");     //The English name of the projectile
+            // DisplayName.SetDefault("Palladin's shield");     //The English name of the projectile
         }
 
         public override void SetDefaults()
@@ -44,14 +44,13 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction);
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = target.lifeMax / 10;
-            crit = false;
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
-        }
+            modifiers.FinalDamage += (target.lifeMax / 10) - 1;
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+            base.ModifyHitNPC(target, ref modifiers);
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             SoundEngine.PlaySound(SoundID.Item37.WithPitchOffset(-1f), Projectile.Center);
         }
@@ -63,8 +62,8 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Palladin's shield");
-            Tooltip.SetDefault("Make big palladin's shield that do damage :)\nThe palladin's shield deals 10% of the targets health");
+            // DisplayName.SetDefault("Palladin's shield");
+            // Tooltip.SetDefault("Make big palladin's shield that do damage :)\nThe palladin's shield deals 10% of the targets health");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

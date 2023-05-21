@@ -13,8 +13,8 @@ namespace WiitaMod.Items.Pets
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Chilly Egg");
-            Tooltip.SetDefault("Summons a Hamis");
+            // DisplayName.SetDefault("Chilly Egg");
+            // Tooltip.SetDefault("Summons a Hamis");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
         }

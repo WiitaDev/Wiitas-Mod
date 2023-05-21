@@ -11,7 +11,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Rocky Molten Bass Arrow");
+			// DisplayName.SetDefault("Rocky Molten Bass Arrow");
 		}
 
 		public override void SetDefaults()

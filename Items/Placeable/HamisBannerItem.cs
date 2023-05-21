@@ -9,8 +9,8 @@ namespace WiitaMod.Items.Placeable
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamis Banner");
-            Tooltip.SetDefault("Nearby players get a bonus against: Hamis");
+            // DisplayName.SetDefault("Hamis Banner");
+            // Tooltip.SetDefault("Nearby players get a bonus against: Hamis");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

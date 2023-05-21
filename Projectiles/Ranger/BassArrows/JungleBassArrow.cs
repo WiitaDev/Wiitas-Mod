@@ -10,7 +10,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Leaf Bass Arrow");
+			// DisplayName.SetDefault("Leaf Bass Arrow");
 		}
 
 		public override void SetDefaults()
@@ -35,7 +35,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Poisoned, 240);
 		}

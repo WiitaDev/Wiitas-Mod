@@ -21,7 +21,7 @@ namespace WiitaMod
         }
 
         [System.Obsolete]
-        public override void AddRecipeGroups()
+        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
         {
             RecipeGroup group = new RecipeGroup(() => Lang.misc[37] + " Mythril Bar", new int[]
             {

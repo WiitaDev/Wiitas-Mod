@@ -14,10 +14,10 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bloody Flamelaser");
-			Tooltip.SetDefault("Uses gel for ammo\n"
+			// DisplayName.SetDefault("Bloody Flamelaser");
+			/* Tooltip.SetDefault("Uses gel for ammo\n"
                              + "'Is it a Flamethrower or a Laser?'\n"
-                             + "'Weaker but more Agile!'");
+                             + "'Weaker but more Agile!'"); */
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 		}

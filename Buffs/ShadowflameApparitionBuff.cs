@@ -8,8 +8,8 @@ namespace WiitaMod.Buffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadowflame Apparition");
-            Description.SetDefault("The Shadow Apparition will fight for you");
+            // DisplayName.SetDefault("Shadowflame Apparition");
+            // Description.SetDefault("The Shadow Apparition will fight for you");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

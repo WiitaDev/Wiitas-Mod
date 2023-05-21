@@ -13,8 +13,8 @@ namespace WiitaMod.Items.Weapons.Ranger
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Sandlion Launcher");
-			Tooltip.SetDefault("'This is an amazing idea!'");
+			// DisplayName.SetDefault("Sandlion Launcher");
+			// Tooltip.SetDefault("'This is an amazing idea!'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 

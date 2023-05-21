@@ -97,7 +97,7 @@ namespace WiitaMod.NPCs
             return true;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(Main.rand.NextFloat(0.25f, 0.50f)), NPC.Center);
         }

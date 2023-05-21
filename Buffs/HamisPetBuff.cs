@@ -9,8 +9,8 @@ namespace WiitaMod.Buffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamis");
-            Description.SetDefault("The Hamis is friendly :)");
+            // DisplayName.SetDefault("Hamis");
+            // Description.SetDefault("The Hamis is friendly :)");
             Main.buffNoTimeDisplay[Type] = true;
             Main.vanityPet[Type] = true;
         }

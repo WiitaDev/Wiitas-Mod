@@ -69,11 +69,7 @@ namespace WiitaMod.Systems
                 flamesShot = 0;
             }
         }
-
-        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
-        {
-        }
-        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        public override void OnHurt(Player.HurtInfo info)
         {
             if (Player.statLife <= Player.statLifeMax2 / 2 && HealthFlowerEquipped && Player.HasBuff(BuffID.PotionSickness) != true)
             {
@@ -120,7 +116,7 @@ namespace WiitaMod.Systems
 
         // Vanilla applies immunity time before this method and after PreHurt and Hurt
         // Therefore, we should apply our immunity time increment here
-        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        public override void PostHurt(Player.HurtInfo info)
         {
             // Different cooldownCounter values mean different damage types taken and different cooldown slots
             // We should apply our immunity time to the correct cooldown slot
@@ -135,10 +131,10 @@ namespace WiitaMod.Systems
             if (!PhilosophersNecklaceEquipped)
                 return;
 
-            if (!pvp)
+            if (!info.PvP)
             {
                 Player.longInvince = true; //longInvince so that other accessories dont stack (this doesn't even work lol)
-                Player.AddImmuneTime(cooldownCounter, 30);
+                Player.AddImmuneTime(info.CooldownCounter, 30);
             }
 
         }

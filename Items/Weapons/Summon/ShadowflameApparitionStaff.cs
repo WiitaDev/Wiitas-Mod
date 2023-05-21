@@ -13,8 +13,8 @@ namespace WiitaMod.Items.Weapons.Summon
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadowflame Apparition Staff"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("Summons a shadowflame apparition to fight for you");
+            // DisplayName.SetDefault("Shadowflame Apparition Staff"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
+            // Tooltip.SetDefault("Summons a shadowflame apparition to fight for you");
 
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }

@@ -12,7 +12,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         public override string Texture => $"Terraria/Images/Projectile_{977}";
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cosmic slash");
+            // DisplayName.SetDefault("Cosmic slash");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
@@ -45,7 +45,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             });
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             ParticleOrchestrator.SpawnParticlesDirect(ParticleOrchestraType.StardustPunch, new ParticleOrchestraSettings
             {

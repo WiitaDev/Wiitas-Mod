@@ -11,8 +11,8 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bass Bow");
-			Tooltip.SetDefault("Arrows turn into bass");
+			// DisplayName.SetDefault("Bass Bow");
+			// Tooltip.SetDefault("Arrows turn into bass");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
@@ -50,7 +50,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			recipe.AddIngredient(ItemID.Bass, 5);
 			recipe.AddIngredient(ItemID.WoodenBow, 1);
 			recipe.AddTile(TileID.WorkBenches);
-			recipe.AddCondition(Recipe.Condition.NearWater);
+			recipe.AddCondition(Condition.NearWater);
 			recipe.Register();
 		}
 

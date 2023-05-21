@@ -11,7 +11,7 @@ namespace WiitaMod.Projectiles.Pets
         {
 
             //DrawOffsetX = -20;
-            DisplayName.SetDefault("Hamis Pet");
+            // DisplayName.SetDefault("Hamis Pet");
             Main.projFrames[Projectile.type] = 10;
 
             Main.projPet[Projectile.type] = true;

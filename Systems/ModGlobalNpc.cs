@@ -19,18 +19,23 @@ namespace WiitaMod.Systems
             }
         }
 
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
         {
-            // This example does not use the AppliesToEntity hook, as such, we can handle multiple npcs here by using if statements.
-            if (type == NPCID.ArmsDealer && NPC.downedPlantBoss && Main.dayTime == false)
+
+
+        }
+        public override void ModifyShop(NPCShop shop)
+        {
+            if (shop.NpcType == NPCID.ArmsDealer)
             {
-                // Adding an item to a vanilla NPC is easy:
-                // This item sells for the normal price.
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<IllegalRocketLauncherParts>());
-                nextSlot++; // Don't forget this line, it is essential.
+                shop.Add(new Item(ModContent.ItemType<IllegalRocketLauncherParts>())
+                {
+                    //add custom stuff here exmple "shopCustomPrice = 2"
+                });
             }
 
         }
+
 
     }
 }
