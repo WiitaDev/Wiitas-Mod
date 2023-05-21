@@ -1,4 +1,5 @@
 # Wiitas-Mod
-Wiita's Mod is a basic content mod that adds some goofy stuff
+Wiita's mod has a github due to me having to devices to work the mod on
 
-Im too lazy to write anything long here...
+Feel free to utilize any code i have made (With credit ofc)
+even tho most of my code is absolute ass and doesn't even work
