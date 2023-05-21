@@ -52,6 +52,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             Projectile.usesIDStaticNPCImmunity = true;
             Projectile.idStaticNPCHitCooldown = 7;
             Projectile.hide = true;
+            Projectile.timeLeft = 300;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -60,7 +61,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             if (IsAtMaxCharge)
             {
                 DrawLaser(Main.spriteBatch, (Texture2D)TextureAssets.Projectile[Projectile.type], Main.player[Projectile.owner].Center,
-                    Projectile.velocity, 10, Projectile.damage, -1.57f, LaserSize, 1000f, Color.White, (int)MOVE_DISTANCE);
+                    Projectile.velocity, 10, Projectile.damage, -1.57f, 0.75f, 1000f, Color.White, (int)MOVE_DISTANCE);
             }
             return false;
         }
@@ -70,6 +71,8 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
         public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 unit, float step, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50)
         {
             float r = unit.ToRotation() + rotation;
+            scale = LaserSize;
+            step = LaserSize;
 
             // Draws the laser 'body'
             for (float i = transDist; i <= Distance; i += step)
@@ -125,7 +128,6 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
         {
             Player player = Main.player[Projectile.owner];
             Projectile.position = player.Center + Projectile.velocity * MOVE_DISTANCE;
-            Projectile.timeLeft = 2;
 
             // By separating large AI into methods it becomes very easy to see the flow of the AI in a broader sense
             // First we update player variables that are needed to channel the laser
@@ -167,7 +169,8 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
                 {
                     if (Main.myPlayer == player.whoAmI)
                     {
-                        Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)) + Projectile.velocity * 3, ProjectileID.CursedDartFlame, Projectile.damage, 0, Main.myPlayer);
+                        Projectile flameBall = Main.projectile[Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)) + Projectile.velocity * 3, ProjectileID.CursedDartFlame, Projectile.damage, 0, Main.myPlayer)];
+                        flameBall.scale = 0.1f;
                         SoundEngine.PlaySound(SoundID.Item20, player.Center);
                     }
                 }
@@ -297,6 +300,27 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
             Vector2 unit = Projectile.velocity;
             Utils.PlotTileLine(Projectile.Center, Projectile.Center + unit * Distance, (Projectile.width + 10) * Projectile.scale, DelegateMethods.CutTiles);
+        }
+        public override void Kill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+
+            if (Charge < MAX_CHARGE) return;
+
+            SoundEngine.PlaySound(SoundID.Item93.WithPitchOffset(-0.35f).WithVolumeScale(0.5f), player.Center);
+            SoundEngine.PlaySound(SoundID.Item105.WithPitchOffset(-0.33f), player.Center);
+
+            Vector2 offset = Projectile.velocity;
+            offset *= MOVE_DISTANCE - 20;
+            Vector2 pos = player.Center + offset - new Vector2(10, 10);
+
+            for (int i = 0; i < 30; i++)
+            {
+                Dust dust = Main.dust[Dust.NewDust(pos, 8, 8, DustID.FireworkFountain_Green, 0, 0, 100, new Color(), 1.25f)];
+                dust.noGravity = true;
+                dust.velocity *= Main.rand.Next(10, 21) * 0.1f;
+            }
+            player.channel = false;
         }
     }
 }

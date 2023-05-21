@@ -100,7 +100,7 @@ namespace WiitaMod.NPCs
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(0.4f), NPC.Center);
+            SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(Main.rand.NextFloat(0.40f, 0.60f)), NPC.Center);
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -126,12 +126,12 @@ namespace WiitaMod.NPCs
 
         public override void OnKill()
         {
-            for (int i = 0; i < Main.rand.Next(2, 4); i++)
+            for (int i = 0; i < Main.rand.Next(3, 5); i++)
             {
                 Vector2 GoreSpeed = new Vector2(Main.rand.NextFloat(0f, 2f), Main.rand.NextFloat(0f, 2f));
                 Gore.NewGore(NPC.GetSource_Death(), NPC.position, GoreSpeed, Main.rand.Next(135, 137), 0.75f);
             }
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.Blood, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f), 0, default, 0.75f);
             }
@@ -368,7 +368,7 @@ namespace WiitaMod.NPCs
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
                 float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - Main.player[NPC.target].Distance(NPC.Center)), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
                 NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (7f + Main.rand.NextFloat(0, 2)) * -1), (float)(Math.Sin(rotation) * (7f + Main.rand.NextFloat(0, 2)) * -1));
-                SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f), NPC.Center);
+                SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(0.80f, 1f)), NPC.Center);
             }
         }
 
