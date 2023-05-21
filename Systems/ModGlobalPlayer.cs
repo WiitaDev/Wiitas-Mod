@@ -4,7 +4,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
 using Terraria.Graphics.Effects;
 
 namespace WiitaMod.Systems
@@ -19,6 +18,7 @@ namespace WiitaMod.Systems
         public bool HamisPetEquipped;
 
         //Weapons
+        public int flamesShot = 0;
 
         //Screenshake
         public int screenShakeTimerGlobal = -1000;
@@ -63,6 +63,11 @@ namespace WiitaMod.Systems
 
             }
             shockwaveProgress++;
+
+            if(Player.channel == false) 
+            {
+                flamesShot = 0;
+            }
         }
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)

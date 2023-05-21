@@ -52,7 +52,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             Projectile.usesIDStaticNPCImmunity = true;
             Projectile.idStaticNPCHitCooldown = 7;
             Projectile.hide = true;
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 360;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -118,7 +118,8 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             {
                 if (Main.rand.NextBool(10))
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(2, 6) * -1), ProjectileID.CursedFlameFriendly, Projectile.damage / 3, 0, Main.myPlayer);
+                    int flameBall = Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(2, 6) * -1), ProjectileID.CursedFlameFriendly, Projectile.damage / 3, 0, Main.myPlayer);
+                    Main.projectile[flameBall].scale = 0.8f;
                 }
             }
         }
@@ -169,13 +170,22 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
                 {
                     if (Main.myPlayer == player.whoAmI)
                     {
-                        Projectile flameBall = Main.projectile[Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)) + Projectile.velocity * 3, ProjectileID.CursedDartFlame, Projectile.damage, 0, Main.myPlayer)];
-                        flameBall.scale = 0.1f;
+                        Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)) + Projectile.velocity * 3, ProjectileID.CursedDartFlame, Projectile.damage, 0, Main.myPlayer);
                         SoundEngine.PlaySound(SoundID.Item20, player.Center);
                     }
                 }
-                CounterThing++;
             }
+            if (CounterThing == 20)
+            {
+                CounterThing = 1;
+                float pitch = Projectile.timeLeft * 0.01f - 1;
+                if (pitch > 0)
+                {
+                    pitch = 0;
+                }
+                SoundEngine.PlaySound(SoundID.Item15.WithPitchOffset(pitch), player.Center);
+            }
+            CounterThing++;
         }
 
         private void SpawnDusts(Player player)

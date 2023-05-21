@@ -1,5 +1,4 @@
 !! This Mod Is Very VERY Early Access!! 
-   (Due To Some People Wanting Hamis)
 
 <!> Mostly Multiplayer Supported <!>
 
@@ -25,7 +24,7 @@ Changelog:
 - Small changes to Leaf Bass Bow
 - Added Corruption & Crimson Flamelasers
 - Changed Bass Bows to work with all arrows
-- Improvements to Hamis
+- Significant improvements to Hamis
 
 0.1.2:
 - Added Hamis pet :)

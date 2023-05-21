@@ -6,12 +6,12 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Ranger.Flamelasers;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 {
 	public class CrimsonFlameLaser : ModItem
 	{
-        private int flamesShot = 0;
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Bloody Flamelaser");
@@ -33,7 +33,7 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 			Item.useAnimation = 10;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 0;
-			Item.value = Item.sellPrice(0, 1, 0, 0);
+			Item.value = Item.sellPrice(0, 10, 0, 0);
 			Item.rare = ItemRarityID.Yellow;
 			//Item.UseSound = SoundID.Item11;
 			Item.autoReuse = true;
@@ -49,7 +49,7 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
             float rotation = MathHelper.ToRadians(35);//Shoots them in a 35 degree radius.
             player.channel = true;
 
-            if (flamesShot <= 10)
+            if (player.GetModPlayer<ModGlobalPlayer>().flamesShot <= 10)
             {
                 for (int i = 0; i < numberProjectiles; i++)
                 {
@@ -64,7 +64,7 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
                     }
                     SoundEngine.PlaySound(SoundID.Item34, player.Center);
                 }
-                flamesShot++;
+				player.GetModPlayer<ModGlobalPlayer>().flamesShot++;
                 return false;
             }
             else
@@ -73,14 +73,6 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
             }
         }
 
-
-        public override void UpdateInventory(Player player)
-        {
-            if (!player.channel) 
-            {
-                flamesShot = 0;
-            }
-        }
 
         public override void AddRecipes()
 		{

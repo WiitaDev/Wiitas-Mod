@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -100,7 +99,7 @@ namespace WiitaMod.NPCs
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(Main.rand.NextFloat(0.40f, 0.60f)), NPC.Center);
+            SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(Main.rand.NextFloat(0.25f, 0.50f)), NPC.Center);
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
