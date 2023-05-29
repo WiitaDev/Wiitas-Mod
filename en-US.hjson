@@ -1,4 +1,3 @@
-
 Mods: {
 	WiitaMod: {
 		Buffs: {
@@ -142,6 +141,7 @@ Mods: {
 			CrimsonFlameLaserlaser.DisplayName: Crimson Flame Laserlaser
 			SandlionProjectile.DisplayName: Sandlion Rocket
 			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
+			CorruptionFlameLaserflame.DisplayName: Corruption Flame Laserflame
 		}
 
 		Tiles.HamisBanner.MapEntry: Banner

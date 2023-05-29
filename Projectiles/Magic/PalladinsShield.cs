@@ -47,6 +47,7 @@ namespace WiitaMod.Projectiles.Magic
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             modifiers.FinalDamage += (target.lifeMax / 10) - 1;
+            modifiers.DisableCrit();
 
             base.ModifyHitNPC(target, ref modifiers);
         }

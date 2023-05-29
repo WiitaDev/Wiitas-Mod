@@ -71,7 +71,7 @@ namespace WiitaMod.Systems
         }
         public override void OnHurt(Player.HurtInfo info)
         {
-            if (Player.statLife <= Player.statLifeMax2 / 2 && HealthFlowerEquipped && Player.HasBuff(BuffID.PotionSickness) != true)
+            if (Player.statLife <= Player.statLifeMax2 / 2 && HealthFlowerEquipped && Player.HasBuff(BuffID.PotionSickness) == false)
             {
                 Player.QuickHeal();
             }

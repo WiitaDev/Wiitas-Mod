@@ -24,31 +24,35 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 
 		public override void SetDefaults()
 		{
-			Item.damage = 50;
 			Item.noMelee = true;
 			Item.DamageType = DamageClass.Ranged;
-			Item.width = 84;
-			Item.height = 30;
-			Item.useTime = 15;
-			Item.useAnimation = 15;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 0;  
-			Item.value = Item.sellPrice(0, 10, 0, 0);
 			Item.rare = ItemRarityID.Yellow;
 			//Item.UseSound = SoundID.Item11;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<CorruptionFlameLaserlaser>();
 			Item.useAmmo = ItemID.Gel;
-			Item.channel = true;
 			Item.shootSpeed = 8f;
-		}
+
+            //All the code above is obsolete due to this
+            Item.CloneDefaults(ItemID.Flamethrower);
+            Item.width = 84;
+            Item.height = 30;
+            Item.value = Item.sellPrice(0, 10, 0, 0);
+            Item.useTime = 7;
+            Item.useAnimation = 35;
+            Item.damage = 50;
+            Item.shoot = ProjectileID.Flames;
+            Item.UseSound = SoundID.Item34;
+        }
 
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
             float numberProjectiles = 3; // 3 shots
             float rotation = MathHelper.ToRadians(35);//Shoots them in a 35 degree radius.
+            player.channel = true;
 
-            if (player.GetModPlayer<ModGlobalPlayer>().flamesShot < 9)
+            if (player.GetModPlayer<ModGlobalPlayer>().flamesShot <= 20)
             {
                 for (int i = 0; i < numberProjectiles; i++)
                 {
@@ -59,9 +63,8 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 					}
 					else//This makes the two other flames shorter
 					{
-                        Projectile.NewProjectile(Item.GetSource_FromThis(), position.X, position.Y, perturbedSpeed.X * 0.75f, perturbedSpeed.Y * 0.75f, ProjectileID.Flames, damage, knockback, Main.myPlayer); //Creates a new projectile with our new vector for spread.
+                        Projectile.NewProjectile(Item.GetSource_FromThis(), position.X, position.Y, perturbedSpeed.X * 0.75f, perturbedSpeed.Y * 0.75f, ProjectileID.Flames, damage / 4, knockback, Main.myPlayer); //Creates a new projectile with our new vector for spread.
                     }
-                    SoundEngine.PlaySound(SoundID.Item34, player.Center);
                 }
                 player.GetModPlayer<ModGlobalPlayer>().flamesShot++;
                 return false;
@@ -72,7 +75,15 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 			}	
         }
 
-		public override void AddRecipes()
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            if (player.GetModPlayer<ModGlobalPlayer>().flamesShot >= 20)
+            {
+                type = ModContent.ProjectileType<CorruptionFlameLaserlaser>();
+            }
+        }
+
+        public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddRecipeGroup("MythrilOrOrichalcium", 6);
