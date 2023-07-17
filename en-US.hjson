@@ -123,6 +123,11 @@ Mods: {
 					The palladin's shield deals 10% of the targets health
 					'''
 			}
+
+			CoralStaff: {
+				DisplayName: Coral Staff
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
@@ -142,6 +147,7 @@ Mods: {
 			SandlionProjectile.DisplayName: Sandlion Rocket
 			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
 			CorruptionFlameLaserflame.DisplayName: Corruption Flame Laserflame
+			CoralStaffProj.DisplayName: Coral Staff Proj
 		}
 
 		Tiles.HamisBanner.MapEntry: Banner

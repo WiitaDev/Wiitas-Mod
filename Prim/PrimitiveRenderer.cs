@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework.Graphics;
-using MonoMod.Utils;
 using Terraria;
 
 namespace WiitaMod.Prim
