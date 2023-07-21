@@ -17,18 +17,10 @@ namespace WiitaMod
                 Ref<Effect> screenRef = new Ref<Effect>(ModContent.Request<Effect>("WiitaMod/Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value); // The path to the compiled shader file.
                 Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave"), EffectPriority.High);
                 Filters.Scene["Shockwave"].Load();
-            }
-        }
 
-        [System.Obsolete]
-        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
-        {
-            RecipeGroup group = new RecipeGroup(() => Lang.misc[37] + " Mythril Bar", new int[]
-            {
-                382,
-                1191
-            });
-            RecipeGroup.RegisterGroup("MythrilOrOrichalcium", group);
+                Ref<Effect> shaderRef = new Ref<Effect>(ModContent.Request<Effect>("WiitaMod/Effects/ShaderTest", AssetRequestMode.ImmediateLoad).Value);
+                GameShaders.Misc["EnemyShader"] = new MiscShaderData(shaderRef, "EnemyShaderPass");
+            }
         }
 
     }

@@ -1,11 +1,11 @@
 !! This Mod Is Very VERY Early Access!! 
 
-<!> Mostly Multiplayer Supported <!>
+<!> Multiplayer Supported <!>
 
 Wiita's Mod is a fairly cool mod that adds content to the base game
 The following stuff is:
 
-- Hamis and a pet for it from Noita :) 
+- Hamis (enemy) and a pet for it from Noita :) 
 - 4 new bows
 - 2 new Flamelasers
 - A post-plantera sandgun upgrade
@@ -14,12 +14,18 @@ The following stuff is:
 
 < Developers >
 - Wiita (Main dev, programming, some art & everything else)
-- meganaisson (Main artist & has provided with ideas for stuff)
+- meganaisson (Main artist)
 
 Contact me on Discord if you have any questions or suggestions
-- JohnKnee#8273
+- Wiita_
 
 Changelog:
+0.2.0:
+- Updated for 1.4.4 version of tModLoader
+- Added Hamis statue & Hamis hat (hamhat)
+- Added a recipe for the Diving Helmet
+- Made Hamis pet shoot nukes at frogs
+
 0.1.3:
 - Small changes to Leaf Bass Bow
 - Added Corruption & Crimson Flamelasers

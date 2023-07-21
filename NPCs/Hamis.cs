@@ -8,6 +8,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using WiitaMod.Items.Armor.Vanity;
 using WiitaMod.Items.Pets;
 using WiitaMod.Items.Placeable;
 
@@ -88,8 +89,9 @@ namespace WiitaMod.NPCs
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1)); // 100% chance to drop Gold Ore
+            //npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1)); // 100% chance to drop Gold Ore
             npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 50)); // 1% chance to drop in normal mode and 2% in expert/master
+            npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisHat>(), 200, 100)); // 0.5% chance to drop in normal mode and 1% in expert/master
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -141,7 +143,8 @@ namespace WiitaMod.NPCs
             // This makes the sprite flip horizontally in conjunction with the npc.direction.
             NPC.spriteDirection = -NPC.direction;
 
-            if (NPC.velocity.Y < 0)
+            ;
+            if (NPC.velocity.Y != 0)
             {
                 AI_State = (float)ActionState.Fall;
             }
@@ -366,7 +369,7 @@ namespace WiitaMod.NPCs
                 // We apply an initial velocity the first tick we are in the Jump frame. Remember that -Y is up.
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
                 float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - Main.player[NPC.target].Distance(NPC.Center)), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
-                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (7f + Main.rand.NextFloat(0, 2)) * -1), (float)(Math.Sin(rotation) * (7f + Main.rand.NextFloat(0, 2)) * -1));
+                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * 7f * -1), (float)(Math.Sin(rotation) * 7f * -1));
                 SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(0.80f, 1f)), NPC.Center);
             }
         }

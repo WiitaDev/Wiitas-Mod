@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Ranger.BassArrows;
@@ -11,6 +14,7 @@ namespace WiitaMod.Systems
     {
         public override bool InstancePerEntity => true;
 
+        private bool resetBatchInPost;
         public int GalacticBassBowDamage;
         public int GalacticSwipeTimer;
         public int GalacticDeBuffTimer = -1;
@@ -31,8 +35,6 @@ namespace WiitaMod.Systems
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
-
-
             float RingShake = (180 - GalacticDeBuffTimer) / 50;
             if (GalacticDeBuffTimer > 0)
             {
@@ -49,6 +51,7 @@ namespace WiitaMod.Systems
                     Dust d2 = Dust.NewDustPerfect(npc.Center + offset, DustID.PurpleCrystalShard, npc.velocity + new Vector2(Main.rand.NextFloat(-RingShake, RingShake), Main.rand.NextFloat(-RingShake, RingShake)), 0, Color.Purple, 1.25f);
                     d2.fadeIn = 0.1f;
                     d2.noGravity = true;
+                    d2.shader = GameShaders.Armor.GetSecondaryShader(38, Main.LocalPlayer);
                 }
                 if (Size == 2f)
                 {//Spawn projectiles to the marked enemy
@@ -87,8 +90,9 @@ namespace WiitaMod.Systems
                     d2.noGravity = true;
                 }
             }
-            npc.netUpdate = true;
+                npc.netUpdate = true;
         }
+
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if(projectile.type == ModContent.ProjectileType<GalacticBassArrow>())

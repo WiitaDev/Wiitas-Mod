@@ -34,8 +34,8 @@ namespace WiitaMod.Effects
             float w = 0.6f;
             miscShaderData.UseShaderSpecificData(new Vector4(num, num2, num3, w));
             miscShaderData.Apply();
-            SlashEffect._vertexStrip.PrepareStrip(proj.oldPos, proj.oldRot, StripColors, StripWidth, -Main.screenPosition + proj.Size / 2f, proj.oldPos.Length, includeBacksides: true);
-            SlashEffect._vertexStrip.DrawTrail();
+            _vertexStrip.PrepareStrip(proj.oldPos, proj.oldRot, StripColors, StripWidth, -Main.screenPosition + proj.Size / 2f, proj.oldPos.Length, includeBacksides: true);
+            _vertexStrip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
 
@@ -295,8 +295,8 @@ namespace WiitaMod.Effects
 
         private Color StripColors(float progressOnStrip)
         {
-            Color value = Main.hslToRgb(.225f, .39f, 0.7f);
-            //Color result = Color.Lerp(Color.Black, value, Utils.GetLerpValue(-0.2f, 0.5f, progressOnStrip, clamped: true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
+            //Color value = Main.hslToRgb(.225f, .39f, 0.7f);
+            //Color result = Color.Lerp(Color.Purple, Color.Pink, Utils.GetLerpValue(-0.2f, 0.5f, progressOnStrip, clamped: true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
             Color result = Color.Purple;
             result.A = 0;
             return result;

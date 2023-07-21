@@ -43,7 +43,11 @@ Mods: {
 
 			HamisPetItem: {
 				DisplayName: Chilly Egg
-				Tooltip: Summons a Hamis
+				Tooltip:
+					'''
+					Summons a Hamis
+					'Does some mischievous acts around frogs'
+					'''
 			}
 
 			HamisBannerItem: {
@@ -123,6 +127,16 @@ Mods: {
 					The palladin's shield deals 10% of the targets health
 					'''
 			}
+
+			HamisHat: {
+				DisplayName: HamHat
+				Tooltip: The drippiest drip there is
+			}
+
+			HamisStatueItem: {
+				DisplayName: Hamis Statue
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
@@ -142,8 +156,12 @@ Mods: {
 			SandlionProjectile.DisplayName: Sandlion Rocket
 			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
 			CorruptionFlameLaserflame.DisplayName: Corruption Flame Laserflame
+			HamisNuke.DisplayName: Hamis Nuke
 		}
 
-		Tiles.HamisBanner.MapEntry: Banner
+		Tiles: {
+			HamisBanner.MapEntry: Banner
+			HamisStatue.MapEntry: Hamis Statue
+		}
 	}
 }

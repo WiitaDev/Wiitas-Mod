@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items.Weapons.Summon;
 using WiitaMod.Items.CraftingMaterials;
+using WiitaMod.Projectiles.Pets;
 
 namespace WiitaMod.Systems
 {
@@ -11,6 +12,20 @@ namespace WiitaMod.Systems
     {
         public override bool InstancePerEntity => true;
 
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (projectile.type == ModContent.ProjectileType<HamisNuke>())
+            {
+                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog)
+                {
+                    modifiers.FinalDamage += npc.lifeMax - 1;
+                }
+                else
+                {
+                    modifiers.FinalDamage -= 1;
+                }
+            }
+        }
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             if (npc.netID == NPCID.GoblinSummoner)
@@ -19,11 +34,6 @@ namespace WiitaMod.Systems
             }
         }
 
-        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
-        {
-
-
-        }
         public override void ModifyShop(NPCShop shop)
         {
             if (shop.NpcType == NPCID.ArmsDealer)

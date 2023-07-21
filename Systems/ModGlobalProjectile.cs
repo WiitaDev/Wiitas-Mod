@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace WiitaMod.Systems
 {
     // Here is a class dedicated to showcasing projectile modifications
-    public class ExampleProjectileModifications : GlobalProjectile
+    public class ModGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
         public override bool AppliesToEntity(Projectile entity, bool lateInstantiation)

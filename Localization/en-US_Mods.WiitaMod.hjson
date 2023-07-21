@@ -1,0 +1,60 @@
+Projectiles: {
+}
+
+Items: {
+	PalladinsShield: {
+	}
+
+	ShadowflameApparitionStaff: {
+	}
+
+	SandlionLauncher: {
+	}
+
+	CrimsonFlameLaser: {
+	}
+
+	CorruptionFlameLaser: {
+	}
+
+	MoltenBassBow: {
+	}
+
+	JungleBassBow: {
+	}
+
+	GalacticBassBow: {
+	}
+
+	BassBow: {
+	}
+
+	HamisBannerItem: {
+	}
+
+	HamisPetItem: {
+	}
+
+	IllegalRocketLauncherParts: {
+	}
+
+	HamisHat: {
+	}
+
+	SandlionAmmo: {
+	}
+
+	PhilosophersNecklace: {
+	}
+
+	HealthFlower: {
+	}
+}
+
+Buffs: {
+	ShadowflameApparitionBuff: {
+	}
+
+	HamisPetBuff: {
+	}
+}

@@ -195,43 +195,46 @@ namespace WiitaMod.Projectiles.Summon
                     timer = 0;
                 }
             }
-
-            if (foundTarget && hasHitEnemy == false)
+            else 
             {
-                // Minion has a target: attack (here, fly towards the enemy)
-                if (distanceFromTarget > 40f)
+                if (foundTarget)
                 {
-                    // The immediate range around the target (so it doesn't latch onto it when close)
-                    Vector2 direction = targetCenter - Projectile.Center;
-                    direction.Normalize();
-                    direction *= speed;
-                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
-                }
-            }
-            else if (hasHitEnemy == false)
-            {
-                // Minion doesn't have a target: return to player and idle
-                if (distanceToIdlePosition > 600f)
-                {
-                    // Speed up the minion if it's away from the player
-                    speed = 16f;
-                    inertia = 60f;
+                    // Minion has a target: attack (here, fly towards the enemy)
+                    if (distanceFromTarget > 40f)
+                    {
+                        // The immediate range around the target (so it doesn't latch onto it when close)
+                        Vector2 direction = targetCenter - Projectile.Center;
+                        direction.Normalize();
+                        direction *= speed;
+                        Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+                    }
                 }
                 else
                 {
-                    // Slow down the minion if closer to the player
-                    speed = 12f;
-                    inertia = 40f;
-                }
-                if (distanceToIdlePosition > 20f)
-                {
-                    // The immediate range around the player (when it passively floats about)
+                    // Minion doesn't have a target: return to player and idle
+                    if (distanceToIdlePosition > 600f)
+                    {
+                        // Speed up the minion if it's away from the player
+                        speed = 16f;
+                        inertia = 60f;
+                    }
+                    else
+                    {
+                        // Slow down the minion if closer to the player
+                        speed = 12f;
+                        inertia = 40f;
+                    }
+                    if (distanceToIdlePosition > 20f)
+                    {
+                        // The immediate range around the player (when it passively floats about)
 
-                    // This is a simple movement formula using the two parameters and its desired direction to create a "homing" movement
-                    vectorToIdlePosition.Normalize();
-                    vectorToIdlePosition *= speed;
-                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+                        // This is a simple movement formula using the two parameters and its desired direction to create a "homing" movement
+                        vectorToIdlePosition.Normalize();
+                        vectorToIdlePosition *= speed;
+                        Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+                    }
                 }
+           
             }
             #endregion
 

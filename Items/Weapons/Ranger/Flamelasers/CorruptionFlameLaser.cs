@@ -86,7 +86,7 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddRecipeGroup("MythrilOrOrichalcium", 6);
+			recipe.AddRecipeGroup("HardmodeTier2", 6);
             recipe.AddIngredient(ItemID.DemoniteBar, 6);
             recipe.AddIngredient(ItemID.CursedFlame, 10);
             recipe.AddIngredient(ItemID.RottenChunk, 5);
