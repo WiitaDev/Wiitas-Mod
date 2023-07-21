@@ -4,6 +4,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Prim;
+using WiitaMod.Projectiles.Magic;
 
 namespace WiitaMod.Items.Weapons.Magic
 {
@@ -32,7 +33,7 @@ namespace WiitaMod.Items.Weapons.Magic
 			Item.rare = ItemRarityID.Blue;
 			Item.UseSound = SoundID.Item5;
 			Item.autoReuse = true;
-			Item.shoot = ProjectileID.WoodenArrowFriendly;
+			Item.shoot = ModContent.ProjectileType<CoralStaffProjectile>();
 			Item.shootSpeed = 8f;
 
 		}

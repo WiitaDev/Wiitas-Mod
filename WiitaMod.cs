@@ -22,7 +22,6 @@ namespace WiitaMod
 
         public override void Load()
         {
-            StarfirePrims = ModContent.Request<Effect>("WiitaMod/Effects/StarfirePrims", AssetRequestMode.ImmediateLoad).Value;
             PrimitiveTextureMap = ModContent.Request<Effect>("WiitaMod/Effects/PrimitiveTextureMap", AssetRequestMode.ImmediateLoad).Value;
 
             if (Main.netMode != NetmodeID.Server)
@@ -57,7 +56,6 @@ namespace WiitaMod
         public override void Unload()
         {
             TestEffect = null;
-            StarfirePrims = null;
             PrimitiveTextureMap = null;
 
             primitives = null;

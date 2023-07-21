@@ -148,6 +148,8 @@ Mods: {
 			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
 			CorruptionFlameLaserflame.DisplayName: Corruption Flame Laserflame
 			CoralStaffProj.DisplayName: Coral Staff Proj
+			EnergizedShockwave.DisplayName: Energized Shockwave
+			CoralStaffProjectile.DisplayName: Coral Staff Projectile
 		}
 
 		Tiles.HamisBanner.MapEntry: Banner
