@@ -82,6 +82,7 @@ namespace WiitaMod.Projectiles.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
+            SpriteBatch spriteBatch = Main.spriteBatch;
             Texture2D ray = Mod.Assets.Request<Texture2D>("Assets/Textures/Ray").Value;
             Vector2 scale = new Vector2(ScaleX, ScaleY);
 
@@ -96,12 +97,11 @@ namespace WiitaMod.Projectiles.Magic
                     1 => Color.Cyan,
                     _ => new Color(140, 200, 255)
                 };
-
                 Vector2 lerp = (((float)Main.timeForVisualEffects + (i * 5)) / 30).ToRotationVector2() * .03f;
-                Main.EntitySpriteDraw(ray, position - Main.screenPosition, null, (color with { A = 0 }) * Projectile.Opacity, Projectile.rotation, origin, scale + lerp, SpriteEffects.FlipVertically, 0);
+                spriteBatch.Draw(ray, position - Main.screenPosition, null, (color with { A = 0 }) * Projectile.Opacity, Projectile.rotation, origin, scale + lerp, SpriteEffects.FlipVertically, 0);
             }
-            const int Base = 0;
-            const int Head = 1;
+            //const int Base = 0;
+            //const int Head = 1;
 
             Vector2 center = Projectile.Center + (Vector2.UnitY * Projectile.gfxOffY);
             Vector2[] drawPoint = new Vector2[] { center + (Vector2.UnitY * (Projectile.height / 2)), center - (Vector2.UnitY * (Projectile.height / 2)) };

@@ -7,6 +7,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Prim;
 
 namespace WiitaMod.Projectiles.Ranger.Flamelasers
 {
@@ -57,12 +58,27 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
 
         public override bool PreDraw(ref Color lightColor)
         {
+
             // We start drawing the laser if we have charged up
             if (IsAtMaxCharge)
             {
                 DrawLaser(Main.spriteBatch, (Texture2D)TextureAssets.Projectile[Projectile.type], Main.player[Projectile.owner].Center,
                     Projectile.velocity, 10, Projectile.damage, -1.57f, 0.75f, 1000f, Color.White, (int)MOVE_DISTANCE);
             }
+            //Testing Prims for this
+            Vector2 center = Projectile.Center + (Vector2.UnitY * Projectile.gfxOffY);
+            Vector2[] drawPoint = new Vector2[] { center + (Vector2.UnitY * (Projectile.height / 2)), center - (Vector2.UnitY * (Projectile.height / 2)) };
+
+            Effect blurEffect = ModContent.Request<Effect>("WiitaMod/Effects/Laser").Value;
+            SquarePrimitive blurLine = new SquarePrimitive()
+            {
+                Position = drawPoint[0] - Main.screenPosition,
+                Height = Distance,
+                Length = 40,
+                Rotation = Projectile.velocity.ToRotation() + 1.57f,
+                Color = Color.LightGreen
+            };
+            PrimitiveRenderer.DrawPrimitiveShape(blurLine, blurEffect);
             return false;
         }
 
