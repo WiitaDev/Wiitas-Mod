@@ -1,5 +1,4 @@
-Projectiles: {
-}
+Projectiles.TestingWeaponProj.DisplayName: Testing Weapon Proj
 
 Items: {
 	PalladinsShield: {
@@ -48,6 +47,11 @@ Items: {
 	}
 
 	HealthFlower: {
+	}
+
+	TestingWeapon: {
+		DisplayName: Testing Weapon
+		Tooltip: ""
 	}
 }
 
