@@ -34,7 +34,7 @@ namespace WiitaMod.Items.Placeable
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.StoneBlock, 50);
-            recipe.AddIngredient(ModContent.ItemType<HamisPetItem>());
+            recipe.AddIngredient(ModContent.ItemType<HamisBannerItem>());
             recipe.AddTile(TileID.HeavyWorkBench);
             recipe.AddCondition(Condition.InGraveyard);
             recipe.Register();

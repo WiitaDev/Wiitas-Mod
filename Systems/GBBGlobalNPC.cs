@@ -1,14 +1,8 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
-using System.Runtime.CompilerServices;
 using Terraria;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using WiitaMod.Items.Weapons;
 using WiitaMod.Projectiles.Ranger.BassArrows;
 
 namespace WiitaMod.Systems
@@ -22,14 +16,12 @@ namespace WiitaMod.Systems
         public int GalacticSwipeTimer;
         public int GalacticDeBuffTimer = -1;
         public float Size = 0f;
-        private bool SpawnedRing = false;
 
         public override void ResetEffects(NPC npc)
         {   
         }
         public override void SetStaticDefaults()
         {
-            
         }
         public override void AI(NPC npc)
         {
@@ -51,15 +43,6 @@ namespace WiitaMod.Systems
                 drawColor = Color.MediumPurple;
                 Size += 0.1f;
                 if (Size > 2f) { Size = 2f; }
-
-
-                if (Main.myPlayer == player.whoAmI && Main.gamePaused == false && !SpawnedRing)
-                {
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<TestingWeaponProj>(), 0, 0, Main.myPlayer, ai2: npc.whoAmI);
-                    SpawnedRing = true;
-                }
-
-
                 for (int i = 0; i < 5 * (npc.height / 10); i++)
                 {//Circle Appear
                     Vector2 offset = new Vector2();

@@ -62,7 +62,7 @@ namespace WiitaMod.Projectiles.Pets
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
-                    if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog)
+                    if (npc.active && (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog))
                     {
                         float between = Vector2.Distance(npc.Center, Projectile.Center);
                         bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;

@@ -40,6 +40,11 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         {
             Projectile.spriteDirection = Projectile.direction;
             Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction);
+            if (Main.rand.NextBool(3))
+            {
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Grass, 0, 0, 0, default(Color), 1f);
+                Main.dust[dustHit].noGravity = true;
+            }
 
             int frameSpeed = 5;
             Projectile.frameCounter++;
@@ -52,6 +57,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
                     Projectile.frame = 0;
                 }
             }
+
 
             Projectile.ai[0]++;
             if (Projectile.ai[0] >= 90)
@@ -130,10 +136,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 0f;
-            if (Main.rand.NextBool(2))
-            {
-                rotateby *= -1;
-            }
+            rotateby *= Main.rand.NextBool(2) ? -1 : 1;
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {

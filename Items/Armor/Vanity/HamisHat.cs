@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Items.Placeable;
 
 namespace WiitaMod.Items.Armor.Vanity
 {
@@ -28,6 +29,13 @@ namespace WiitaMod.Items.Armor.Vanity
             Item.value = Item.sellPrice(silver: 10); // How many coins the item is worth
             Item.rare = ItemRarityID.Yellow; // The rarity of the item
             Item.vanity = true;
+        }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ModContent.ItemType<HamisBannerItem>(), 2);
+            recipe.AddTile(TileID.DemonAltar);
+            recipe.Register();
         }
     }
 }

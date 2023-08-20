@@ -175,6 +175,14 @@ namespace WiitaMod.Projectiles.Summon
             if (hasHitEnemy)
             {
                 timer++;
+                /*if (timer <= 39)
+                {
+                    Projectile.velocity = Projectile.velocity.RotatedBy(0.1f) * Projectile.direction;
+                }
+                if(timer >= 40) 
+                {
+                    hasHitEnemy = false;
+                }*/
 
                 if (timer <= 17)
                 {
