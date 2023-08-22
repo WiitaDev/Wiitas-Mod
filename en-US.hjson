@@ -137,6 +137,11 @@ Mods: {
 				DisplayName: Hamis Statue
 				Tooltip: ""
 			}
+
+			CustomSwingSword: {
+				DisplayName: Custom Swing Sword
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
@@ -157,6 +162,8 @@ Mods: {
 			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
 			CorruptionFlameLaserflame.DisplayName: Corruption Flame Laserflame
 			HamisNuke.DisplayName: Hamis Nuke
+			ExampleCustomSwingProjectile.DisplayName: Example Custom Swing Projectile
+			CustomSwingProjectile.DisplayName: Custom Swing Projectile
 		}
 
 		Tiles: {
