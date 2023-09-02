@@ -19,7 +19,14 @@ The following stuff is:
 Contact me on Discord if you have any questions or suggestions
 - Wiita_
 
+Upcoming content:
+- A new ocean biome
+- Some kind of boss
+
 Changelog:
+0.2.1:
+- Added "insert weapon name"
+
 0.2.0:
 - Updated for 1.4.4 version of tModLoader
 - Added Hamis statue & Hamis hat (hamhat)

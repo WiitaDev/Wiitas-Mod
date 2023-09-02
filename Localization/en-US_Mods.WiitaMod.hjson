@@ -53,6 +53,11 @@ Items: {
 		DisplayName: Testing Weapon
 		Tooltip: ""
 	}
+
+	ExampleBlock: {
+		DisplayName: Example Block
+		Tooltip: ""
+	}
 }
 
 Buffs: {

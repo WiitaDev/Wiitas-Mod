@@ -7,6 +7,8 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameContent;
+using ReLogic.Content;
 
 namespace WiitaMod.Items.Weapons.Melee
 {
@@ -127,7 +129,7 @@ namespace WiitaMod.Items.Weapons.Melee
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30; // Needed for the trail
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40; // Needed for the trail
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
 
@@ -240,9 +242,14 @@ namespace WiitaMod.Items.Weapons.Melee
             }
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            DrawData swordData = new DrawData(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            Main.EntitySpriteDraw(swordData);
 
-            default(Effects.SwingEffect).Draw(Projectile, origin);
+            //default(Effects.SwingEffect).Draw(Projectile, origin);
+
+            //Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size;
+            DrawData ringBackData = new DrawData(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            Main.EntitySpriteDraw(ringBackData);
 
             return false;
         }
