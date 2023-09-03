@@ -150,6 +150,7 @@ Mods: {
 			CoralStaffProj.DisplayName: Coral Staff Proj
 			EnergizedShockwave.DisplayName: Energized Shockwave
 			CoralStaffProjectile.DisplayName: Coral Staff Projectile
+			CrystalGauntletBall.DisplayName: Crystal Gauntlet Ball
 		}
 
 		Tiles.HamisBanner.MapEntry: Banner

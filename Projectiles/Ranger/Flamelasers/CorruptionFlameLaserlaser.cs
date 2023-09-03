@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -8,6 +9,8 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Prim;
+using static Humanizer.In;
+using static Humanizer.On;
 
 namespace WiitaMod.Projectiles.Ranger.Flamelasers
 {
@@ -58,27 +61,20 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
 
         public override bool PreDraw(ref Color lightColor)
         {
-
+            Texture2D ray = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/GlowTrail", AssetRequestMode.ImmediateLoad).Value;
             // We start drawing the laser if we have charged up
             if (IsAtMaxCharge)
             {
-                DrawLaser(Main.spriteBatch, (Texture2D)TextureAssets.Projectile[Projectile.type], Main.player[Projectile.owner].Center,
-                    Projectile.velocity, 10, Projectile.damage, -1.57f, 0.75f, 1000f, Color.White, (int)MOVE_DISTANCE);
-            }
-            //Testing Prims for this
-            Vector2 center = Projectile.Center + (Vector2.UnitY * Projectile.gfxOffY);
-            Vector2[] drawPoint = new Vector2[] { center + (Vector2.UnitY * (Projectile.height / 2)), center - (Vector2.UnitY * (Projectile.height / 2)) };
+                /*DrawLaser(Main.spriteBatch, (Texture2D)TextureAssets.Projectile[Projectile.type], Main.player[Projectile.owner].Center,
+                    Projectile.velocity, 10, Projectile.damage, -1.57f, 0.75f, 1000f, Color.White, (int)MOVE_DISTANCE);*/
 
-            Effect blurEffect = ModContent.Request<Effect>("WiitaMod/Effects/Laser").Value;
-            SquarePrimitive blurLine = new SquarePrimitive()
-            {
-                Position = drawPoint[0] - Main.screenPosition,
-                Height = Distance,
-                Length = 40,
-                Rotation = Projectile.velocity.ToRotation() + 1.57f,
-                Color = Color.LightGreen
-            };
-            PrimitiveRenderer.DrawPrimitiveShape(blurLine, blurEffect);
+                //Testing Prims for this
+                float tellStrength = (float)Math.Sqrt(Utils.GetLerpValue(0, 40, 10, true));
+                Vector2 telegraphScale = new Vector2(Distance * 0.5f, 1f);
+                Main.EntitySpriteDraw(ray, Projectile.Center - Main.screenPosition, ray.Frame(), Color.White * 0.2f, Projectile.velocity.ToRotation(), ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
+                //Main.EntitySpriteDraw(ray, Projectile.Center - Main.screenPosition, ray.Frame(), Color.White, Projectile.velocity.ToRotation(), ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
+
+            }
             return false;
         }
 
@@ -162,6 +158,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             SetLaserPosition(player);
             SpawnDusts(player);
             CastLights();
+            Projectile.localAI[1]++;
         }
 
         private void CustomStuff(Player player)
