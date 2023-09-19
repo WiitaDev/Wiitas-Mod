@@ -5,6 +5,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria.WorldBuilding;
 using Terraria.GameContent.Generation;
+using WiitaMod.Tiles;
 
 namespace WiitaMod.World
 {
@@ -27,7 +28,7 @@ namespace WiitaMod.World
 
             // Code to test placed here:
             //WorldGen.TileRunner(x - 1, y, WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(2, 8), TileID.CobaltBrick);
-            WorldGen.digTunnel(x, y, 0, 1, 15, 3, false);
+            WorldGen.digTunnel(x, y, 1, 2, 2, 3, true);
         }
     }
 }

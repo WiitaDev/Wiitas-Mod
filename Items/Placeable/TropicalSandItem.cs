@@ -18,6 +18,7 @@ namespace WiitaMod.Items.Placeable
             Item.DefaultToPlaceableTile(ModContent.TileType<TropicalSand>());
             Item.width = 12;
             Item.height = 12;
+            Item.ammo = ItemID.SandBlock;
         }
         /*
         public override void AddRecipes()

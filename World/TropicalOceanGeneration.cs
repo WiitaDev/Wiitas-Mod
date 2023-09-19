@@ -14,34 +14,22 @@ using static Terraria.ModLoader.ModContent;
 
 namespace WiitaMod.World
 {
-    class TropicalOceanGeneration : ModSystem
+    class TropicalOceanGeneration : ModSystem //CODE YOINKED FROM AEQUUS MOD!
     {
         public int size;
-        public int nextChestLoot;
         public int wantedDirection;
         public Point location;
         public Point genLocation;
         public void Reset()
         {
-            nextChestLoot = 0;
             location = new Point();
             size = Main.maxTilesX / 28;
-            if (size > 200)
+            if (size > 200) // small: 150, medium: ~215, large: 250
             {
                 size -= 200;
                 size /= 2;
                 size += 200;
             }
-        }
-        public static bool JustPressed(Keys key)
-        {
-            return Main.keyState.IsKeyDown(key) && !Main.oldKeyState.IsKeyDown(key);
-        }
-
-        public override void PostUpdateEverything()
-        {
-            if (JustPressed(Keys.Insert))
-                TestMethod((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16);
         }
 
         private bool CanOverwriteTile(Tile tile)
@@ -52,16 +40,6 @@ namespace WiitaMod.World
         public bool ProperPlacement(int x, int y)
         {
             return !Main.tile[x, y].HasTile && Main.tile[x, y + 1].HasTile && (Main.tileSand[Main.tile[x, y + 1].TileType] || Main.tile[x, y + 1].TileType == TileID.ShellPile);
-        }
-
-        private void TestMethod(int x, int y)
-        {
-            Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
-
-            // Code to test placed here:
-            //WorldGen.TileRunner(x - 1, y, WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(2, 8), TileID.CobaltBrick);
-            //location.X = x; location.Y = y;
-            Generate();
         }
         public void GenerateSandArea(int x, int y) 
         {
@@ -81,6 +59,8 @@ namespace WiitaMod.World
             {
                 y = Main.maxTilesY - 10 - size;
             }
+
+            //WorldUtils.Gen(genLocation, new Shapes.Circle(x, y / 2), Actions.Chain(new GenAction[]{ new Actions.SetTile(TileID.Sandstone), new Actions.PlaceWall(WallID.Sandstone),}));
 
             List<Point> placeTiles = new();
             for (int i = 0; i < size * 2; i++)
@@ -119,7 +99,7 @@ namespace WiitaMod.World
                             {
                                 if (!WorldGen.genRand.NextBool(25 + ((int)Main.worldSurface - y2) + 2))
                                 {
-                                    Main.tile[x2 + m, y2 + n].TileType = (ushort)TileType<TropicalSand>();
+                                    Main.tile[x2 + m, y2 + n].TileType = TileID.HardenedSand;
                                     continue;
                                 }
                             }
@@ -137,7 +117,7 @@ namespace WiitaMod.World
                             {
                                 continue;
                             }
-                            Main.tile[x2 + m, y2 + n].TileType = TileID.Sand;
+                            Main.tile[x2 + m, y2 + n].TileType = (ushort)TileType<TropicalSand>();
                         }
                     }
                 }
@@ -147,15 +127,14 @@ namespace WiitaMod.World
         private void GenerateTropicalOcean()
         {
             int x = location.X;
-            int y = location.Y + 120;
+            int y = location.Y; //+ 120
             genLocation = new Point(x, y);
 
-            GenerateSandArea(x + wantedDirection * 20, y + 40);
+            GenerateSandArea(x + wantedDirection * 20, y); //+ 40
         }
         public void Generate()
         {
             Reset();
-            //wantedDirection = Main.dungeonX / Main.dungeonX; 
             wantedDirection = Main.dungeonX * 2 < Main.maxTilesX ? 1 : -1; // makes wanted direction opposite of dungeon
             for (int i = 0; i < 5000; i++)
             {
@@ -196,15 +175,26 @@ namespace WiitaMod.World
         }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
-            int ResetIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Larva"));
+            int ResetIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Create Ocean Caves"));
             if (ResetIndex != -1)
             {
-                tasks.Insert(ResetIndex + 1, new PassLegacy("Wiita's Mod Tropical Ocean", (progress, configuration) =>
+                tasks.Insert(ResetIndex + 1, new PassLegacy("Wiita's: Tropical Ocean", (progress, configuration) =>
                 {
-                    progress.Message = "Creating a Tropical Ocean";
+                    progress.Message = "Creating Tropical Ocean";
                     Generate();
                 }));
             }
+            int ResetIndex2 = tasks.FindIndex(genpass => genpass.Name.Equals("Reset"));
+            if (ResetIndex2 != -1)
+            {
+                tasks.Insert(ResetIndex2 + 1, new PassLegacy("Wiita's: Beach extension", (progress, configuration) =>
+                {
+                    progress.Message = "Extending an ocean";
+                    Reset();
+                    GenVars.beachSandRandomWidthRange *= 2000;
+                }));
+            }
+
         }
     }
 }

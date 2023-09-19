@@ -144,7 +144,7 @@ Mods: {
 			}
 
 			TropicalSandItem: {
-				DisplayName: Tropical Sand
+				DisplayName: Tropical Sand Block
 				Tooltip: ""
 			}
 		}

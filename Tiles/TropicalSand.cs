@@ -23,14 +23,14 @@ namespace WiitaMod.Tiles
             TileID.Sets.Falling[Type] = true;
             TileID.Sets.ForAdvancedCollision.ForSandshark[Type] = true;
 
-            AddMapEntry(new Color(135, 206, 235));
+            //AddMapEntry(new Color(135, 206, 235));
             RegisterItemDrop(Type);
             DustType = DustID.Sand;
 
 
             DustType = DustID.Sand;
 
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(new Color(216, 211, 69));
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
