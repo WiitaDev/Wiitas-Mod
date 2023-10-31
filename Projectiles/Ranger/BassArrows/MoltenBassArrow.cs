@@ -75,7 +75,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             target.AddBuff(BuffID.OnFire, 240);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player Owner = Main.player[Projectile.owner];
             if (Main.myPlayer == Owner.whoAmI)

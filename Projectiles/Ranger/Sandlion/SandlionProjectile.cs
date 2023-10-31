@@ -59,7 +59,7 @@ namespace WiitaMod.Projectiles.Ranger.Sandlion
 			}
         }
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
             Player Owner = Main.player[Projectile.owner];
             for (int i = 0; i < 10; i++)

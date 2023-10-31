@@ -140,7 +140,7 @@ Mods: {
 
 			CustomSwingSword: {
 				DisplayName: Custom Swing Sword
-				Tooltip: ""
+				Tooltip: You're not supposed to see this..
 			}
 		}
 
