@@ -142,6 +142,11 @@ Mods: {
 				DisplayName: Custom Swing Sword
 				Tooltip: You're not supposed to see this..
 			}
+
+			CosmicBassBow: {
+				DisplayName: Cosmic Bass Bow New
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
@@ -164,6 +169,10 @@ Mods: {
 			HamisNuke.DisplayName: Hamis Nuke
 			ExampleCustomSwingProjectile.DisplayName: Example Custom Swing Projectile
 			CustomSwingProjectile.DisplayName: Custom Swing Projectile
+			CosmicBassArrow.DisplayName: Cosmic Bass Arrow
+			CosmicBassBowHold.DisplayName: Cosmic Bass Bow Hold
+			BigCosmicBassArrow.DisplayName: Big Cosmic Bass Arrow
+			CosmicProjectile.DisplayName: Cosmic Projectile
 		}
 
 		Tiles: {

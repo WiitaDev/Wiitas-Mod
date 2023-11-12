@@ -1,5 +1,5 @@
 displayName = Wiita's Mod
 author = Wiita
-version = 0.2.0.1
+version = 0.2.1
 buildIgnore = .gitignore, *.sln, *.csproj, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*
 hideCode = true

@@ -17,9 +17,13 @@ The following stuff is:
 - meganaisson (Main artist)
 
 Contact me on Discord if you have any questions or suggestions
-- Wiita_
+- Wiita.
 
 Changelog:
+0.2.1:
+- Reworked Cosmic Bass Bow
+- Reworked Hamis Hat
+
 0.2.0:
 - Updated for 1.4.4 version of tModLoader
 - Added Hamis statue & Hamis hat (hamhat)

@@ -36,9 +36,9 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void OnSpawn(IEntitySource source)
         {
-            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -90;
+            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
+            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 400;
         }
-
         public override void AI()
         {
             Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction);
