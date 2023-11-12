@@ -34,7 +34,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
             Item.knockBack = 1f;
             Item.width = 36;
             Item.height = 74;
-            Item.damage = 150;
+                Item.damage = 125;
             Item.UseSound = SoundID.Item100;
             Item.shoot = ProjectileID.WoodenArrowFriendly;
             Item.rare = ItemRarityID.Red;
@@ -57,7 +57,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.Bass, 20);
+			recipe.AddIngredient(ModContent.ItemType<BassBow>());
 			recipe.AddIngredient(ItemID.FragmentVortex, 12);
 			recipe.AddIngredient(ItemID.FragmentNebula, 12);
 			recipe.AddTile(TileID.LunarCraftingStation);

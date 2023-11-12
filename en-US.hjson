@@ -61,12 +61,11 @@ Mods: {
 			}
 
 			GalacticBassBow: {
-				DisplayName: Cosmic Bass Bow
+				DisplayName: Cosmic Bass Bow (old)
 				Tooltip:
 					'''
-					Arrows turn into Cosmic Bass
-					When you hit an enemy with Cosmic Bass, it creates a ring around the enemy
-					The ring shoots outs Cosmic projectiles that deal 75% damage of the weapon
+					The old Cosmic Bass Bow
+					"Make a new one I guess"
 					'''
 			}
 
@@ -130,7 +129,13 @@ Mods: {
 
 			HamisHat: {
 				DisplayName: HamHat
-				Tooltip: The drippiest drip there is
+				Tooltip:
+					'''
+					'The drippiest drip there is'
+					8% Increased critical strike chance
+					4% increased magic damage
+					'''
+				SetBonus: Increases maximum mana by 60
 			}
 
 			HamisStatueItem: {
@@ -144,8 +149,14 @@ Mods: {
 			}
 
 			CosmicBassBow: {
-				DisplayName: Cosmic Bass Bow New
-				Tooltip: ""
+				DisplayName: Cosmic Bass Bow
+				Tooltip:
+					'''
+					Arrows turn into Cosmic Bass
+					Charging the weapon partially shoots bursts of Cosmic Bass
+					Charging the weapon fully shoots a strong homing Cosmic Bass
+					The strong Cosmic Bass explodes into homing Cosmic Projectiles
+					'''
 			}
 		}
 
@@ -155,23 +166,19 @@ Mods: {
 			PalladinsShieldProjectile.DisplayName: Palladin's shield
 			HamisPet.DisplayName: Hamis Pet
 			BassArrow.DisplayName: Bass Arrow
-			GalacticBassArrow.DisplayName: Cosmic Bass Arrow
 			GalacticSlash.DisplayName: Cosmic slash
 			JungleBassArrow.DisplayName: Leaf Bass Arrow
 			JungleBassLeaf.DisplayName: Bass Leaf
 			MoltenBassArrow.DisplayName: Molten Bass Arrow
 			RockyMoltenBassArrow.DisplayName: Rocky Molten Bass Arrow
-			CorruptionFlameLaserlaser.DisplayName: Corruption Flame Laserlaser
-			CrimsonFlameLaserlaser.DisplayName: Crimson Flame Laserlaser
+			CorruptionFlameLaserlaser.DisplayName: Corruption Laser
+			CrimsonFlameLaserlaser.DisplayName: Crimson Laser
 			SandlionProjectile.DisplayName: Sandlion Rocket
 			ShadowflameApparitionMinion.DisplayName: Shadowflame Apparition
-			CorruptionFlameLaserflame.DisplayName: Corruption Flame Laserflame
 			HamisNuke.DisplayName: Hamis Nuke
-			ExampleCustomSwingProjectile.DisplayName: Example Custom Swing Projectile
-			CustomSwingProjectile.DisplayName: Custom Swing Projectile
 			CosmicBassArrow.DisplayName: Cosmic Bass Arrow
-			CosmicBassBowHold.DisplayName: Cosmic Bass Bow Hold
-			BigCosmicBassArrow.DisplayName: Big Cosmic Bass Arrow
+			CosmicBassBowHold.DisplayName: Cosmic Bass Bow
+			BigCosmicBassArrow.DisplayName: Cosmic Bass Arrow
 			CosmicProjectile.DisplayName: Cosmic Projectile
 		}
 

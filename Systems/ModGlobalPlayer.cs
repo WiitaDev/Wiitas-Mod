@@ -101,9 +101,10 @@ namespace WiitaMod.Systems
         {
             if (PhilosophersNecklaceEquipped)
             {
-                Player.potionDelayTime = (int)((float)Player.potionDelayTime * 0.75f);
-                Player.restorationDelayTime = (int)((float)Player.restorationDelayTime * 0.75f);
-                Player.mushroomDelayTime = (int)((float)Player.mushroomDelayTime * 0.75f);
+                Player.potionDelayTime = (int)(Player.potionDelayTime * 0.75f);
+                Player.restorationDelayTime = (int)(Player.restorationDelayTime * 0.75f);
+                Player.mushroomDelayTime = (int)(Player.mushroomDelayTime * 0.75f);
+                Player.longInvince = true; //longInvince so that other accessories dont stack (this doesn't even work lol)
             }
             base.UpdateEquips();
         }
@@ -133,7 +134,6 @@ namespace WiitaMod.Systems
 
             if (!info.PvP)
             {
-                Player.longInvince = true; //longInvince so that other accessories dont stack (this doesn't even work lol)
                 Player.AddImmuneTime(info.CooldownCounter, 30);
             }
 

@@ -38,10 +38,11 @@ namespace WiitaMod.Systems
         {
             if (shop.NpcType == NPCID.ArmsDealer)
             {
-                shop.Add(new Item(ModContent.ItemType<IllegalRocketLauncherParts>())
+                shop.InsertAfter(ItemID.IllegalGunParts, ModContent.ItemType<IllegalRocketLauncherParts>(), Condition.TimeNight, Condition.DownedPlantera);
+                /*shop.Add(new Item(ModContent.ItemType<IllegalRocketLauncherParts>())
                 {
                     //add custom stuff here exmple "shopCustomPrice = 2"
-                });
+                });*/
             }
 
         }

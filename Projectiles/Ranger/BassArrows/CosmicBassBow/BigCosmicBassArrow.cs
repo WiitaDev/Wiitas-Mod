@@ -39,6 +39,13 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
 
         public override void OnSpawn(IEntitySource source)
         {
+            for (int i = 0; i < 55; i++)
+            {
+                Vector2 circle = Main.rand.NextVector2Circular(2f, 2f);
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.PurpleCrystalShard, circle.X + Projectile.velocity.X / 3, circle.X + Projectile.velocity.Y / 3, 0, default(Color), 1f);
+                Main.dust[dustHit].scale = (float)Main.rand.Next(135, 190) * 0.013f;
+                Main.dust[dustHit].noGravity = true;
+            }
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -74,7 +81,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
             for (int i = 0; i < 55; i++)
             {
                 Vector2 circle = Main.rand.NextVector2Circular(2f, 2f);
-                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.PurpleCrystalShard, circle.X + Projectile.velocity.X, circle.X + Projectile.velocity.Y, 0, default(Color), 1f);
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.PurpleCrystalShard, circle.X + Projectile.velocity.X / 5, circle.X + Projectile.velocity.Y / 5, 0, default(Color), 1f);
                 Main.dust[dustHit].scale = (float)Main.rand.Next(135, 190) * 0.013f;
                 Main.dust[dustHit].noGravity = true;
             }
@@ -84,7 +91,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 {
                     if (Main.myPlayer == player.whoAmI)
                     {
-                        Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 0.5f + new Vector2(Main.rand.Next(-7, 8), Main.rand.Next(-7, 8)), ModContent.ProjectileType<CosmicProjectile>(), Projectile.damage / 2, 0, Main.myPlayer);
+                        Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 0.4f + new Vector2(Main.rand.Next(-7, 8), Main.rand.Next(-7, 8)), ModContent.ProjectileType<CosmicProjectile>(), Projectile.damage / 2, 0, Main.myPlayer);
                     }
                 }
             }

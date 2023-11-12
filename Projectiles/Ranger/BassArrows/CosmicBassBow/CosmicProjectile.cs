@@ -51,6 +51,14 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
         {
             Projectile.spriteDirection = Projectile.direction;
 
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 circle = Main.rand.NextVector2Circular(0.05f, 0.05f);
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.PurpleCrystalShard, circle.X + Projectile.velocity.X, circle.X + Projectile.velocity.Y, 0, default, 1f);
+                Main.dust[dustHit].scale = (float)Main.rand.Next(135, 190) * 0.007f;
+                Main.dust[dustHit].noGravity = true;
+            }
+
             float maxDetectRadius = 1400f; // The maximum radius at which a projectile can detect a target
             float projSpeed = 20f; // The speed at which the projectile moves towards the target
 

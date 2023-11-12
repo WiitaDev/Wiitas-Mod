@@ -122,8 +122,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
         private void ShootBig(Player player)
         {
             Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -75;
-            SoundEngine.PlaySound(SoundID.Item93.WithPitchOffset(-0.35f).WithVolumeScale(0.5f), player.Center);
-            SoundEngine.PlaySound(SoundID.Item105.WithPitchOffset(-0.33f), player.Center);
+            SoundEngine.PlaySound(SoundID.Item74.WithPitchOffset(-0.33f), player.Center);
 
             Vector2 offset = Projectile.velocity;
             offset *= MOVE_DISTANCE - 20;
@@ -135,8 +134,8 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 dust.noGravity = true;
                 dust.velocity *= Main.rand.Next(10, 21) * 0.1f;
             }
-
-            Projectile.NewProjectile(player.GetSource_FromThis(), pos, Projectile.velocity * 30, ModContent.ProjectileType<BigCosmicBassArrow>(), Projectile.damage * 3, 0, Main.myPlayer);
+            float Damage = Projectile.damage * 2.5f;
+            Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 30, ModContent.ProjectileType<BigCosmicBassArrow>(), (int)Damage, 0, Main.myPlayer);
         }
 
         private void ChargeBow(Player player)

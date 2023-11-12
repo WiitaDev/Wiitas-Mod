@@ -8,7 +8,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using WiitaMod.Items.Armor.Vanity;
+using WiitaMod.Items.Armor;
 using WiitaMod.Items.Pets;
 using WiitaMod.Items.Placeable;
 
@@ -21,12 +21,6 @@ namespace WiitaMod.NPCs
             // DisplayName.SetDefault("Hamis");
 
             Main.npcFrameCount[NPC.type] = 17;
-
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-            { // Influences how the NPC looks in the Bestiary
-                Velocity = 1f // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
         }
         // Here we define an enum we will use with the State slot. Using an ai slot as a means to store "state" can simplify things greatly. Think flowchart.
         private enum ActionState

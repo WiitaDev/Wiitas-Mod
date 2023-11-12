@@ -6,6 +6,7 @@ Wiita's Mod is a fairly cool mod that adds content to the base game
 The following stuff is:
 
 - Hamis (enemy) and a pet for it from Noita :) 
+- HamHat (Alternate version of Magic Hat)
 - 4 new bows
 - 2 new Flamelasers
 - A post-plantera sandgun upgrade
@@ -22,7 +23,7 @@ Contact me on Discord if you have any questions or suggestions
 Changelog:
 0.2.1:
 - Reworked Cosmic Bass Bow
-- Reworked Hamis Hat
+- Made HamHat useful & changed its sprite
 
 0.2.0:
 - Updated for 1.4.4 version of tModLoader
