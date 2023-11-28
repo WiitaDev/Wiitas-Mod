@@ -143,11 +143,6 @@ Mods: {
 				Tooltip: ""
 			}
 
-			CustomSwingSword: {
-				DisplayName: Custom Swing Sword
-				Tooltip: You're not supposed to see this..
-			}
-
 			CosmicBassBow: {
 				DisplayName: Cosmic Bass Bow
 				Tooltip:
@@ -157,6 +152,11 @@ Mods: {
 					Charging the weapon fully shoots a strong homing Cosmic Bass
 					The strong Cosmic Bass explodes into homing Cosmic Projectiles
 					'''
+			}
+
+			CosmicSentry: {
+				DisplayName: Cosmic Sentry
+				Tooltip: ""
 			}
 		}
 
@@ -178,8 +178,9 @@ Mods: {
 			HamisNuke.DisplayName: Hamis Nuke
 			CosmicBassArrow.DisplayName: Cosmic Bass Arrow
 			CosmicBassBowHold.DisplayName: Cosmic Bass Bow
-			BigCosmicBassArrow.DisplayName: Cosmic Bass Arrow
+			BigCosmicBassArrow.DisplayName: Strong Cosmic Bass Arrow
 			CosmicProjectile.DisplayName: Cosmic Projectile
+			CosmicSentrySentry.DisplayName: Cosmic Sentry
 		}
 
 		Tiles: {
