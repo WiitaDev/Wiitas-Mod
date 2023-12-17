@@ -9,9 +9,8 @@ using WiitaMod.Projectiles.Summon;
 
 namespace WiitaMod.Items.Weapons.Summon
 {
-    public class CosmicSentry : ModItem
+    public class BassSentry : ModItem
     {
-        const float MAX_DISTANCE = 600f;
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Shadowflame Apparition Staff");
@@ -22,40 +21,30 @@ namespace WiitaMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
-            Item.noMelee = true;
-            Item.DamageType = DamageClass.Summon;
+            Item.CloneDefaults(ItemID.DD2BallistraTowerT1Popper);
             Item.width = 60;
             Item.height = 60;
-            Item.damage = 65;
-
+            Item.damage = 15;
             Item.mana = 12;
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 30;
-            Item.useAnimation = 30;
             Item.knockBack = 2;
             Item.sentry = true;
             Item.UseSound = SoundID.Item44;
             Item.rare = ItemRarityID.LightPurple;
             Item.value = Item.sellPrice(0, 5, 0, 0);
-            Item.shoot = ModContent.ProjectileType<CosmicSentrySentry>();
+            Item.shoot = ModContent.ProjectileType<BassSentrySentry>();
 
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             position = Main.MouseWorld;
-            if (MouseTooFar(player))
-                position = player.DirectionTo(position) * MAX_DISTANCE;
 
-            Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI);
+            Projectile.NewProjectile(source, position.X, position.Y, 0, 0, type, damage, knockback, player.whoAmI);
             player.UpdateMaxTurrets();
             return false;
         }
         public override bool CanUseItem(Player player)
         {
-            if (MouseTooFar(player))
-                return false;
-
             Projectile dummy = new Projectile();
             dummy.SetDefaults(Item.shoot);
 
@@ -64,6 +53,5 @@ namespace WiitaMod.Items.Weapons.Summon
 
             return !Collision.SolidTilesVersatile(topLeft.X, bottomRight.X, topLeft.Y, bottomRight.Y);
         }
-        private bool MouseTooFar(Player player) => player.Distance(Main.MouseWorld) >= MAX_DISTANCE;
     }
 }

@@ -2,8 +2,8 @@
 
 <!> Multiplayer Supported <!>
 
-Wiita's Mod is a fairly cool mod that adds content to the base game
-The following stuff is:
+Wiita's Mod is a mediocre content mod that adds random stuff
+Current stuff in the mod:
 
 - Hamis (enemy) and a pet for it from Noita :) 
 - HamHat (Alternate version of Magic Hat)
@@ -11,6 +11,7 @@ The following stuff is:
 - 2 new Flamelasers
 - A post-plantera sandgun upgrade
 - 1 new summoner weapon
+- 1 new sentry
 - 2 new accessories
 
 < Developers >
@@ -24,6 +25,7 @@ Changelog:
 0.2.1:
 - Reworked Cosmic Bass Bow
 - Made HamHat useful & changed its sprite
+- Added a new sentry
 
 0.2.0:
 - Updated for 1.4.4 version of tModLoader

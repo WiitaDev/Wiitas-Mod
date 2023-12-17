@@ -158,6 +158,11 @@ Mods: {
 				DisplayName: Cosmic Sentry
 				Tooltip: ""
 			}
+
+			BassSentry: {
+				DisplayName: Bass Sentry
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
@@ -181,6 +186,7 @@ Mods: {
 			BigCosmicBassArrow.DisplayName: Strong Cosmic Bass Arrow
 			CosmicProjectile.DisplayName: Cosmic Projectile
 			CosmicSentrySentry.DisplayName: Cosmic Sentry
+			BassSentrySentry.DisplayName: Bass Sentry Sentry
 		}
 
 		Tiles: {
