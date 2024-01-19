@@ -163,6 +163,11 @@ Mods: {
 				DisplayName: Bass Sentry
 				Tooltip: ""
 			}
+
+			FriedSeagull: {
+				DisplayName: Fried Seagull
+				Tooltip: "'Vermin with wings? Chicken of the sea? Or just an opportunity missed?'"
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis

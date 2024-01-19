@@ -11,7 +11,6 @@ Current stuff in the mod:
 - 2 new Flamelasers
 - A post-plantera sandgun upgrade
 - 1 new summoner weapon
-- 1 new sentry
 - 2 new accessories
 
 < Developers >
@@ -25,7 +24,7 @@ Changelog:
 0.2.1:
 - Reworked Cosmic Bass Bow
 - Made HamHat useful & changed its sprite
-- Added a new sentry
+- Added Fried Seagull
 
 0.2.0:
 - Updated for 1.4.4 version of tModLoader
