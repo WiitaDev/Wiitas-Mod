@@ -15,10 +15,10 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			/* Tooltip.SetDefault("Arrows turn into Leaf Bass" + 
 							 "\nThe Leaf Bass breaks into homing leaves" +
 							 "\nThe leaves ignore 20 enemy defense"); */
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Item.ResearchUnlockCount = 1;
+            ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
 
-
-		}
+        }
 
 		public override void SetDefaults()
 		{

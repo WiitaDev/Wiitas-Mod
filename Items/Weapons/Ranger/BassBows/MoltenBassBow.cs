@@ -14,9 +14,9 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			// DisplayName.SetDefault("Molten Bass Bow");
 			// Tooltip.SetDefault("Arrows turn into Molten Bass that explode spreading fire\nThe Molten Bass gets extinguished when touching water");
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-
-			}
+			Item.ResearchUnlockCount = 1;
+            ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
+        }
 
 		public override void SetDefaults()
 		{

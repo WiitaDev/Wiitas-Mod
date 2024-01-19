@@ -1,3 +1,4 @@
+using Humanizer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -60,6 +61,8 @@ namespace WiitaMod.NPCs
         // This is all to just make beautiful, manageable, and clean code.
         public ref float AI_State => ref NPC.ai[0];
         public ref float AI_Timer => ref NPC.ai[1];
+        bool playerNoticed = false;
+
 
         public override void SetDefaults()
         {
@@ -135,7 +138,7 @@ namespace WiitaMod.NPCs
         public override void AI()
         {
             // This makes the sprite flip horizontally in conjunction with the npc.direction.
-            NPC.spriteDirection = -NPC.direction;
+            NPC.spriteDirection = NPC.direction * -1;
 
             ;
             if (NPC.velocity.Y != 0)
@@ -341,6 +344,10 @@ namespace WiitaMod.NPCs
             // The faceTarget parameter means that npc.direction will automatically be 1 or -1 if the targeted player is to the right or left.
             // This is also automatically flipped if npc.confused.
             NPC.TargetClosest(true);
+            if(Main.player[NPC.target].Distance(NPC.Center) > 800f) { playerNoticed = false; }
+
+            if (!Collision.CanHitLine(NPC.position, 20, 20, Main.player[NPC.target].position, 20, 20) && playerNoticed == false) { playerNoticed = false; return; } else { playerNoticed = true; }
+
 
             // Now we check the make sure the target is still valid and within our specified notice range (500)
             if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0)
@@ -349,7 +356,7 @@ namespace WiitaMod.NPCs
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
             }
-            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) < 800f)
+            if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) <= 600f)
             {
                 AI_State = (float)ActionState.Run;
             }
@@ -357,13 +364,14 @@ namespace WiitaMod.NPCs
         private void Jump()
         {
             AI_Timer++;
+            float playerDistance = Main.player[NPC.target].Distance(NPC.Center);
 
             if (AI_Timer == 1)
             {
                 // We apply an initial velocity the first tick we are in the Jump frame. Remember that -Y is up.
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
-                float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - Main.player[NPC.target].Distance(NPC.Center)), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
-                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * 7f * -1), (float)(Math.Sin(rotation) * 7f * -1));
+                float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - playerDistance), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
+                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (playerDistance * 0.03f + 4f) * -1), (float)(Math.Sin(rotation) * (playerDistance * 0.03f + 4f) * -1));
 
                 SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(0.80f, 1f)), NPC.Center);
             }
@@ -374,28 +382,28 @@ namespace WiitaMod.NPCs
             Player target = Main.player[NPC.target];
             NPC.TargetClosest(true);
 
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -3 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
+            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
             {
-                NPC.velocity.X -= Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the left
+                NPC.velocity.X -= Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the left
             }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0)
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 60) == 0)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
             }
 
-            if (target.position.X > NPC.position.X && NPC.velocity.X < 3 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
+            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
             {
-                NPC.velocity.X += Main.rand.NextFloat(0.18f, 0.23f); // accelerate to the right
+                NPC.velocity.X += Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the right
             }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0)
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 60) == 0)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
             }
-            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 800f)
+            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 600f)
             {
                 // Out targeted player seems to have left our range, so we'll go back to sleep.
                 NPC.velocity = Vector2.Zero;

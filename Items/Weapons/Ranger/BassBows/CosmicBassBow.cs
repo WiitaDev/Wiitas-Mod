@@ -17,6 +17,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 							 "\nThe ring shoots outs Cosmic projectiles that deal 75% damage of the weapon"); */
 
             Item.ResearchUnlockCount = 1;
+            ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
 		}
 
 		public override void SetDefaults()

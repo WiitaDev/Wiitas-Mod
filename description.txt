@@ -25,6 +25,8 @@ Changelog:
 - Reworked Cosmic Bass Bow
 - Made HamHat useful & changed its sprite
 - Added Fried Seagull
+- Small changes to Hamis AI
+- Added "insert Lightning weapon name"
 
 0.2.0:
 - Updated for 1.4.4 version of tModLoader

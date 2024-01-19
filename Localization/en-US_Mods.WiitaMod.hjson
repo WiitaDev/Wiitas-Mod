@@ -1,4 +1,9 @@
-Projectiles.TestingWeaponProj.DisplayName: Testing Weapon Proj
+Projectiles: {
+	TestingWeaponProj.DisplayName: Testing Weapon Proj
+	CrystalGauntletBall.DisplayName: Crystal Gauntlet Ball
+	LightningSniperProj.DisplayName: Lightning Sniper Proj
+	LightningSniperHold.DisplayName: Lightning Sniper Hold
+}
 
 Items: {
 	PalladinsShield: {
@@ -51,6 +56,11 @@ Items: {
 
 	TestingWeapon: {
 		DisplayName: Testing Weapon
+		Tooltip: ""
+	}
+
+	LightningSniper: {
+		DisplayName: Lightning Sniper
 		Tooltip: ""
 	}
 }
