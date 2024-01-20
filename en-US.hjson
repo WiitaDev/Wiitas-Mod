@@ -168,6 +168,11 @@ Mods: {
 				DisplayName: Fried Seagull
 				Tooltip: "'Vermin with wings? Chicken of the sea? Or just an opportunity missed?'"
 			}
+
+			AstralAlloy: {
+				DisplayName: Astral Alloy
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis

@@ -63,6 +63,11 @@ Items: {
 		DisplayName: Lightning Sniper
 		Tooltip: ""
 	}
+
+	ThundercoreRifle: {
+		DisplayName: Thundercore Rifle
+		Tooltip: ""
+	}
 }
 
 Buffs: {

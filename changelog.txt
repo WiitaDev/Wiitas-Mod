@@ -1,5 +1,5 @@
 - Reworked Cosmic Bass Bow
 - Made Hamis Hat useful & changed its sprite
 - Added Fried Seagull
-- Added "insert lightning weapon name"
+- Added Thundercore rifle
 - Small changes to Hamis

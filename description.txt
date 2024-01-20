@@ -7,9 +7,7 @@ Current stuff in the mod:
 
 - Hamis (enemy) and a pet for it from Noita :) 
 - HamHat (Alternate version of Magic Hat)
-- 4 new bows
-- 2 new Flamelasers
-- A post-plantera sandgun upgrade
+- 8 new ranged weapons
 - 1 new summoner weapon
 - 2 new accessories
 
@@ -26,7 +24,7 @@ Changelog:
 - Made HamHat useful & changed its sprite
 - Added Fried Seagull
 - Small changes to Hamis AI
-- Added "insert Lightning weapon name"
+- Added Thundercore Rifle
 
 0.2.0:
 - Updated for 1.4.4 version of tModLoader

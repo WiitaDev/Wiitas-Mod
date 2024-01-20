@@ -6,12 +6,12 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items.Ammo;
 using WiitaMod.Items.CraftingMaterials;
-using WiitaMod.Projectiles.Ranger.BassArrows;
+using WiitaMod.Projectiles.Ranger;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger
 {
-	public class LightningSniper : ModItem
+	public class ThundercoreRifle : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -21,7 +21,8 @@ namespace WiitaMod.Items.Weapons.Ranger
 
 		public override void SetDefaults()
 		{
-			Item.damage = 550;
+			Item.damage = 650;
+			Item.crit = 20;
 			Item.noMelee = true;
 			Item.DamageType = DamageClass.Ranged;
 			Item.width = 92;
@@ -36,7 +37,6 @@ namespace WiitaMod.Items.Weapons.Ranger
 			Item.autoReuse = false;
 			Item.shoot = ModContent.ProjectileType<LightningSniperHold>();
 			Item.shootSpeed = 6f;
-			Item.noUseGraphic = true;
 		}
 
 
@@ -59,16 +59,18 @@ namespace WiitaMod.Items.Weapons.Ranger
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.SoulofSight, 5);
-			recipe.AddIngredient(ItemID.EyeoftheGolem);
-            recipe.AddRecipeGroup("HardmodeTier3", 8);
-            recipe.AddTile(TileID.WorkBenches);
+			recipe.AddIngredient(ModContent.ItemType<AstralAlloy>(), 8);
+            recipe.AddRecipeGroup("HardmodeTier3", 3);
+			recipe.AddIngredient(ItemID.SoulofSight, 10);
+			recipe.AddIngredient(ItemID.SoulofFright, 5);
+			recipe.AddIngredient(ItemID.Ectoplasm, 3);
+            recipe.AddTile(TileID.MythrilAnvil);
 			recipe.Register();
 		}
 
 		public override Vector2? HoldoutOffset()
 		{
-			Vector2 offset = new Vector2(-24, 0);
+			Vector2 offset = new Vector2(-50, -6);
 			return offset;
 		}
 	}
