@@ -1,25 +1,20 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Graphics;
-using WiitaMod.Dusts;
-using System.IO;
-using Microsoft.CodeAnalysis;
 
 namespace WiitaMod.Projectiles.Ranger
 {
-    public class LightningSniperProj : ModProjectile
+    public class ThunderCoreProj : ModProjectile
     {
         public ref float Time => ref Projectile.ai[0];
-        //public ref float Owner => ref Projectile.ai[1];
+        public ref float Owner => ref Projectile.ai[1];
         public ref float Distance => ref Projectile.ai[2];
 
         public List<Vector2> points;
@@ -29,7 +24,7 @@ namespace WiitaMod.Projectiles.Ranger
         public Vector2 midPoint;
         public Vector2 endPoint;
 
-        public ref Player Owner => ref Main.player[Projectile.owner];
+        //public ref Player Owner => ref Main.player[Projectile.owner];
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
 
         public override bool ShouldUpdatePosition() => false;
@@ -49,11 +44,11 @@ namespace WiitaMod.Projectiles.Ranger
 
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.Center = Main.projectile[Owner.heldProj].Center;
+            Projectile.Center = Main.projectile[Main.player[(int)Owner].heldProj].Center;
         }
 
         public override void AI()
-        {          
+        {
             if (Time < 1)
             {
                 endPoint = Projectile.Center;
@@ -125,7 +120,7 @@ namespace WiitaMod.Projectiles.Ranger
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                Vector2 mouse = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 1100;
+                Vector2 mouse = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 1800;
                 //mouse = Main.player[(int)Owner].MountedCenter + Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 1100;
 
                 int closestTarget = -1;
@@ -139,16 +134,13 @@ namespace WiitaMod.Projectiles.Ranger
                     }
                 }
 
-                if(closestDistance < 150 && closestTarget != -1) 
+                if (closestDistance < 150 && closestTarget != -1)
                 {
                     endPoint = Main.rand.NextVector2FromRectangle(Main.npc[closestTarget].Hitbox);
-                    //Projectile.netUpdate = true;
                     return;
                 }
 
-
                 endPoint = mouse;
-                //Projectile.netUpdate = true;
             }
         }
 
@@ -229,8 +221,8 @@ namespace WiitaMod.Projectiles.Ranger
             }
             return false;
         }
-    } 
-    public class LightningSniperHold : ModProjectile
+    }
+    public class ThunderCoreRifleHold : ModProjectile
     {
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
         public override void SetDefaults()
@@ -259,8 +251,8 @@ namespace WiitaMod.Projectiles.Ranger
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * Owner.HeldItem.shootSpeed, 0.07f);
             Projectile.Center = Owner.MountedCenter + Projectile.velocity * (20f + 8f * Projectile.scale);
 
-            if(Time == 0)
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<LightningSniperProj>(), Projectile.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
+            if (Time == 0 && Owner.whoAmI == Main.myPlayer)
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<ThunderCoreProj>(), Projectile.damage, 1f, Owner.whoAmI, ai1: Owner.whoAmI);
 
 
             Time++;

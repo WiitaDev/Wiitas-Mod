@@ -3,3 +3,4 @@
 - Added Fried Seagull
 - Added Thundercore rifle
 - Small changes to Hamis
+- Added the Medieval Prosthetic accessory

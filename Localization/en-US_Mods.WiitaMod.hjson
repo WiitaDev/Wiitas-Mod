@@ -3,6 +3,8 @@ Projectiles: {
 	CrystalGauntletBall.DisplayName: Crystal Gauntlet Ball
 	LightningSniperProj.DisplayName: Lightning Sniper Proj
 	LightningSniperHold.DisplayName: Lightning Sniper Hold
+	ThunderCoreProj.DisplayName: Thunder Core Proj
+	ThunderCoreRifleHold.DisplayName: Thunder Core Rifle Hold
 }
 
 Items: {
@@ -65,8 +67,9 @@ Items: {
 	}
 
 	ThundercoreRifle: {
-		DisplayName: Thundercore Rifle
-		Tooltip: ""
+	}
+
+	MedievalProsthetic: {
 	}
 }
 

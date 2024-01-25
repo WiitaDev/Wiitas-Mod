@@ -9,7 +9,7 @@ Current stuff in the mod:
 - HamHat (Alternate version of Magic Hat)
 - 8 new ranged weapons
 - 1 new summoner weapon
-- 2 new accessories
+- 3 new accessories
 
 < Developers >
 - Wiita (Main dev, programming, some art & everything else)
@@ -25,6 +25,7 @@ Changelog:
 - Added Fried Seagull
 - Small changes to Hamis AI
 - Added Thundercore Rifle
+- Added the Medieval Prosthetic accessory
 
 0.2.0:
 - Updated for 1.4.4 version of tModLoader

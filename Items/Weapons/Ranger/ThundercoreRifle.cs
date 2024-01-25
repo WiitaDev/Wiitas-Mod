@@ -35,15 +35,15 @@ namespace WiitaMod.Items.Weapons.Ranger
 			Item.rare = ItemRarityID.Yellow;
 			Item.UseSound = SoundID.Thunder;
 			Item.autoReuse = false;
-			Item.shoot = ModContent.ProjectileType<LightningSniperHold>();
+			Item.shoot = ModContent.ProjectileType<ThunderCoreRifleHold>();
 			Item.shootSpeed = 6f;
 		}
 
 
-        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<LightningSniperHold>()] <= 0;
+        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ThunderCoreRifleHold>()] <= 0;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<LightningSniperHold>()] <= 0)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<ThunderCoreRifleHold>()] <= 0)
             {
 				if (player.altFunctionUse == 0)
 				{

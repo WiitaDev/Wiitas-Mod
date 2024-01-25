@@ -1,4 +1,6 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -51,13 +53,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
         {
             Projectile.spriteDirection = Projectile.direction;
 
-            for (int i = 0; i < 4; i++)
-            {
-                Vector2 circle = Main.rand.NextVector2Circular(0.05f, 0.05f);
-                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.PurpleCrystalShard, circle.X + Projectile.velocity.X, circle.X + Projectile.velocity.Y, 0, default, 1f);
-                Main.dust[dustHit].scale = (float)Main.rand.Next(135, 190) * 0.007f;
-                Main.dust[dustHit].noGravity = true;
-            }
 
             float maxDetectRadius = 1400f; // The maximum radius at which a projectile can detect a target
             float projSpeed = 20f; // The speed at which the projectile moves towards the target
@@ -79,7 +74,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * projSpeed;
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction) + 1.57f * Projectile.direction;
             }
-            else 
+            else
             {
                 Projectile.friendly = false;
                 Projectile.velocity *= 0.96f;
@@ -87,8 +82,21 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
         }
 
         public override bool PreDraw(ref Color lightColor)
-        { 
+        {
             default(Effects.CosmicProjectileTrail).Draw(Projectile);
+
+            Texture2D core = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/CircleGradient", AssetRequestMode.ImmediateLoad).Value;
+            Texture2D glow = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Glow", AssetRequestMode.ImmediateLoad).Value;
+
+            Color result = Color.Purple;
+            result.A = 0;
+
+            for (int i = 0; i < 2; i++)
+            {
+                Main.EntitySpriteDraw(core, Projectile.Center - Main.screenPosition, core.Frame(), result, Projectile.rotation, core.Size() * 0.5f, Projectile.scale * 0.1f, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), result, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
+            }
+
 
             return false;
         }

@@ -154,16 +154,6 @@ Mods: {
 					'''
 			}
 
-			CosmicSentry: {
-				DisplayName: Cosmic Sentry
-				Tooltip: ""
-			}
-
-			BassSentry: {
-				DisplayName: Bass Sentry
-				Tooltip: ""
-			}
-
 			FriedSeagull: {
 				DisplayName: Fried Seagull
 				Tooltip: "'Vermin with wings? Chicken of the sea? Or just an opportunity missed?'"
@@ -171,7 +161,23 @@ Mods: {
 
 			AstralAlloy: {
 				DisplayName: Astral Alloy
-				Tooltip: ""
+				Tooltip: lightning infused alloy
+			}
+
+			ThundercoreRifle: {
+				DisplayName: Thundercore Rifle
+				Tooltip: "'big thunder boom lightning amazing'"
+			}
+
+			MedievalProsthetic: {
+				DisplayName: Medieval Prosthetic
+				Tooltip:
+					'''
+					100% Increased Flight Time
+					30% Increased Jump Speed
+					-5% Max Health
+					'The prosthetic is so badly made that you take damage when walking'
+					'''
 			}
 		}
 
@@ -195,8 +201,6 @@ Mods: {
 			CosmicBassBowHold.DisplayName: Cosmic Bass Bow
 			BigCosmicBassArrow.DisplayName: Strong Cosmic Bass Arrow
 			CosmicProjectile.DisplayName: Cosmic Projectile
-			CosmicSentrySentry.DisplayName: Cosmic Sentry
-			BassSentrySentry.DisplayName: Bass Sentry Sentry
 		}
 
 		Tiles: {
