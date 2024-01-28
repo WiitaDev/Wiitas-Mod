@@ -23,7 +23,7 @@ namespace WiitaMod.Items.CraftingMaterials
             Item.height = 64;
             Item.maxStack = 9999;
             Item.value = Item.buyPrice(0, 0, 25, 0);
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.White;
         }
 
         public override void AddRecipes()

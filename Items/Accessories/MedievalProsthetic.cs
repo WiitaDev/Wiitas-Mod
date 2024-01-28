@@ -31,11 +31,11 @@ namespace WiitaMod.Items.Accessories
 				if (flag)
 				{
 					player.wingTime *= 2;
-					damageTimer = 0;
 					flag = false;
 				}
                 player.runAcceleration *= 1.5f;
                 player.maxRunSpeed *= 1.3f;
+				damageTimer = 0;
 			}
 			else if (!flag && player.velocity.Y == 0) //on the ground
 			{
@@ -43,7 +43,7 @@ namespace WiitaMod.Items.Accessories
 			}
 			
 			if(damageTimer <= 0) {
-				if (player.velocity.Y == 0 && player.velocity.X != 0 && player.mount == null) // on the ground and moving
+				if (player.velocity.Y == 0 && player.velocity.X != 0 && !player.mount.Active) // on the ground and moving
 				{
 					if(player.whoAmI == Main.myPlayer)
 						player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " tripped on a rock and died."), Main.rand.Next(1, 4), 0, armorPenetration: 9999, dodgeable: false, knockback: 0, cooldownCounter: 20);

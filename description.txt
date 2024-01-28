@@ -13,7 +13,7 @@ Current stuff in the mod:
 
 < Developers >
 - Wiita (Main dev, programming, some art & everything else)
-- meganaisson (Main artist)
+- meganaisson (Main artist, idea generator)
 
 Contact me on Discord if you have any questions or suggestions
 - Wiita.

@@ -16,13 +16,13 @@ namespace WiitaMod.Systems
         {
             if (projectile.type == ModContent.ProjectileType<HamisNuke>())
             {
-                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog)
+                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == 687)
                 {
                     modifiers.FinalDamage += npc.lifeMax - 1;
                 }
                 else
                 {
-                    modifiers.FinalDamage -= 1;
+                    modifiers.FinalDamage *= 0;
                 }
             }
         }

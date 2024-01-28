@@ -57,12 +57,12 @@ namespace WiitaMod.Projectiles.Pets
             Vector2 targetCenter = Projectile.position;
             bool foundTarget = false;
 
-            if (NPC.CountNPCS(NPCID.Frog) > 0 || NPC.CountNPCS(NPCID.GoldFrog) > 0)
+            if (NPC.CountNPCS(NPCID.Frog) > 0 || NPC.CountNPCS(NPCID.GoldFrog) > 0 || NPC.CountNPCS(687) > 0)
             {
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
-                    if (npc.active && (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog))
+                    if (npc.active && (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == 687))
                     {
                         float between = Vector2.Distance(npc.Center, Projectile.Center);
                         bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
@@ -115,7 +115,7 @@ namespace WiitaMod.Projectiles.Pets
             Projectile.aiStyle = 0;
             Projectile.width = 15;
             Projectile.height = 15;
-            Projectile.damage = 1;
+            Projectile.damage = 0;
             Projectile.penetrate = 2;
             Projectile.scale = 1f;
             Projectile.timeLeft = 600;

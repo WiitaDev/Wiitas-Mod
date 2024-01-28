@@ -33,7 +33,7 @@ Mods: {
 
 			SandlionAmmo: {
 				DisplayName: Sandlion
-				Tooltip: "'I wonder if i can shoot this...'"
+				Tooltip: "'I wonder if I can shoot this...'"
 			}
 
 			IllegalRocketLauncherParts: {
@@ -132,7 +132,7 @@ Mods: {
 				Tooltip:
 					'''
 					'The drippiest drip there is'
-					8% Increased critical strike chance
+					8% increased critical strike chance
 					4% increased magic damage
 					'''
 				SetBonus: Increases maximum mana by 60
@@ -161,7 +161,7 @@ Mods: {
 
 			AstralAlloy: {
 				DisplayName: Astral Alloy
-				Tooltip: lightning infused alloy
+				Tooltip: ""
 			}
 
 			ThundercoreRifle: {
@@ -173,9 +173,9 @@ Mods: {
 				DisplayName: Medieval Prosthetic
 				Tooltip:
 					'''
-					100% Increased flight time
-					30% Increased flight movement speed
-					10% Reduced max health
+					100% increased flight time
+					30% increased flight movement speed
+					5% reduced max health
 					'The prosthetic is so badly made that you take damage when walking'
 					'''
 			}
@@ -199,7 +199,7 @@ Mods: {
 			HamisNuke.DisplayName: Hamis Nuke
 			CosmicBassArrow.DisplayName: Cosmic Bass Arrow
 			CosmicBassBowHold.DisplayName: Cosmic Bass Bow
-			BigCosmicBassArrow.DisplayName: Strong Cosmic Bass Arrow
+			BigCosmicBassArrow.DisplayName: Cosmic Bass
 			CosmicProjectile.DisplayName: Cosmic Projectile
 		}
 

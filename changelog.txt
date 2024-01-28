@@ -2,5 +2,5 @@
 - Made Hamis Hat useful & changed its sprite
 - Added Fried Seagull
 - Added Thundercore rifle
-- Small changes to Hamis
+- Small changes to Hamis AI
 - Added the Medieval Prosthetic accessory
