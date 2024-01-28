@@ -173,9 +173,9 @@ Mods: {
 				DisplayName: Medieval Prosthetic
 				Tooltip:
 					'''
-					100% Increased Flight Time
-					30% Increased Jump Speed
-					-5% Max Health
+					100% Increased flight time
+					30% Increased flight movement speed
+					10% Reduced max health
 					'The prosthetic is so badly made that you take damage when walking'
 					'''
 			}

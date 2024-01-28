@@ -3,15 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Dusts;
 
 namespace WiitaMod.Projectiles.Ranger
 {
-    public class ThunderCoreProj : ModProjectile
+    public class ThundercoreProj : ModProjectile
     {
         public ref float Time => ref Projectile.ai[0];
         public ref float Owner => ref Projectile.ai[1];
@@ -34,7 +36,7 @@ namespace WiitaMod.Projectiles.Ranger
             Projectile.height = 24;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 200;
             Projectile.tileCollide = false;
             Projectile.manualDirectionChange = true;
             Projectile.extraUpdates = 1;
@@ -80,7 +82,12 @@ namespace WiitaMod.Projectiles.Ranger
                 points.Add(endPoint);
 
                 for (int i = 0; i < points.Count; i++)
-                {
+                {            
+                    if (i > 0)
+                    {
+                        HomeToEnemies(i);
+
+                    }
                     offsets.Add(Main.rand.NextVector2Circular(2, 5).RotatedBy(Projectile.AngleTo(endPoint)) * Utils.GetLerpValue(1, points.Count * 0.3f, i, true) * Utils.GetLerpValue(points.Count - 1, points.Count * 0.7f, i, true));
                     velocities.Add(Projectile.DirectionTo(endPoint).RotatedByRandom(1.5f) * Main.rand.NextFloat(2f, 6f));
                 }
@@ -123,25 +130,32 @@ namespace WiitaMod.Projectiles.Ranger
                 Vector2 mouse = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 1800;
                 //mouse = Main.player[(int)Owner].MountedCenter + Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 1100;
 
-                int closestTarget = -1;
-                int closestDistance = 1000;
-                for (int i = 0; i < Main.maxNPCs; i++)
-                {
-                    if (Main.npc[i].active && Main.npc[i].Distance(Main.MouseWorld) < closestDistance)
-                    {
-                        closestTarget = i;
-                        closestDistance = (int)Main.npc[i].Distance(Main.MouseWorld);
-                    }
-                }
-
-                if (closestDistance < 150 && closestTarget != -1)
+                /*if (closestDistance < 150 && closestTarget != -1)
                 {
                     endPoint = Main.rand.NextVector2FromRectangle(Main.npc[closestTarget].Hitbox);
                     return;
-                }
+                }*/
 
                 endPoint = mouse;
             }
+        }
+
+
+        private void HomeToEnemies(int i) 
+        {
+            float closestDistance = 1000;
+            NPC closestTarget = null;
+            for (int k = 0; k < Main.maxNPCs; k++)
+            {
+                NPC target = Main.npc[k];
+                if (target.active && target.Distance(points[i]) < closestDistance && target.CanBeChasedBy())
+                {
+                    closestTarget = target;
+                    closestDistance = target.Distance(points[i]);
+                }
+            }
+            if(closestDistance < 150 && closestTarget != null)
+            points[i] = Main.rand.NextVector2FromRectangle(closestTarget.Hitbox);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -157,13 +171,22 @@ namespace WiitaMod.Projectiles.Ranger
                     hitbox.Location = (center - hitbox.Size() * 0.5f).ToPoint();
 
                     if (targetHitbox.Intersects(hitbox) || targetHitbox.Intersects(endpointHitbox))
+                    {
                         return true;
+                    }
                 }
             }
 
             return false;
         }
 
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if(target.type == NPCID.TheDestroyerBody) 
+            {
+                modifiers.FinalDamage *= 0.1f;
+            }
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             if (Time > 1)
@@ -222,7 +245,7 @@ namespace WiitaMod.Projectiles.Ranger
             return false;
         }
     }
-    public class ThunderCoreRifleHold : ModProjectile
+    public class ThundercoreRifleHold : ModProjectile
     {
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
         public override void SetDefaults()
@@ -252,7 +275,7 @@ namespace WiitaMod.Projectiles.Ranger
             Projectile.Center = Owner.MountedCenter + Projectile.velocity * (20f + 8f * Projectile.scale);
 
             if (Time == 0 && Owner.whoAmI == Main.myPlayer)
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<ThunderCoreProj>(), Projectile.damage, 1f, Owner.whoAmI, ai1: Owner.whoAmI);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<ThundercoreProj>(), Projectile.damage, 1f, Owner.whoAmI, ai1: Owner.whoAmI);
 
 
             Time++;

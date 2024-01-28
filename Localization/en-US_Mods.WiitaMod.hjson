@@ -5,6 +5,8 @@ Projectiles: {
 	LightningSniperHold.DisplayName: Lightning Sniper Hold
 	ThunderCoreProj.DisplayName: Thunder Core Proj
 	ThunderCoreRifleHold.DisplayName: Thunder Core Rifle Hold
+	ThundercoreProj.DisplayName: Thundercore Proj
+	ThundercoreRifleHold.DisplayName: Thundercore Rifle Hold
 }
 
 Items: {
