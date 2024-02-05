@@ -19,33 +19,4 @@ Contact me on Discord if you have any questions or suggestions
 - Wiita.
 
 Changelog:
-0.2.1:
-- Reworked Cosmic Bass Bow
-- Made HamHat useful & changed its sprite
-- Added Fried Seagull
-- Small changes to Hamis AI
-- Added Thundercore Rifle
-- Added the Medieval Prosthetic accessory
-
-0.2.0:
-- Updated for 1.4.4 version of tModLoader
-- Added Hamis statue & Hamis hat (hamhat)
-- Added a recipe for the Diving Helmet
-- Made Hamis pet shoot nukes at frogs
-- Contemplated life choices for 12 hours
-
-0.1.3:
-- Small changes to Leaf Bass Bow
-- Added Corruption & Crimson Flamelasers
-- Changed Bass Bows to work with all arrows
-- Significant improvements to Hamis
-
-0.1.2:
-- Added Hamis pet :)
-- Added Sandlion Launcher 
-- Reworked Leaf Bass Bow
-
-0.1.1:
-- Added Galactic Bass Bow
-- Added Hamis :)
-- Fixed some balancing issues
+- Changelog can be found from the workshop changes

@@ -20,7 +20,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
 
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Cosmic Bass Arrow");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 50;    //The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;        //The recording mode
         }

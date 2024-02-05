@@ -95,7 +95,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             }
         }
 
-        public NPC FindClosestNPC(float maxDetectDistance)
+        private NPC FindClosestNPC(float maxDetectDistance)
         {
             NPC closestNPC = null;
 

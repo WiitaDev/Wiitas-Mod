@@ -365,6 +365,7 @@ namespace WiitaMod.NPCs
         {
             AI_Timer++;
             float playerDistance = Main.player[NPC.target].Distance(NPC.Center);
+            Player target = Main.player[NPC.target];
 
             if (AI_Timer == 1)
             {
@@ -374,6 +375,15 @@ namespace WiitaMod.NPCs
                 NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (playerDistance * 0.03f + 4f) * -1), (float)(Math.Sin(rotation) * (playerDistance * 0.03f + 4f) * -1));
 
                 SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(0.80f, 1f)), NPC.Center);
+            }
+            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
+            {
+                NPC.velocity.X -= Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the left
+            }
+
+            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
+            {
+                NPC.velocity.X += Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the right
             }
         }
 
@@ -424,9 +434,9 @@ namespace WiitaMod.NPCs
                 if (tileX * 16 < position3.X + NPC.width && tileX * 16 + 16 > position3.X && (Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && !Main.tile[tileX, tileY - 1].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType] && !Main.tileSolidTop[Main.tile[tileX, tileY].TileType] || Main.tile[tileX, tileY - 1].IsHalfBlock && Main.tile[tileX, tileY - 1].HasUnactuatedTile) && (!Main.tile[tileX, tileY - 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 1].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 1].TileType] || Main.tile[tileX, tileY - 1].IsHalfBlock && (!Main.tile[tileX, tileY - 4].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 4].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 4].TileType])) && (!Main.tile[tileX, tileY - 2].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 2].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 2].TileType]) && (!Main.tile[tileX, tileY - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY - 3].TileType] || Main.tileSolidTop[Main.tile[tileX, tileY - 3].TileType]) && (!Main.tile[tileX - num81, tileY - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX - num81, tileY - 3].TileType]))
                 {
                     float num84 = tileY * 16;
-                    if (Main.tile[tileX, tileY].IsHalfBlock)
+                    if (Main.tile[tileX, tileY].IsHalfBlock || Main.tile[tileX, tileY].HasTile)
                         num84 += 8f;
-                    if (Main.tile[tileX, tileY - 1].IsHalfBlock)
+                    if (Main.tile[tileX, tileY - 1].IsHalfBlock || Main.tile[tileX, tileY].HasTile)
                         num84 -= 8f;
                     if (num84 < position3.Y + NPC.height)
                     {

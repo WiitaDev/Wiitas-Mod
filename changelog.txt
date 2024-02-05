@@ -1,6 +1,2 @@
-- Reworked Cosmic Bass Bow
-- Made Hamis Hat useful & changed its sprite
-- Added Fried Seagull
-- Added Thundercore rifle
-- Small changes to Hamis AI
-- Added the Medieval Prosthetic accessory
+0.2.2:
+- Added coral staff

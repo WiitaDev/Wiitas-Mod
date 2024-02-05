@@ -179,6 +179,11 @@ Mods: {
 					'The prosthetic is so badly made that you take damage when walking'
 					'''
 			}
+
+			CoralStaff: {
+				DisplayName: Coral Staff
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
@@ -201,6 +206,8 @@ Mods: {
 			CosmicBassBowHold.DisplayName: Cosmic Bass Bow
 			BigCosmicBassArrow.DisplayName: Cosmic Bass
 			CosmicProjectile.DisplayName: Cosmic Projectile
+			CoralStaffProj.DisplayName: Coral Staff Proj
+			CoralStaffHold.DisplayName: Coral Staff Hold
 		}
 
 		Tiles: {
