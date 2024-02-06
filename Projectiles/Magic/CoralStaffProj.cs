@@ -1,13 +1,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using rail;
 using ReLogic.Content;
-using System;
-using System.Net;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles.Ranger;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Magic
 {
@@ -101,29 +101,32 @@ namespace WiitaMod.Items.Weapons.Magic
             return false;
         }
     }
+
     public class CoralStaffHold : ModProjectile
     {
         public override string Texture => ModContent.GetModProjectile(ModContent.ProjectileType<CoralStaffProj>()).Texture;
 
         public ref float Time => ref Projectile.ai[0];
+        public ref float UseType => ref Projectile.ai[1];
         public ref Player player => ref Main.player[Projectile.owner];
 
         public override void SetDefaults()
         {
             Projectile.width = 24;
             Projectile.height = 24;
-            Projectile.friendly = true;
-            Projectile.penetrate = -1;
             Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.friendly = true;
             Projectile.ownerHitCheck = true;
-            Projectile.hide = true;
             Projectile.DamageType = DamageClass.Magic;
+            Projectile.hide = true;
         }
 
+        bool firstAttack = true;
         public override void AI()
         {
             bool manaIsAvailable = player.CheckMana(player.HeldItem.mana, false, false);
-            if (!player.channel || !manaIsAvailable)
+            if (!player.channel && !firstAttack || !manaIsAvailable && !firstAttack)
             {
                 Projectile.Kill();
             }
@@ -135,20 +138,13 @@ namespace WiitaMod.Items.Weapons.Magic
             player.heldProj = Projectile.whoAmI;
             Projectile.Center = player.MountedCenter;
 
-            if (Time == 30 && player.whoAmI == Main.myPlayer)
+            if (UseType == 0 && Time == 40)
             {
-                for (int i = 0; i < 3; i++) {
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(10 * Projectile.spriteDirection, -30), new Vector2(Main.rand.NextFloat(-3, 4), Main.rand.NextFloat(3, 5) * -1), ModContent.ProjectileType<CoralStaffProj>(), Projectile.damage, 1f, player.whoAmI);
-                }
-                player.CheckMana(player.HeldItem.mana, true, false);
-                SoundEngine.PlaySound(SoundID.Item45, player.Center);
-                for (int i = 0; i < 30; i++)
-                {
-                    Vector2 position = new Vector2(8 * Projectile.spriteDirection - 8, 20) + Main.rand.NextVector2Circular(10, 10);
-                    int smashDust = Dust.NewDust(player.Center + position, 10, 10, DustID.BlueTorch, Scale: 2f);
-                    Main.dust[smashDust].noGravity = true;
-
-                }
+                MainAttack();
+            }
+            else if (UseType == 2 && Time == 30) 
+            {
+                AltAttack();
             }
 
             float modRotB = compArmRotBack;
@@ -159,10 +155,52 @@ namespace WiitaMod.Items.Weapons.Magic
             Projectile.spriteDirection = player.direction;
             Projectile.rotation -= player.direction * 0.2f;
 
-            Time++;
             if(Time >= 40) 
             {
                 Time = 0;
+                firstAttack = false;
+            }
+            Time++;
+        }
+
+        private void MainAttack() 
+        {
+            if (player.whoAmI == Main.myPlayer)
+            {
+                if (!firstAttack)
+                {
+                    player.CheckMana(player.HeldItem.mana, true, false);
+                } 
+
+                for (int i = 0; i < 3; i++)
+                {
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(10 * Projectile.spriteDirection, -70), new Vector2(Main.rand.NextFloat(-3, 4), Main.rand.NextFloat(3, 5) * -1), ModContent.ProjectileType<CoralStaffProj>(), Projectile.damage, 1f, player.whoAmI);
+                }
+                SoundEngine.PlaySound(SoundID.Item45, player.Center);
+
+                for (int i = 0; i < 30; i++)
+                {
+                    Vector2 position = new Vector2(10 * Projectile.spriteDirection - 10, -70) + Main.rand.NextVector2CircularEdge(15, 15);
+                    int smashDust = Dust.NewDust(player.Center + position, 10, 10, DustID.BlueTorch, Scale: 1.5f);
+                    Main.dust[smashDust].noGravity = true;
+                    Main.dust[smashDust].velocity *= 0.1f;
+                }
+            }
+        }
+
+        private void AltAttack()
+        {
+            if (player.whoAmI == Main.myPlayer)
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    Vector2 position = new Vector2(8 * Projectile.spriteDirection - 8, 20) + Main.rand.NextVector2Circular(10, 10);
+                    int smashDust = Dust.NewDust(player.Center + position, 10, 10, DustID.BlueTorch, Scale: 2f);
+                    Main.dust[smashDust].noGravity = true;
+                }
+                SoundEngine.PlaySound(SoundID.Item45, player.Center);
+
+                player.GetModPlayer<ModGlobalPlayer>().ActivateShockwave = true;
             }
         }
 
@@ -172,26 +210,43 @@ namespace WiitaMod.Items.Weapons.Magic
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D staffTexture = ModContent.Request<Texture2D>("WiitaMod/Items/Weapons/Magic/CoralStaff", AssetRequestMode.ImmediateLoad).Value;
-
-            float adjustedTime = Time;
-            if(Time >= 10 && Time <= 25) //-20 to 10
-            {
-                adjustedTime = 30 - Time * 2f;
-            }
-            else if (Time >= 26 && Time <= 33) // impact frames.  THIS CODE IS SO ATROCIOUSLY BAD
-            {
-                adjustedTime = -20;
-            }
-            else if (Time > 33) //-18 to 0
-            {
-                adjustedTime = (Time - 40) * 3f;
-            }
-
-            compArmRotFront = (-adjustedTime - 35)  * 0.07f * Projectile.spriteDirection; // hand stuff
-
-            SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Color whiteColor = new Color(255, 255, 255, 255);
-            Vector2 posOffset = new Vector2(10 * Projectile.spriteDirection, -adjustedTime - 45);
+            Vector2 posOffset = new Vector2(10 * Projectile.spriteDirection, 0);
+            SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            float animationTime;
+            if(UseType == 2) 
+            {
+                animationTime = Time;
+
+                if(Time >= 10 && Time <= 25) //-20 to 10
+                {
+                    animationTime = 30 - Time * 2f;
+                }
+                else if (Time >= 26 && Time <= 33) // impact frames.  THIS CODE IS SO ATROCIOUSLY BAD
+                {
+                    animationTime = -20;
+                }
+                else if (Time > 33) //-18 to 0
+                {
+                    animationTime = (Time - 40) * 3f;
+                }           
+
+                compArmRotFront = (-animationTime - 35)  * 0.07f * Projectile.spriteDirection; // hand stuff
+
+                posOffset.Y = -animationTime - 45;
+            }
+            else if(UseType == 0) 
+            {
+                animationTime = Time;               
+                if (!firstAttack)
+                {
+                    animationTime = 40;
+                }
+
+                posOffset.Y = -animationTime * 0.75f - 20;
+                compArmRotFront = (-animationTime - 15) * 0.04f * Projectile.spriteDirection; // hand stuff
+            }
 
             Main.EntitySpriteDraw(staffTexture, player.Center + posOffset - Main.screenPosition, staffTexture.Frame(), whiteColor, MathHelper.ToRadians(-45 * Projectile.spriteDirection), staffTexture.Size() * 0.5f, Projectile.scale, effects, 0);
 

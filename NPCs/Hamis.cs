@@ -163,6 +163,22 @@ namespace WiitaMod.NPCs
                     Jump();
                     break;
                 case (float)ActionState.Fall:
+
+                    Player target = Main.player[NPC.target];
+                    NPC.TargetClosest(true);
+
+                    if (NPC.velocity.X == 0)
+                    {
+                        if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
+                        {
+                            NPC.velocity.X -= Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the left
+                        }
+                        if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
+                        {
+                            NPC.velocity.X += Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the right
+                        }
+                    }
+
                     if (NPC.velocity.Y == 0)
                     {
                         if (Main.player[NPC.target].Distance(NPC.Center) < 64f)
@@ -372,19 +388,11 @@ namespace WiitaMod.NPCs
                 // We apply an initial velocity the first tick we are in the Jump frame. Remember that -Y is up.
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
                 float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - playerDistance), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
-                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (playerDistance * 0.03f + 4f) * -1), (float)(Math.Sin(rotation) * (playerDistance * 0.03f + 4f) * -1));
+                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (playerDistance * 0.015f + 4f) * -1), (float)(Math.Sin(rotation) * (playerDistance * 0.035f + 4f) * -1));
 
                 SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(0.80f, 1f)), NPC.Center);
             }
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
-            {
-                NPC.velocity.X -= Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the left
-            }
 
-            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
-            {
-                NPC.velocity.X += Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the right
-            }
         }
 
         private void Run()
@@ -413,7 +421,7 @@ namespace WiitaMod.NPCs
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
             }
-            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 600f)
+            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 800f)
             {
                 // Out targeted player seems to have left our range, so we'll go back to sleep.
                 NPC.velocity = Vector2.Zero;

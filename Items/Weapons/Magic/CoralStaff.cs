@@ -3,6 +3,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Projectiles.Ranger;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Magic
 {
@@ -39,12 +41,22 @@ namespace WiitaMod.Items.Weapons.Magic
             Item.noUseGraphic = true;
         }
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool AltFunctionUse(Player player)
         {
-            player.channel = true;
-            player.statMana += Item.mana;
             return true;
         }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<CoralStaffHold>()] <= 0)
+            {
+                if (player.altFunctionUse != 1)
+                    Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<CoralStaffHold>(), damage, 0, player.whoAmI, ai1: player.altFunctionUse);
+            }
+
+            return false;
+        }
+
 
         public override void AddRecipes()
         {
