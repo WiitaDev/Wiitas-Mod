@@ -77,7 +77,7 @@ namespace WiitaMod.NPCs
             NPC.knockBackResist = 0.5f;
             NPC.aiStyle = -1; // 3 = Fighter AI(zombie, etc.), -1 = custom AI
             NPC.scale = 1.5f;
-            NPC.netAlways = true;
+            NPC.netSpam = 1;
             NPC.npcSlots = 0.5f;
 
             Banner = NPC.type; // Makes this NPC get affected by the normal zombie banner.
@@ -103,7 +103,11 @@ namespace WiitaMod.NPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnCondition.Cavern.Chance * 0.75f; // Spawn with 3/4 the chance of a regular zombie.
+            if (spawnInfo.Player.ZoneNormalCaverns)
+            {
+                return SpawnCondition.Cavern.Chance * 0.75f; // Spawn with 3/4 the chance of a regular zombie.
+            }
+            return 0f;
         }
         public override int SpawnNPC(int tileX, int tileY)
         {
@@ -140,7 +144,6 @@ namespace WiitaMod.NPCs
             // This makes the sprite flip horizontally in conjunction with the npc.direction.
             NPC.spriteDirection = NPC.direction * -1;
 
-            ;
             if (NPC.velocity.Y != 0)
             {
                 AI_State = (float)ActionState.Fall;
@@ -286,8 +289,7 @@ namespace WiitaMod.NPCs
 
                 case (float)ActionState.Run:
                     AI_Timer++;
-                    NPC.frameCounter++;
-
+                    NPC.frameCounter += (double)(NPC.velocity.Length() / 6f);
                     if (NPC.frameCounter < 5)
                     {
                         NPC.frame.Y = (int)Frame.Run1 * frameHeight;
@@ -324,7 +326,7 @@ namespace WiitaMod.NPCs
 
         private void Notice()
         {
-            if(AI_Timer < 0) 
+            if (AI_Timer < 0) 
             {
                 AI_State = (float)ActionState.Run;
                 return;
@@ -362,7 +364,7 @@ namespace WiitaMod.NPCs
             NPC.TargetClosest(true);
             if(Main.player[NPC.target].Distance(NPC.Center) > 800f) { playerNoticed = false; }
 
-            if (!Collision.CanHitLine(NPC.position, 20, 20, Main.player[NPC.target].position, 20, 20) && playerNoticed == false) { playerNoticed = false; return; } else { playerNoticed = true; }
+            if (!Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, 20, 20) && playerNoticed == false) { playerNoticed = false; return; } else { playerNoticed = true; }
 
 
             // Now we check the make sure the target is still valid and within our specified notice range (500)
@@ -402,9 +404,9 @@ namespace WiitaMod.NPCs
 
             if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
             {
-                NPC.velocity.X -= Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the left
+                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f); // accelerate to the left
             }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 60) == 0)
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
@@ -413,9 +415,9 @@ namespace WiitaMod.NPCs
 
             if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
             {
-                NPC.velocity.X += Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the right
+                NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f); // accelerate to the right
             }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 60) == 0)
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
@@ -428,6 +430,7 @@ namespace WiitaMod.NPCs
                 AI_State = (float)ActionState.Idle;
             }
         }
+
         private void SlopeCheck(int tileX, int tileY)
         {
             if (NPC.velocity.Y >= 0f)

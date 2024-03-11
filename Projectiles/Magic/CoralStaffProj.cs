@@ -39,30 +39,24 @@ namespace WiitaMod.Items.Weapons.Magic
                 // Homing logic
                 float speed = 10f;
                 float turnSpeed = 75f;
-                bool hasTarget = false;
 
-                for (int i = 0; i < 200; i++)
+                NPC target = FindClosestNPC(350f);
+                if (target == null)
                 {
-                    NPC target = Main.npc[i];
-                    if (target.active && !target.friendly && target.CanBeChasedBy())
-                    {
-                        // Homing calculations
-                        Vector2 targetPos = target.Center - Projectile.Center;
-                        float length = targetPos.Length();
-                        if (length < 350f)
-                        {
-                            targetPos.Normalize();
-                            Projectile.velocity = (Projectile.velocity * 20f + targetPos * (turnSpeed - length * 0.15f)) / 21f;
-                            Projectile.velocity.Normalize();
-                            Projectile.velocity *= speed;
-                            hasTarget = true;
-                        }
-                    }
-                }
-                if(!hasTarget) 
-                { 
                     Projectile.velocity *= 0.98f;
                     Projectile.timeLeft -= 2;
+                    return;
+                }
+                if (target.active && !target.friendly && target.CanBeChasedBy())
+                {
+                    // Homing calculations
+                    Vector2 targetPos = target.Center - Projectile.Center;
+                    float length = targetPos.Length();
+                    targetPos.Normalize();
+
+                    Projectile.velocity = (Projectile.velocity * 20f + targetPos * (turnSpeed - length * 0.15f)) / 21f;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= speed;
                 }
             }
             else 
@@ -100,6 +94,31 @@ namespace WiitaMod.Items.Weapons.Magic
 
             return false;
         }
+        private NPC FindClosestNPC(float maxDetectDistance)
+        {
+            NPC closestNPC = null;
+
+            float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
+
+            // Loop through all NPCs(max always 200)
+            for (int k = 0; k < Main.maxNPCs; k++)
+            {
+                NPC target = Main.npc[k];
+                if (target.CanBeChasedBy())
+                {
+                    float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, Projectile.Center);
+
+                    if (sqrDistanceToTarget < sqrMaxDetectDistance)
+                    {
+                        sqrMaxDetectDistance = sqrDistanceToTarget;
+                        closestNPC = target;
+                    }
+                }
+            }
+
+            return closestNPC;
+        }
+
     }
 
     public class CoralStaffHold : ModProjectile

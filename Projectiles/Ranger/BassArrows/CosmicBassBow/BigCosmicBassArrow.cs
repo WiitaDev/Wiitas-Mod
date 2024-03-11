@@ -10,12 +10,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
 {
     public class BigCosmicBassArrow : ModProjectile
     {
-        public float Charge
-        {
-            get => Projectile.localAI[0];
-            set => Projectile.localAI[0] = value;
-        }
-
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Cosmic Bass Arrow");
@@ -53,6 +47,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
 
         public override void AI()
         {
+            Lighting.AddLight(Projectile.Center, Color.Purple.ToVector3() * 1f);
             Projectile.spriteDirection = Projectile.direction;
 
             float maxDetectRadius = 200f; // The maximum radius at which a projectile can detect a targe
@@ -63,9 +58,16 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
             {
                 return;
             }
+            float turnSpeed = 150f;
 
-            Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 30f;
-            Lighting.AddLight(Projectile.Center, Color.Purple.ToVector3() * 1f);
+            // Homing calculations
+            Vector2 targetPos = closestNPC.Center - Projectile.Center;
+            float length = targetPos.Length();
+            targetPos.Normalize();
+
+            Projectile.velocity = (Projectile.velocity * 20f + targetPos * (turnSpeed - length * 0.15f)) / 21f;
+            Projectile.velocity.Normalize();
+            Projectile.velocity *= 30;
         }
 
         public override bool PreDraw(ref Color lightColor)

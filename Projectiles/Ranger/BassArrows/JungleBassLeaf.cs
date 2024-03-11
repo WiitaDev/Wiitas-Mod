@@ -1,8 +1,11 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -63,7 +66,8 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             if (Projectile.ai[0] >= 90)
             {
                 float maxDetectRadius = 400f; // The maximum radius at which a projectile can detect a target
-                float projSpeed = 5f; // The speed at which the projectile moves towards the target
+                float projSpeed = 5f + Projectile.ai[0] * 0.05f; // The speed at which the projectile moves towards the target
+                float turnSpeed = 75f + Projectile.ai[0] * 0.1f;
                 Projectile.friendly = true;
 
                 // Trying to find NPC closest to the projectile
@@ -73,10 +77,19 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
                     Projectile.timeLeft -= 10;
                     return;
                 }
+
+                Lighting.AddLight(Projectile.Center, Color.Lime.ToVector3() * 1f);
                 // If found, change the velocity of the projectile and turn it in the direction of the target
                 // Use the SafeNormalize extension method to avoid NaNs returned by Vector2.Normalize when the vector is zero
                 Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * projSpeed * (Projectile.ai[0] / 50);
-                Projectile.rotation = Projectile.velocity.ToRotation();
+                // Homing calculations
+                Vector2 targetPos = closestNPC.Center - Projectile.Center;
+                float length = targetPos.Length();
+                targetPos.Normalize();
+
+                Projectile.velocity = (Projectile.velocity * 20f + targetPos * (turnSpeed - length * 0.15f)) / 21f;
+                Projectile.velocity.Normalize();
+                Projectile.velocity *= projSpeed;
             }
             else
             {
@@ -130,9 +143,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             return closestNPC;
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-        }
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 0f;
@@ -160,9 +170,13 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             if (Projectile.ai[0] >= 90 && closestNPC != null)
             {
                 default(Effects.JungleBassLeafTrail).Draw(Projectile);
+
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.GreenTorch, Main.rand.Next(-2, 3), Main.rand.Next(-2, 3), 0, default(Color), 1f);
+                Main.dust[dustHit].scale = (float)Main.rand.Next(135, 160) * 0.009f;
+                Main.dust[dustHit].noGravity = true;
             }
+
             return true;
         }
-
     }
 }
