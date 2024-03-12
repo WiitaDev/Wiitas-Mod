@@ -308,7 +308,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             Utils.PlotTileLine(Projectile.Center, Projectile.Center + unit * Distance, (Projectile.width + 10) * Projectile.scale, DelegateMethods.CutTiles);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
 

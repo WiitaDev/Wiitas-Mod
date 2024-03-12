@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -41,7 +38,7 @@ namespace WiitaMod.World
         {
             return !Main.tile[x, y].HasTile && Main.tile[x, y + 1].HasTile && (Main.tileSand[Main.tile[x, y + 1].TileType] || Main.tile[x, y + 1].TileType == TileID.ShellPile);
         }
-        public void GenerateSandArea(int x, int y) 
+        public void GenerateSandArea(int x, int y)
         {
             if (x - size < 10)
             {
@@ -76,10 +73,11 @@ namespace WiitaMod.World
                     {
                         if (CanOverwriteTile(Main.tile[x2, y2]) && (!Main.remixWorld || Main.rand.NextBool(10)))
                         {
-                            if (Main.tile[x2, y2].HasTile)
+                            placeTiles.Add(new Point(x2, y2));
+                            /*if (Main.tile[x2, y2].HasTile)
                             {
                                 placeTiles.Add(new Point(x2, y2));
-                            }
+                            }*/
                         }
                     }
                 }
@@ -103,7 +101,8 @@ namespace WiitaMod.World
                                     continue;
                                 }
                             }
-                            Main.tile[x2 + m, y2 + n].TileType = TileID.Sandstone;
+                            //Main.tile[x2 + m, y2 + n].TileType = TileID.Sandstone;
+                            WorldGen.PlaceTile(x2 + m, y2 + n, TileID.Sandstone);
                         }
                     }
                 }
@@ -113,17 +112,17 @@ namespace WiitaMod.World
                     {
                         for (int n = -2; n <= 2; n++)
                         {
-                            if (!Main.tile[x2 + m, y2 + n].HasTile && Main.tile[x2 + m, y2 + n].LiquidAmount > 0)
+                            /*if (!Main.tile[x2 + m, y2 + n].HasTile && Main.tile[x2 + m, y2 + n].LiquidAmount > 0)
                             {
                                 continue;
-                            }
+                            }*/
                             Main.tile[x2 + m, y2 + n].TileType = (ushort)TileType<TropicalSand>();
+                            WorldGen.PlaceTile(x2 + m, y2 + n, (ushort)TileType<TropicalSand>());
                         }
                     }
                 }
             }
         }
-
         private void GenerateTropicalOcean()
         {
             int x = location.X;
@@ -191,7 +190,7 @@ namespace WiitaMod.World
                 {
                     progress.Message = "Extending an ocean";
                     Reset();
-                    GenVars.beachSandRandomWidthRange *= 2000;
+                    GenVars.beachSandDungeonExtraWidth *= 2000;
                 }));
             }
 
