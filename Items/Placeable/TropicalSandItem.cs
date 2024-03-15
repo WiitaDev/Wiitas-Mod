@@ -20,24 +20,24 @@ namespace WiitaMod.Items.Placeable
             Item.height = 12;
             Item.ammo = ItemID.SandBlock;
         }
-        /*
         public override void AddRecipes()
         {
-            CreateRecipe(10)
+            CreateRecipe() // Add multiple recipes set to one Item. 
+                .AddIngredient<TropicalSandstoneWallItem>(4)
+                .AddTile(TileID.WorkBenches)
+                .Register();
+
+           /* CreateRecipe(10)
                 .AddIngredient<ExampleItem>()
                 .AddTile<Tiles.Furniture.ExampleWorkbench>()
                 .Register();
 
-            CreateRecipe() // Add multiple recipes set to one Item. 
-                .AddIngredient<ExampleWall>(4)
-                .AddTile<Tiles.Furniture.ExampleWorkbench>()
-                .Register();
 
             CreateRecipe()
                 .AddIngredient<ExamplePlatform>(2)
                 .AddTile<Tiles.Furniture.ExampleWorkbench>()
-                .Register();
-        }*/
+                .Register();*/
+        }
 
 
     }

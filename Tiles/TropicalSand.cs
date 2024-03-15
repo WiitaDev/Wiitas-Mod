@@ -25,8 +25,6 @@ namespace WiitaMod.Tiles
 
             //AddMapEntry(new Color(135, 206, 235));
             RegisterItemDrop(Type);
-            DustType = DustID.Sand;
-
 
             DustType = DustID.Sand;
 

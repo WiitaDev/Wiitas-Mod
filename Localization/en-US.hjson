@@ -147,6 +147,11 @@ Mods: {
 				DisplayName: Tropical Sand Block
 				Tooltip: ""
 			}
+
+			TropicalSandstoneWallItem: {
+				DisplayName: Tropical Sandstone Wall Item
+				Tooltip: ""
+			}
 		}
 
 		NPCs.Hamis.DisplayName: Hamis
