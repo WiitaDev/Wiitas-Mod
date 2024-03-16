@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
 using Terraria.GameContent.RGB;
 using Terraria.ID;
@@ -21,11 +22,13 @@ namespace WiitaMod.World
 
         public const float TopWaterDepthPercentage = 0.175f;
 
-        public const float TopWaterDescentSmoothnessMin = 0.15f;
+        public const float TopWaterDescentSmoothnessMin = 0.19f;
 
         public const float TopWaterDescentSmoothnessMax = 0.20f;
-        public static int MaxTopWaterDepth => (int)(BlockDepth * TopWaterDepthPercentage);
 
+        public const int DepthForWater = 5;
+
+        public static int MaxTopWaterDepth => (int)(BlockDepth * TopWaterDepthPercentage);
 
         public static int BiomeWidth
         {
@@ -34,10 +37,10 @@ namespace WiitaMod.World
                 return Main.maxTilesX switch
                 {
                     // Small worlds.
-                    4200 => 370,
+                    4200 => 400,
 
                     // Medium worlds.
-                    6400 => 445,
+                    6400 => 475,
 
                     // Large worlds. This also accounts for worlds of an unknown size, such as extra large worlds.
                     _ => (int)(Main.maxTilesX / 16.8f),
@@ -70,6 +73,12 @@ namespace WiitaMod.World
             set;
         }
 
+        public static int CaveStart
+        {
+            get;
+            set;
+        }
+
         public static int GetActualX(int x)
         {
             if (Main.dungeonX > Main.maxTilesX / 2) //Jungle side (opposite of dungeon)
@@ -91,24 +100,23 @@ namespace WiitaMod.World
         {
             DetermineYStart();
 
-            GenerateSandBlock();
+            GenerateSand();
             GenerateWater();
-            //GenerateMiddleSand();
+            GenerateCaveTunnel();
 
             RemoveTilesAbove();
-
             SandstoneLine();
             SurfaceMounds();
 
             GenerateBeach();
+            PreventSandFalling();
         }
-
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
-            int surfaceIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Settle Liquids Again"));
-            if (surfaceIndex != -1)
+            int Index = tasks.FindIndex(genpass => genpass.Name.Equals("Settle Liquids Again"));
+            if (Index != -1)
             {
-                tasks.Insert(surfaceIndex + 1, new PassLegacy("Tropical Ocean", (progress, configuration) =>
+                tasks.Insert(Index + 1, new PassLegacy("Tropical Ocean", (progress, configuration) =>
                 {
                     progress.Message = "Creating Tropical Ocean";
                     Generate();
@@ -116,7 +124,7 @@ namespace WiitaMod.World
             }
         }
 
-        public void GenerateSandBlock()
+        public void GenerateSand()
         {
             int width = BiomeWidth + 1;
             int maxDepth = BlockDepth;
@@ -129,7 +137,7 @@ namespace WiitaMod.World
                 int x = GetActualX(i);
 
                 // Calculate the 0-1 factor that determines how far down a vertical strip of the sea should descend.
-                float depthFactor = (float)Math.Pow(Math.Sin((1f - i / (float)width) * MathHelper.PiOver2), 0.24f);
+                float depthFactor = (float)Math.Pow(Math.Sin((1f - i / (float)width) * MathHelper.PiOver2), 0.19f);
 
                 // Determine the top and botton of the strip.
                 int top = YStart;
@@ -141,7 +149,7 @@ namespace WiitaMod.World
                     {
                         Main.tile[x, y].TileType = sandID;
 
-                        if (!Main.tile[x, y + 1].HasTile && Main.tile[x, y].HasTile && SafeTile(x,y).HasTile) // Check for floating sand blocks
+                        if (!Main.tile[x, y + 1].HasTile && Main.tile[x, y].TileType == sandID && y >= (int)GenVars.worldSurfaceLow) // Check for floating sand blocks
                         {
                             Main.tile[x, y].TileType = sandstoneID;
                         }
@@ -174,7 +182,6 @@ namespace WiitaMod.World
 
         public void GenerateWater()
         {
-            int DepthForWater = 5;
             int maxDepth = MaxTopWaterDepth;
             int totalSandTilesBeforeWater = WorldGen.genRand.Next(TotalSandBeforeWaterMin, TotalSandBeforeWaterMax);
             int width = (int)((BiomeWidth - totalSandTilesBeforeWater) * 0.895f);
@@ -186,60 +193,62 @@ namespace WiitaMod.World
                 int x = GetActualX(i);
 
                 // Calculate the 0-1 factor that determines how far down a vertical strip of water should descend.
-                float depthFactor = (float)Math.Pow(Math.Sin((1f - i / (float)width) * MathHelper.PiOver2), descentSmoothness * 3);
+                float depthFactor = (float)Math.Pow(Math.Sin((1f - i / (float)width) * MathHelper.PiOver2), descentSmoothness * 1.5f);
 
                 // Determine the top and botton of the water strip.
                 int top = YStart;
                 int bottom = top + (int)(maxDepth * depthFactor * 2);
                 for (int y = top; y < bottom; y++)
                 {
-                    if (y >= top + DepthForWater)
-                        Main.tile[x, y + WorldGen.genRand.Next(22, 25)].WallType = (ushort)ModContent.WallType<TropicalSandstoneWall>();
+                    /*if (y >= top + DepthForWater)
+                        Main.tile[x, y + WorldGen.genRand.Next(22, 25)].WallType = (ushort)ModContent.WallType<TropicalSandstoneWall>();*/
+
                     Main.tile[x, y].LiquidAmount = byte.MaxValue;
                     Main.tile[x, y].Get<TileWallWireStateData>().HasTile = false;
+
+                    if(i == width / 4 && y == bottom -1 ) 
+                    {
+                        CaveStart = y;
+                    }
                 }
 
                 // Clear water that's above the level for some reason.
                 for (int y = top - 150; y < top + DepthForWater; y++)
                     Main.tile[x, y].LiquidAmount = 0;
+
             }
+        }
 
-            ushort sandstoneID = TileID.SmoothSandstone;
+        public void GenerateCaveTunnel() 
+        {
+            int x = GetActualX(BiomeWidth / 5);
+            int y = CaveStart + 40 + BlockDepth / 3;
 
-            for (int i = 1; i < width - totalSandTilesBeforeWater; i++)
-            {
-                int x = GetActualX(i);
+            int dir = x * 2 > Main.maxTilesX ? -1 : 1;
+            WorldGen.digTunnel(x, y, dir * 0.5f, -BiomeWidth / 150, 125, WorldGen.genRand.Next(3, 5), Wet: true); // entrance tunnels
+            WorldGen.digTunnel(x, y, dir, 2.74f, 5, WorldGen.genRand.Next(6, 9), Wet: true); // ^
 
-                // Calculate the 0-1 factor that determines how far down a vertical strip of water should descend.
-                float depthFactor = (float)Math.Pow(Math.Sin((1f - i / (float)width) * MathHelper.PiOver2), descentSmoothness * 2);
+            var v = WorldGen.digTunnel(x, y, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); // ^
+            for (int i = 1; i <= 5; i++)
+                WorldGen.digTunnel(v.X, v.Y, dir * -2, WorldGen.genRand.NextFloat(-0.12f, 0.2f), 20, WorldGen.genRand.Next(3, 5), Wet: true); //random center tunnels
 
-                // Determine the top and botton of the water strip.
-                int top = YStart + BlockDepth / 2;
-                int bottom = top + (int)(maxDepth * depthFactor * 2);
-                for (int y = top; y < bottom; y++)
-                {
-                    if(y <= top + 2) 
-                    {
-                        Main.tile[x, y].TileType = sandstoneID;
-                    }
-                    else 
-                    {
-                        Main.tile[x, y].LiquidAmount = byte.MaxValue;
-                        Main.tile[x, y].Get<TileWallWireStateData>().HasTile = false;                  
-                    }
-                }
-            }
+            v = WorldGen.digTunnel(v.X, v.Y, dir * 2, WorldGen.genRand.NextFloat(-0.1f, 0.02f), 70, 2, Wet: true); //tiny leading tunnel
+
+            for (int i = 1; i <= 3; i++)
+                v = WorldGen.digTunnel(v.X, v.Y, dir, WorldGen.genRand.NextFloat(-0.3f, 0.3f), 10, WorldGen.genRand.Next(3, 6), Wet: true); //continue from tiny
         }
 
         private void GenerateBeach()
         {
-            int beachWidth = WorldGen.genRand.Next(150, 190 + 1);
+            int beachWidth = WorldGen.genRand.Next(180, 240 + 1);
             var searchCondition = Searches.Chain(new Searches.Down(3000), new Conditions.IsSolid());
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
             ushort sandstoneID = TileID.SmoothSandstone;
+            ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
+
 
             // Stop immediately if for some strange reason a valid tile could not be located for the beach starting point.
-            if (!WorldUtils.Find(new Point(BiomeWidth + 4, Main.remixWorld ? YStart : (int)GenVars.worldSurfaceLow - 10), searchCondition, out Point determinedPoint))
+            if (!WorldUtils.Find(new Point(BiomeWidth + 4, (int)GenVars.worldSurfaceLow - 10), searchCondition, out Point determinedPoint))
                 return;
 
             // Transform the landscape.
@@ -248,8 +257,8 @@ namespace WiitaMod.World
                 int x = GetActualX(i);
                 float xRatio = Utils.GetLerpValue(BiomeWidth - 10, BiomeWidth + beachWidth, i, true);
                 float ditherChance = Utils.GetLerpValue(0.92f, 0.99f, xRatio, true);
-                int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 50f + 1f);
-                for (int y = YStart - 50; y < YStart + depth; y++)
+                int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 75f + 1f);
+                for (int y = YStart - 80; y < YStart + depth; y++)
                 {
                     Tile tileAtPosition = SafeTile(x, y);
                     if (tileAtPosition.HasTile && ValidBeachDestroyTiles.Contains(tileAtPosition.TileType))
@@ -262,73 +271,32 @@ namespace WiitaMod.World
                     }
                     else if (tileAtPosition.HasTile && ValidBeachConvertTiles.Contains(tileAtPosition.TileType) && WorldGen.genRand.NextFloat() >= ditherChance)
                         Main.tile[x, y].TileType = sandID;
- 
-
-                    if (!Main.tile[x,y + 1].HasTile && Main.tile[x,y].HasTile || Main.tile[x, y + 1].Get<TileWallWireStateData>().Slope != SlopeType.Solid) // Check for floating sand blocks
-                    {
-                        Main.tile[x, y].TileType = sandstoneID;
-                    }
 
                     if (tileAtPosition.WallType > WallID.None)
-                        Main.tile[x, y].WallType = WallID.None;
+                        Main.tile[x, y].WallType = wallID;
                 }
             }
         }
 
-        public void GenerateMiddleSand() 
+        public void PreventSandFalling()
         {
-            int width = BiomeWidth - 40;
-            int Depth = BlockDepth / 4;
-            ushort sandstoneID = TileID.SmoothSandstone;
+            int width = BiomeWidth + 1;
+            int maxDepth = BlockDepth;
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
-            ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
-            int heightSeed = WorldGen.genRand.Next();
+            ushort sandstoneID = TileID.SmoothSandstone;
 
-            for (int i = 1; i < width; i++)
+            int top = YStart - 90;
+            int bottom = top + maxDepth + 1;
+
+            for (int i = 1; i < width + 240; i++) // +240 is the beach max lenght
             {
                 int x = GetActualX(i);
 
-                // Determine the top and botton of the strip.
-                int top = YStart + Depth;
-                int bottom = top + Depth;
-
                 for (int y = top; y < bottom; y++)
                 {
-                    float ditherChance = CalculateDitherChance(width, top, bottom, i, y);
-                    if (WorldGen.genRand.NextFloat() >= ditherChance)
+                    if (!WorldGen.SolidTile(x, y + 1) && Main.tile[x, y].TileType == sandID) // Check for floating sand blocks
                     {
                         Main.tile[x, y].TileType = sandstoneID;
-
-                        if (y >= top + 45)
-                            Main.tile[x, y].WallType = wallID;
-                    }
-
-                    // Ensure that the sand pops into existence if there is no chance that dithering will occur.
-                    if (ditherChance <= 0f)
-                    {
-                        Main.tile[x, y].Get<TileWallWireStateData>().Slope = SlopeType.Solid;
-                        Main.tile[x, y].Get<TileWallWireStateData>().IsHalfBlock = false;
-                        Main.tile[x, y].Get<TileWallWireStateData>().HasTile = true;
-                    }
-                }
-
-                Tile t = SafeTile(x, top);
-
-                if (t.HasTile)
-                {
-                    float noise = FractalBrownianMotion(i * 0.0079f, top * 0.0079f, heightSeed, 5) * 0.5f + 0.5f;
-                    noise = MathHelper.Lerp(noise, 0.5f, Utils.GetLerpValue(width - 13f, width - 1f, i, true));
-
-                    int heightOffset = -(int)Math.Round(MathHelper.Lerp(-20, 40, noise));
-                    for (int dy = 0; dy != heightOffset; dy += Math.Sign(heightOffset))
-                    {
-                        WorldUtils.Gen(new(x, top + dy), new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
-                        {
-                            heightOffset > 0 ? new Actions.ClearTile() : new Actions.SetTile(sandID, true),
-                            new Actions.PlaceWall(MathHelper.Distance(dy, heightOffset) >= 3f && heightOffset < 0f ? wallID : WallID.None, true),
-                            new Actions.SetLiquid(),
-                            new Actions.Smooth(true)
-                        }));
                     }
                 }
             }
@@ -339,7 +307,7 @@ namespace WiitaMod.World
             for (int i = 0; i < BiomeWidth; i++)
             {
                 int x = GetActualX(i);
-                for (int y = YStart - 140; y < YStart + 80; y++)
+                for (int y = YStart - 140; y < YStart + 40; y++)
                 {
                     int type = SafeTile(x, y).TileType;
                     if (YStartWhitelist.Contains(type) ||
@@ -364,7 +332,7 @@ namespace WiitaMod.World
             {
                 for (int y = YStart; y < YStart + depth; y++)
                 {
-                    int sandstoneLineOffset = (int)(FractalBrownianMotion(i * 0.00115f, y * 0.00115f, sandstoneSeed, 7) * 30) + (int)(depth * 0.64f);
+                    int sandstoneLineOffset = (int)(FractalBrownianMotion(i * 0.00115f, y * 0.00115f, sandstoneSeed, 7) * 30) + (int)(depth * 0.58f);
 
 
                     sandstoneLineOffset -= (int)(Math.Pow(Utils.GetLerpValue(width * 0.1f, width * 0.8f, i, true), 1.72f) * 67f);
@@ -402,7 +370,7 @@ namespace WiitaMod.World
                     float noise = FractalBrownianMotion(i * 0.0079f, y * 0.0079f, heightSeed, 5) * 0.5f + 0.5f;
                     noise = MathHelper.Lerp(noise, 0.5f, Utils.GetLerpValue(width - 13f, width - 1f, i, true));
 
-                    int heightOffset = -(int)Math.Round(MathHelper.Lerp(-4, 8, noise));
+                    int heightOffset = -(int)Math.Round(MathHelper.Lerp(-6, 10, noise));
                     for (int dy = 0; dy != heightOffset; dy += Math.Sign(heightOffset))
                     {
                         WorldUtils.Gen(new(x, y + dy), new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
@@ -479,6 +447,8 @@ namespace WiitaMod.World
 
         public static readonly List<int> ValidBeachDestroyTiles = new()
         {
+            TileID.Vines,
+            TileID.VineFlowers,
             TileID.Coral,
             TileID.BeachPiles,
             TileID.Plants,
@@ -487,10 +457,16 @@ namespace WiitaMod.World
             TileID.LargePiles,
             TileID.LargePiles2,
             TileID.JungleGrass,
+            TileID.JungleVines,
+            TileID.JunglePlants,
+            TileID.JunglePlants2,
+            TileID.PlantDetritus,
             TileID.CorruptJungleGrass,
             TileID.CrimsonJungleGrass,
             TileID.CorruptThorns,
             TileID.CrimsonThorns,
+            TileID.CorruptPlants,
+            TileID.CrimsonPlants,
             TileID.DyePlants,
             TileID.Trees,
             TileID.Sunflower,

@@ -77,7 +77,7 @@ namespace WiitaMod.Tiles
             int ResetIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Reset"));
             if (ResetIndex != -1)
             {
-                tasks.Insert(ResetIndex + 1, new PassLegacy("Wiita's Mod Statue Setup", (progress, configuration) => {
+                tasks.Insert(ResetIndex + 1, new PassLegacy("Wiita's Mod Setup", (progress, configuration) => {
                     progress.Message = "Adding Hamis Statues";
 
                     // Not necessary, just a precaution.
