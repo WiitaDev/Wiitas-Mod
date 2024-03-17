@@ -43,7 +43,7 @@ namespace WiitaMod.World
                     6400 => 475,
 
                     // Large worlds. This also accounts for worlds of an unknown size, such as extra large worlds.
-                    _ => (int)(Main.maxTilesX / 16.8f),
+                    _ => (int)(Main.maxTilesX / 15f), // large is 560
                 };
             }
         }
@@ -187,6 +187,7 @@ namespace WiitaMod.World
             int width = (int)((BiomeWidth - totalSandTilesBeforeWater) * 0.895f);
             float descentSmoothness = WorldGen.genRand.NextFloat(TopWaterDescentSmoothnessMin, TopWaterDescentSmoothnessMax);
 
+            int heightSeed = WorldGen.genRand.Next();
 
             for (int i = 1; i < width; i++)
             {
@@ -205,37 +206,71 @@ namespace WiitaMod.World
 
                     Main.tile[x, y].LiquidAmount = byte.MaxValue;
                     Main.tile[x, y].Get<TileWallWireStateData>().HasTile = false;
+                    Main.tile[x, y].WallType = WallID.None;
 
-                    if(i == width / 4 && y == bottom -1 ) 
+                    if (i == width / 4 && y == bottom - 1)
                     {
                         CaveStart = y;
                     }
+
+                    // rough up the ocean bottom
+                    if(y == bottom - 1 && i >= 2) 
+                    {
+                        Tile t = SafeTile(x, y + 1);
+                        ushort blockTileType = (ushort)ModContent.TileType<TropicalSand>();
+                        if (t.HasTile)
+                        {
+                            float noise = FractalBrownianMotion(i * 0.0069f, y * 0.0069f, heightSeed, 5) * 0.5f + 0.5f;
+                            noise = MathHelper.Lerp(noise, 0.5f, Utils.GetLerpValue(width - 13f, width - 1f, i, true));
+
+                            int heightOffset = -(int)Math.Round(MathHelper.Lerp(-6, 10, noise));
+                            for (int dy = 0; dy != heightOffset; dy += Math.Sign(heightOffset))
+                            {
+                                WorldUtils.Gen(new(x, y + dy), new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
+                                {
+                                    heightOffset > 0 ? new Actions.ClearTile() : new Actions.SetTile(blockTileType, true),
+                                    new Actions.SetLiquid(),
+                                    new Actions.Smooth(true)
+                                }));
+                            }
+                        }
+                    
+                    }
+
                 }
 
                 // Clear water that's above the level for some reason.
-                for (int y = top - 150; y < top + DepthForWater; y++)
+                for (int y = top - 150; y < top + 2; y++)
                     Main.tile[x, y].LiquidAmount = 0;
 
             }
+
         }
 
         public void GenerateCaveTunnel() 
         {
             int x = GetActualX(BiomeWidth / 5);
-            int y = CaveStart + 40 + BlockDepth / 3;
+            int y = CaveStart + 20 + BlockDepth / 3;
+            int dir = (Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1) * (BiomeWidth - 400) / 50;
+            var v = WorldGen.digTunnel(x, y, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); //spawn point
 
-            int dir = x * 2 > Main.maxTilesX ? -1 : 1;
-            WorldGen.digTunnel(x, y, dir * 0.5f, -BiomeWidth / 150, 125, WorldGen.genRand.Next(3, 5), Wet: true); // entrance tunnels
-            WorldGen.digTunnel(x, y, dir, 2.74f, 5, WorldGen.genRand.Next(6, 9), Wet: true); // ^
+            WorldGen.digTunnel(x, y, dir * 0.1f, -BiomeWidth / 150, 160, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); // entrance tunnels
+            WorldGen.digTunnel(x, y, 0, 2.74f, 5, WorldGen.genRand.Next(6, 9) + (BiomeWidth - 400) / 30, Wet: true); // ^
 
-            var v = WorldGen.digTunnel(x, y, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); // ^
             for (int i = 1; i <= 5; i++)
-                WorldGen.digTunnel(v.X, v.Y, dir * -2, WorldGen.genRand.NextFloat(-0.12f, 0.2f), 20, WorldGen.genRand.Next(3, 5), Wet: true); //random center tunnels
+                WorldGen.digTunnel(v.X, v.Y, dir * -2, WorldGen.genRand.NextFloat(-0.12f, 0.2f), 30, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //backwards expanding tunnels
 
-            v = WorldGen.digTunnel(v.X, v.Y, dir * 2, WorldGen.genRand.NextFloat(-0.1f, 0.02f), 70, 2, Wet: true); //tiny leading tunnel
+            for (int i = 1; i <= 6; i++)
+                WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(0.12f, 0.2f) * -1, 40, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //random leading tunnels
+
+            v = WorldGen.digTunnel(v.X, v.Y, dir * 2, WorldGen.genRand.NextFloat(-0.1f, 0.02f), 70, 2); //tiny leading tunnel
 
             for (int i = 1; i <= 3; i++)
-                v = WorldGen.digTunnel(v.X, v.Y, dir, WorldGen.genRand.NextFloat(-0.3f, 0.3f), 10, WorldGen.genRand.Next(3, 6), Wet: true); //continue from tiny
+                v = WorldGen.digTunnel(v.X, v.Y, dir, WorldGen.genRand.NextFloat(-0.3f, 0.3f), 10, WorldGen.genRand.Next(3, 6) + (BiomeWidth - 400) / 30, Wet: true); //continue from tiny
+
+            for (int i = 1; i <= 6; i++)
+                WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(-0.2f, 0.08f), 40, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //random middle tunnels
+
         }
 
         private void GenerateBeach()
@@ -243,7 +278,6 @@ namespace WiitaMod.World
             int beachWidth = WorldGen.genRand.Next(180, 240 + 1);
             var searchCondition = Searches.Chain(new Searches.Down(3000), new Conditions.IsSolid());
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
-            ushort sandstoneID = TileID.SmoothSandstone;
             ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
 
 
