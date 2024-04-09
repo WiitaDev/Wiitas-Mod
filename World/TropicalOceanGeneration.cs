@@ -1,4 +1,6 @@
+using Humanizer;
 using Microsoft.Xna.Framework;
+using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -92,11 +94,20 @@ namespace WiitaMod.World
             int xCheckPosition = GetActualX(BiomeWidth + 1);
             var searchCondition = Searches.Chain(new Searches.Down(3000), new Conditions.IsSolid());
             Point determinedPoint;
+            int ypos = 0;
+            for (int y = 1; y < GenVars.worldSurfaceHigh; y++) 
+            {
+                if (Main.tile[xCheckPosition, y].HasTile && ValidBeachConvertTiles.Contains(Main.tile[xCheckPosition, y].TileType)) 
+                {
+                    ypos = y;
+                    break;
+                }
+            }
 
-            WorldUtils.Find(new Point(xCheckPosition, (int)GenVars.worldSurfaceLow - 10), searchCondition, out determinedPoint);
+            WorldUtils.Find(new Point(xCheckPosition, ypos), searchCondition, out determinedPoint);
             YStart = determinedPoint.Y;
         }
-        private void Generate() 
+        public void Generate() 
         {
             DetermineYStart();
 
@@ -110,18 +121,8 @@ namespace WiitaMod.World
 
             GenerateBeach();
             PreventSandFalling();
-        }
-        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
-        {
-            int Index = tasks.FindIndex(genpass => genpass.Name.Equals("Settle Liquids Again"));
-            if (Index != -1)
-            {
-                tasks.Insert(Index + 1, new PassLegacy("Tropical Ocean", (progress, configuration) =>
-                {
-                    progress.Message = "Creating Tropical Ocean";
-                    Generate();
-                }));
-            }
+
+            GenVars.structures.AddStructure(new(GetActualX(2) - BiomeWidth / 2 - 10, YStart - BlockDepth / 2 - 10, BiomeWidth + 20, BlockDepth + 20));
         }
 
         public void GenerateSand()
@@ -247,15 +248,24 @@ namespace WiitaMod.World
 
         }
 
-        public void GenerateCaveTunnel() 
+        public void GenerateCaveTunnel()
         {
-            int x = GetActualX(BiomeWidth / 5);
-            int y = CaveStart + 20 + BlockDepth / 3;
+            int startX = GetActualX(BiomeWidth / 5);
             int dir = (Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1) * (BiomeWidth - 400) / 50;
-            var v = WorldGen.digTunnel(x, y, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); //spawn point
+            int startY = CaveStart + 20 + BlockDepth / 3;
+            var v = WorldGen.digTunnel(startX, startY, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); //spawn point
 
-            WorldGen.digTunnel(x, y, dir * 0.1f, -BiomeWidth / 150, 160, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); // entrance tunnels
-            WorldGen.digTunnel(x, y, 0, 2.74f, 5, WorldGen.genRand.Next(6, 9) + (BiomeWidth - 400) / 30, Wet: true); // ^
+            int offset = 0;
+            for (int y = YStart; y < startY; y++)
+            {
+                Main.tile[startX, y].Get<TileWallWireStateData>().HasTile = false;
+                Main.tile[startX, y].LiquidAmount = byte.MaxValue;
+
+                offset = WorldGen.genRand.Next(-1, 2) * 2;
+
+                WorldGen.digTunnel(startX + offset, y, dir * 0.1f, -BiomeWidth / 150, 1, WorldGen.genRand.Next(2, 4), Wet: true); // entrance tunnels
+            }
+
 
             for (int i = 1; i <= 5; i++)
                 WorldGen.digTunnel(v.X, v.Y, dir * -2, WorldGen.genRand.NextFloat(-0.12f, 0.2f), 30, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //backwards expanding tunnels
@@ -270,7 +280,6 @@ namespace WiitaMod.World
 
             for (int i = 1; i <= 6; i++)
                 WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(-0.2f, 0.08f), 40, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //random middle tunnels
-
         }
 
         private void GenerateBeach()
