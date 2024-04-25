@@ -186,7 +186,10 @@ Mods: {
 			}
 		}
 
-		NPCs.Hamis.DisplayName: Hamis
+		NPCs: {
+			Hamis.DisplayName: Hamis
+			HamisGroup.DisplayName: Hamis Group
+		}
 
 		Projectiles: {
 			PalladinsShieldProjectile.DisplayName: Palladin's shield

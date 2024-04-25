@@ -1,9 +1,10 @@
-using Humanizer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -61,7 +62,12 @@ namespace WiitaMod.NPCs
         // This is all to just make beautiful, manageable, and clean code.
         public ref float AI_State => ref NPC.ai[0];
         public ref float AI_Timer => ref NPC.ai[1];
+
+        public int confused = 1;
+
         bool playerNoticed = false;
+
+        public bool isGolden;
 
 
         public override void SetDefaults()
@@ -73,7 +79,7 @@ namespace WiitaMod.NPCs
             NPC.lifeMax = 25;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.value = 10f;
+            NPC.value = 50f;
             NPC.knockBackResist = 0.5f;
             NPC.aiStyle = -1; // 3 = Fighter AI(zombie, etc.), -1 = custom AI
             NPC.scale = 1.5f;
@@ -86,14 +92,40 @@ namespace WiitaMod.NPCs
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1)); // 100% chance to drop Gold Ore
-            npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 50)); // 1% chance to drop in normal mode and 2% in expert/master
-            npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisHat>(), 200, 100)); // 0.5% chance to drop in normal mode and 1% in expert/master
+            if (!NPC.SpawnedFromStatue)
+            {
+                //npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1)); // 100% chance to drop Gold Ore
+                npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 50)); // 1% chance to drop in normal mode and 2% in expert/master
+                npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisHat>(), 200, 100)); // 0.5% chance to drop in normal mode and 1% in expert/master
+            }
         }
 
+        private bool resetBatchInPost;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            Effect GoldEffect = ModContent.Request<Effect>("WiitaMod/Effects/GoldEffect", AssetRequestMode.ImmediateLoad).Value;
+
+            if (isGolden && Main.netMode != NetmodeID.Server) // The netmode check might be redundant but I can't verify whether or not it is.
+            {
+                resetBatchInPost = true; // We're using a dedicated bool for this in the *very* unlikely case your buff somehow gets purged during drawing.
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, GoldEffect, Main.GameViewMatrix.ZoomMatrix); // SpriteSortMode needs to be set to Immediate for shaders to work.
+
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+            }
+
             return true;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (resetBatchInPost)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                resetBatchInPost = false;
+            }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -105,13 +137,18 @@ namespace WiitaMod.NPCs
         {
             if (spawnInfo.Player.ZoneNormalCaverns)
             {
-                return SpawnCondition.Cavern.Chance * 0.75f; // Spawn with 3/4 the chance of a regular zombie.
+                return SpawnCondition.Cavern.Chance * 0.45f; // Spawn with 45% the chance of a regular zombie.
             }
             return 0f;
         }
-        public override int SpawnNPC(int tileX, int tileY)
+
+        public override void OnSpawn(IEntitySource source)
         {
-            return base.SpawnNPC(tileX, tileY);
+            if (Main.rand.Next(1, 101) == 69) //1% chance to spawn a golden hamis
+            {
+                isGolden = true;
+                NPC.value = 200000; // 20 gold
+            }
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -122,7 +159,7 @@ namespace WiitaMod.NPCs
 				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
 				// Sets the description of this NPC that is listed in the bestiary.
-				new FlavorTextBestiaryInfoElement("Hamis."),
+				new FlavorTextBestiaryInfoElement("The ancients, all knowing...\r\nWandering husks of what they once were"),
             });
         }
 
@@ -143,10 +180,19 @@ namespace WiitaMod.NPCs
         {
             // This makes the sprite flip horizontally in conjunction with the npc.direction.
             NPC.spriteDirection = NPC.direction * -1;
+            confused = NPC.confused ? -1 : 1;
 
             if (NPC.velocity.Y != 0)
             {
                 AI_State = (float)ActionState.Fall;
+            }
+
+            if (isGolden)
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    Dust.NewDust(NPC.Center, 15, 15, DustID.SparkForLightDisc);
+                }
             }
 
             int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
@@ -188,7 +234,7 @@ namespace WiitaMod.NPCs
                         {
                             AI_Timer = Main.rand.Next(30, 90) * -1;
                         }
-                        else 
+                        else
                         {
                             AI_Timer = 0;
                         }
@@ -326,7 +372,7 @@ namespace WiitaMod.NPCs
 
         private void Notice()
         {
-            if (AI_Timer < 0) 
+            if (AI_Timer < 0)
             {
                 AI_State = (float)ActionState.Run;
                 return;
@@ -337,7 +383,7 @@ namespace WiitaMod.NPCs
                 // Here we use our Timer to wait .33 seconds before actually jumping. In FindFrame you'll notice AI_Timer also being used to animate the pre-jump crouch
                 AI_Timer++;
 
-                if (AI_Timer >= Main.rand.Next(20,41) && NPC.velocity.Y == 0)
+                if (AI_Timer >= Main.rand.Next(20, 41) && NPC.velocity.Y == 0)
                 {
                     AI_State = (float)ActionState.Jump;
                     AI_Timer = 0;
@@ -362,7 +408,7 @@ namespace WiitaMod.NPCs
             // The faceTarget parameter means that npc.direction will automatically be 1 or -1 if the targeted player is to the right or left.
             // This is also automatically flipped if npc.confused.
             NPC.TargetClosest(true);
-            if(Main.player[NPC.target].Distance(NPC.Center) > 800f) { playerNoticed = false; }
+            if (Main.player[NPC.target].Distance(NPC.Center) > 800f) { playerNoticed = false; }
 
             if (!Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, 20, 20) && playerNoticed == false) { playerNoticed = false; return; } else { playerNoticed = true; }
 
@@ -390,7 +436,7 @@ namespace WiitaMod.NPCs
                 // We apply an initial velocity the first tick we are in the Jump frame. Remember that -Y is up.
                 Vector2 vector8 = new Vector2(NPC.position.X + (NPC.width / 2), NPC.position.Y + (NPC.height / 2));
                 float rotation = (float)Math.Atan2(vector8.Y - (Main.player[NPC.target].position.Y + (Main.player[NPC.target].height * 0.5f) - playerDistance), vector8.X - (Main.player[NPC.target].position.X + (Main.player[NPC.target].width * 0.5f)));
-                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (playerDistance * 0.015f + 4f) * -1), (float)(Math.Sin(rotation) * (playerDistance * 0.035f + 4f) * -1));
+                NPC.velocity = new Vector2((float)(Math.Cos(rotation) * (playerDistance * 0.015f + 4f) * -1) * confused, (float)(Math.Sin(rotation) * (playerDistance * 0.035f + 4f) * -1));
 
                 SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisJump").WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(0.80f, 1f)), NPC.Center);
             }
@@ -402,9 +448,9 @@ namespace WiitaMod.NPCs
             Player target = Main.player[NPC.target];
             NPC.TargetClosest(true);
 
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
+            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget || NPC.velocity.X < 4 && NPC.confused) // AND I'm not at max "left" velocity
             {
-                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f); // accelerate to the left
+                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
             }
             else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0)
             {
@@ -413,9 +459,9 @@ namespace WiitaMod.NPCs
                 AI_Timer = 0;
             }
 
-            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
+            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget || NPC.velocity.X > -4 && NPC.confused) // AND I'm not at max "right" velocity
             {
-                NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f); // accelerate to the right
+                NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the right
             }
             else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0)
             {
@@ -471,5 +517,51 @@ namespace WiitaMod.NPCs
             }
         }
 
+    }
+
+    public class HamisGroup : ModNPC
+    {
+        public override string Texture => $"WiitaMod/Assets/Textures/Empty";
+
+        public override void SetDefaults()
+        {
+            NPC.width = 14;
+            NPC.height = 20;
+            NPC.damage = 10;
+            NPC.defense = 0;
+            NPC.lifeMax = 25;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.value = 50f;
+            NPC.knockBackResist = 0.5f;
+            NPC.aiStyle = -1; // 3 = Fighter AI(zombie, etc.), -1 = custom AI
+            NPC.scale = 1.5f;
+            NPC.netSpam = 1;
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            int amount = Main.rand.Next(3, 6);
+            if (Main.rand.Next(1, 31) == 1)
+            {
+                amount = 15;
+            }
+
+            for (int i = 0; i < amount; i++)
+            {
+                NPC.NewNPC(source, (int)NPC.Center.X + Main.rand.Next(-12, 13), (int)NPC.Center.Y + Main.rand.Next(-3, 4), ModContent.NPCType<Hamis>());
+            }
+
+            NPC.life = 0;
+        }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.Player.ZoneNormalCaverns)
+            {
+                return SpawnCondition.Cavern.Chance * 0.25f; // Spawn with 45% the chance of a regular zombie.
+            }
+            return 0f;
+        }
     }
 }

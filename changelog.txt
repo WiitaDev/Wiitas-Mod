@@ -1,2 +1,5 @@
 0.2.2:
-- Added coral staff
+- Tweaked the Hamis pet sprite a little
+- Added the Gold Hamis (1% chance to spawn instead of a regular hamis)
+- Made Hamis to be able to spawn in groups
+- Changed the icon to match upcoming content

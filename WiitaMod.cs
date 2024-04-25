@@ -18,8 +18,6 @@ namespace WiitaMod
                 Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave"), EffectPriority.High);
                 Filters.Scene["Shockwave"].Load();
 
-                Ref<Effect> shaderRef = new Ref<Effect>(ModContent.Request<Effect>("WiitaMod/Effects/ShaderTest", AssetRequestMode.ImmediateLoad).Value);
-                GameShaders.Misc["EnemyShader"] = new MiscShaderData(shaderRef, "EnemyShaderPass");
             }
         }
 

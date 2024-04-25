@@ -25,9 +25,9 @@ namespace WiitaMod.Projectiles.Pets
             Projectile.CloneDefaults(ProjectileID.MiniMinotaur);
             AIType = ProjectileID.MiniMinotaur;
             Projectile.width = 22;
-            Projectile.height = 19; // the height is 1 pixel lower because otherwise it had a row of pixels visible on top of it. And this works fine...
+            Projectile.height = 20;
             Projectile.scale = 1.5f;
-            DrawOriginOffsetY = 4;
+            DrawOriginOffsetY = 6;
         }
 
         public override bool PreAI()
