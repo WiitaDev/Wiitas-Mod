@@ -19,6 +19,7 @@ namespace WiitaMod.Systems
 
         //Weapons
         public int flamesShot = 0;
+        public int InfernalAlmanacProjectiles;
 
         //Screenshake
         public int screenShakeTimerGlobal = -1000;

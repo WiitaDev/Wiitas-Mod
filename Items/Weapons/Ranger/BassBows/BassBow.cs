@@ -11,12 +11,12 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Bass Bow");
-			// Tooltip.SetDefault("Arrows turn into bass");
+            // DisplayName.SetDefault("Bass Bow");
+            // Tooltip.SetDefault("Arrows turn into bass");
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
 
-		}
+        }
 
 		public override void SetDefaults()
 		{
