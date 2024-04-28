@@ -6,7 +6,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items.CraftingMaterials;
 using WiitaMod.Projectiles.Magic;
-using WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow;
 
 namespace WiitaMod.Items.Weapons.Magic
 {
@@ -20,18 +19,18 @@ namespace WiitaMod.Items.Weapons.Magic
 		public override void SetDefaults()
 		{
 
-            Item.damage = 15;
+            Item.damage = 30;
 
             Item.DamageType = DamageClass.Magic;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.mana = 6;
+            Item.mana = 8;
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.reuseDelay = 10;
-            Item.knockBack = 1f;
+            Item.knockBack = 6f;
             Item.width = 36;
             Item.height = 74;
-            Item.UseSound = SoundID.Item100;
+            Item.UseSound = SoundID.Item80;
             Item.shoot = ModContent.ProjectileType<InfernalAlmanacHold>();
             Item.rare = ItemRarityID.Orange;
             Item.value = Item.sellPrice(0, 1);
@@ -47,6 +46,11 @@ namespace WiitaMod.Items.Weapons.Magic
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             type = ModContent.ProjectileType<InfernalAlmanacHold>();
+        }
+
+        public override bool CanUseItem(Player player)
+        {
+            return player.ownedProjectileCounts[ModContent.ProjectileType<InfernalAlmanacHold>()] <= 0;
         }
 
         public override void AddRecipes()

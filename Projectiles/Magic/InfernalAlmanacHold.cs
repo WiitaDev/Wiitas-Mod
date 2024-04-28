@@ -11,12 +11,14 @@ namespace WiitaMod.Projectiles.Magic
 {
     public class InfernalAlmanacHold : ModProjectile
     {
+        public override string Texture => $"WiitaMod/Assets/Textures/Empty";
+
         // The maximum charge value
-        private const float MAX_CHARGE = 30f;
+        private const float MAX_CHARGE = 20f;
         // The maximum amount of projectiles
         private const float MAX_PROJECTILES = 6f;
         //The distance charge particle from the player center
-        private const float MOVE_DISTANCE = 70f;
+        private const float MOVE_DISTANCE = 25f;
 
         // The actual charge value is stored in the localAI0 field
         public float Charge
@@ -60,7 +62,6 @@ namespace WiitaMod.Projectiles.Magic
             Timer++;
             Player player = Main.player[Projectile.owner];
             Projectile.position = player.Center + Projectile.velocity * MOVE_DISTANCE;
-            ProjectileAmount = player.ownedProjectileCounts[ModContent.ProjectileType<InfernalAlmanacProj>()];
 
             if (!player.channel)
             {             
@@ -78,8 +79,8 @@ namespace WiitaMod.Projectiles.Magic
 
         private void SpawnProjectile(Player player)
         {
-            if (Main.myPlayer == player.whoAmI && ProjectileAmount != MAX_PROJECTILES)
-            {
+            if (Main.myPlayer == player.whoAmI && ProjectileAmount != MAX_PROJECTILES && player.CheckMana(player.GetManaCost(player.HeldItem), true, false))
+            {                
                 int SpawnedProjectiles = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
                 int projID = 0;
                 for (int i = 1; i < MAX_PROJECTILES + 1; i++) {
@@ -92,7 +93,7 @@ namespace WiitaMod.Projectiles.Magic
                     }
                 }
                 
-                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage / 2, 0, Main.myPlayer, ai1: projID);
+                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai1: projID);
                 ProjectileAmount++;
             }
         }
@@ -108,18 +109,22 @@ namespace WiitaMod.Projectiles.Magic
                 Charge++;
             }
 
-            int chargeFact = (int)(Charge / 10f);
-            Vector2 dustVelocity = Vector2.UnitX * 18f;
-            dustVelocity = dustVelocity.RotatedBy(Projectile.rotation - 1.57f);
-            Vector2 spawnPos = Projectile.Center + dustVelocity;
-            for (int k = 0; k < chargeFact + 1; k++)
+            for (int i = 1; i < ProjectileAmount + 1; i++)
             {
-                Vector2 spawn = spawnPos + ((float)Main.rand.NextDouble() * 6.28f).ToRotationVector2() * (30f - chargeFact);
-                Dust dust = Main.dust[Dust.NewDust(pos, 20, 20, DustID.Torch, Projectile.velocity.X / 2f, Projectile.velocity.Y / 2f)];
-                dust.velocity = Vector2.Normalize(spawnPos - spawn) * 1.5f * (30f - chargeFact) / 10f;
-                dust.scale = Main.rand.Next(10, 20) * 0.06f;
+                double deg = Timer * 2 + i * 60; //The degrees, you can multiply projectile.ai[1] to make it orbit faster, may be choppy depending on the value
+                double rad = deg * (Math.PI / 180); //Convert degrees to radians
+                double dist = 10; //Distance away from the target
+
+                Vector2 adjustedPosition = Projectile.Center;
+
+                adjustedPosition.X = Projectile.Center.X - (int)(Math.Cos(rad) * dist) - Projectile.width / 2;
+                adjustedPosition.Y = Projectile.Center.Y - (int)(Math.Sin(rad) * dist) - Projectile.height / 2;
+
+                Dust dust = Dust.NewDustPerfect(adjustedPosition, DustID.Torch);
+                dust.scale = Main.rand.Next(10, 20) * 0.04f;
                 dust.noGravity = true;
             }
+
         }
 
         private void UpdatePlayer(Player player)

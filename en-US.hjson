@@ -182,7 +182,12 @@ Mods: {
 
 			InfernalAlmanac: {
 				DisplayName: Infernal Almanac
-				Tooltip: very amazing despciriituiohn
+				Tooltip:
+					'''
+					Summons Infernal Fireballs to circle around you when charging
+					When you stop charging you shoot out the Fireballs
+					Once fully charged the Fireballs have extra piercing and home onto enemies
+					'''
 			}
 		}
 
@@ -210,7 +215,7 @@ Mods: {
 			BigCosmicBassArrow.DisplayName: Cosmic Bass
 			CosmicProjectile.DisplayName: Cosmic Projectile
 			InfernalAlmanacHold.DisplayName: Infernal Almanac Hold
-			InfernalAlmanacProj.DisplayName: Infernal Fire
+			InfernalAlmanacProj.DisplayName: Infernal Fireball
 		}
 
 		Tiles: {

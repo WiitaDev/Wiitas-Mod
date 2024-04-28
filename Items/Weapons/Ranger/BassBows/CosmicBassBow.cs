@@ -32,7 +32,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
             Item.useTime = 20;
             Item.reuseDelay = 10;
             Item.shootSpeed = 30f;
-            Item.knockBack = 1f;
+            Item.knockBack = 6f;
             Item.width = 36;
             Item.height = 74;
                 Item.damage = 125;

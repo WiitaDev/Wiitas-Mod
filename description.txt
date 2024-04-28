@@ -9,12 +9,13 @@ Current stuff in the mod:
 - HamHat (Alternate version of Magic Hat)
 - Fried Seagull
 - 8 new ranged weapons
+- 1 new mage weapon
 - 1 new summoner weapon
 - 3 new accessories
 
 < Developers >
 - Wiita (Main dev, programming, some art & everything else)
-- meganaisson (Main artist, idea generator)
+- mega (Main artist, idea generator)
 
 Contact me on Discord if you have any questions or suggestions
 - Wiita.

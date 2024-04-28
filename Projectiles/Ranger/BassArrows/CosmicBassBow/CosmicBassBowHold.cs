@@ -96,7 +96,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
         private void ShootSingle(Player player)
         {
             if (Main.myPlayer == player.whoAmI)
-                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 30, ModContent.ProjectileType<CosmicBassArrow>(), Projectile.damage / 2, 0, Main.myPlayer);
+                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 30, ModContent.ProjectileType<CosmicBassArrow>(), Projectile.damage / 2, player.HeldItem.knockBack, Main.myPlayer);
         }
         private void ShootBurst(Player player)
         {
@@ -111,7 +111,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 for (int k = 0; k < numberProjectiles; k++)
                 {
                     Vector2 perturbedSpeed = Projectile.velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, k / numberProjectiles)); // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
-                    Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, perturbedSpeed * 30f, ModContent.ProjectileType<CosmicBassArrow>(), Projectile.damage, 0.25f, Main.myPlayer, ai1: ProjAi); //Creates a new projectile with our new vector for spread.
+                    Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, perturbedSpeed * 30f, ModContent.ProjectileType<CosmicBassArrow>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai1: ProjAi); //Creates a new projectile with our new vector for spread.
                     ProjAi = 100;
                 }
                 Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
@@ -135,7 +135,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 dust.velocity *= Main.rand.Next(10, 21) * 0.1f;
             }
             float Damage = Projectile.damage * 2.5f;
-            Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 30, ModContent.ProjectileType<BigCosmicBassArrow>(), (int)Damage, 0, Main.myPlayer);
+            Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 30, ModContent.ProjectileType<BigCosmicBassArrow>(), (int)Damage, player.HeldItem.knockBack, Main.myPlayer);
         }
 
         private void ChargeBow(Player player)

@@ -93,7 +93,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 {
                     if (Main.myPlayer == player.whoAmI)
                     {
-                        Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 0.4f + new Vector2(Main.rand.Next(-7, 8), Main.rand.Next(-7, 8)), ModContent.ProjectileType<CosmicProjectile>(), Projectile.damage / 2, 0, Main.myPlayer);
+                        Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Projectile.velocity * 0.4f + new Vector2(Main.rand.Next(-7, 8), Main.rand.Next(-7, 8)), ModContent.ProjectileType<CosmicProjectile>(), Projectile.damage / 2, player.HeldItem.knockBack, Main.myPlayer);
                     }
                 }
             }
