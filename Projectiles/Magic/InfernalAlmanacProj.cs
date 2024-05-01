@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -11,14 +12,16 @@ namespace WiitaMod.Projectiles.Magic
 {
     public class InfernalAlmanacProj : ModProjectile
     {
-        public float Timer;
+        public ref float Timer => ref Projectile.ai[1];
+        public ref float ProjectileNum => ref Projectile.ai[0];
 
-        public ref float ProjectileNum => ref Projectile.ai[1];
+        public ref Player player => ref Main.player[Projectile.owner];
 
         bool flag = false;
         bool maxCharge = false;
         public bool Channeling = true;
         public Projectile HeldProj;
+        int HeldProjIndex;
 
         public override void SetStaticDefaults()
         {
@@ -44,15 +47,19 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.hostile = false;
         }
 
+        public override void SendExtraAI(BinaryWriter writer) { 
+            writer.Write(HeldProjIndex); 
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            HeldProjIndex = reader.ReadInt32();
+        }
+
         public override void OnSpawn(IEntitySource source)
         {
-            Player player = Main.player[Projectile.owner];
-
-            if (Projectile.owner == Main.myPlayer)
-            {
-                HeldProj = Main.projectile[player.heldProj];
-                Timer = HeldProj.ai[0];
-            }
+            HeldProj = Main.projectile[player.heldProj];
+            Timer = HeldProj.ai[0];
 
             CircleAround(player); // set position into orbit before spawning dust
 
@@ -72,8 +79,6 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void OnKill(int timeLeft)
         {
-            Player player = Main.player[Projectile.owner];
-
             for (int i = 0; i < 15; i++)
             {
                 Vector2 circle = Main.rand.NextVector2Circular(2f, 2f);
@@ -81,29 +86,35 @@ namespace WiitaMod.Projectiles.Magic
                 Main.dust[dustHit].scale = (float)Main.rand.Next(135, 190) * 0.013f;
                 Main.dust[dustHit].noGravity = true;
             }
+
+            if(maxCharge)
+                ProjectileHelper.Explode(Projectile.whoAmI, 100, 100, false);
+
             SoundEngine.PlaySound(SoundID.Item20.WithPitchOffset(-0.5f), Projectile.Center);
         }
 
-        public override void AI()
+        public override void AI() 
         {
-            Player player = Main.player[Projectile.owner];
-
-            if (Projectile.owner == Main.myPlayer)
-            {
-                Timer = HeldProj.ai[0];
-            }
-
             if (!player.channel)
             {
                 Channeling = false;
             }
 
             float maxDetectRadius = 250f; // The maximum radius at which a projectile can detect a target
-            float speed = 12f; // The speed at which the projectile moves towards the target
+            float speed = 17f; // The speed at which the projectile moves towards the target
             float turnSpeed = 250f;
 
             if (Channeling == true)
             {
+                if (player == Main.LocalPlayer)
+                {
+                    Timer = HeldProj.ai[0];
+                    if (HeldProj.ai[1] == 6)
+                    {
+                        maxCharge = true;
+                    }
+                }              
+
                 Projectile.rotation = 0;
                 Projectile.friendly = false;
                 Projectile.timeLeft = 300;
@@ -121,10 +132,6 @@ namespace WiitaMod.Projectiles.Magic
                     int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
                     string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
                     player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newAmount);
-                    if (HeldProj.localAI[1] == 6) {
-                        maxCharge = true;
-                        Projectile.penetrate = 2; 
-                    }
 
 
                     flag = true;
@@ -136,7 +143,7 @@ namespace WiitaMod.Projectiles.Magic
                 {
                     Projectile.timeLeft -= 2;
                 }
-                else if(maxCharge)
+                else if (maxCharge)
                 {
                     // Homing calculations
                     Vector2 targetPos = closestNPC.Center - Projectile.Center;
@@ -173,7 +180,7 @@ namespace WiitaMod.Projectiles.Magic
 
         private void CircleAround(Player player)
         {
-            double deg = Timer * 2 + ProjectileNum * 60; //The degrees, you can multiply projectile.ai[1] to make it orbit faster, may be choppy depending on the value
+            double deg = Timer * 2 + ProjectileNum * 60;
             double rad = deg * (Math.PI / 180); //Convert degrees to radians
             double dist = 100; //Distance away from the target
 
@@ -181,6 +188,8 @@ namespace WiitaMod.Projectiles.Magic
 
             Projectile.position.X = adjustedPosition.X - (int)(Math.Cos(rad) * dist) - Projectile.width / 2;
             Projectile.position.Y = adjustedPosition.Y - (int)(Math.Sin(rad) * dist) - Projectile.height / 2;
+
+            Projectile.netUpdate = true;
         }
 
         public override bool PreDraw(ref Color lightColor)

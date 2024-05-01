@@ -11,14 +11,12 @@ namespace WiitaMod.Projectiles.Magic
 {
     public class InfernalAlmanacHold : ModProjectile
     {
-        public override string Texture => $"WiitaMod/Assets/Textures/Empty";
-
         // The maximum charge value
         private const float MAX_CHARGE = 20f;
         // The maximum amount of projectiles
         private const float MAX_PROJECTILES = 6f;
         //The distance charge particle from the player center
-        private const float MOVE_DISTANCE = 25f;
+        private const float MOVE_DISTANCE = 15f;
 
         // The actual charge value is stored in the localAI0 field
         public float Charge
@@ -28,8 +26,8 @@ namespace WiitaMod.Projectiles.Magic
         }
         public float ProjectileAmount
         {
-            get => Projectile.localAI[1];
-            set => Projectile.localAI[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         } 
         public float Timer
         {
@@ -41,19 +39,19 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void SetDefaults()
         {
-            Projectile.width = 10;
-            Projectile.height = 10;
+            Projectile.width = 56;
+            Projectile.height = 42;
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
+            Projectile.scale = 0.75f;
             Projectile.DamageType = DamageClass.Magic;
-            Projectile.hide = true;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            return false;
+            return true;
         }
 
         public override void AI()
@@ -61,7 +59,7 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.timeLeft = 2;
             Timer++;
             Player player = Main.player[Projectile.owner];
-            Projectile.position = player.Center + Projectile.velocity * MOVE_DISTANCE;
+            Projectile.Center = new Vector2(player.MountedCenter.X + MOVE_DISTANCE * Projectile.direction, player.MountedCenter.Y);
 
             if (!player.channel)
             {             
@@ -75,6 +73,7 @@ namespace WiitaMod.Projectiles.Magic
                 SpawnProjectile(player);
                 Charge = 0;
             }
+            Projectile.netUpdate = true;
         }
 
         private void SpawnProjectile(Player player)
@@ -93,17 +92,13 @@ namespace WiitaMod.Projectiles.Magic
                     }
                 }
                 
-                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai1: projID);
+                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai0: projID);
                 ProjectileAmount++;
             }
         }
 
         private void ChargeWeapon(Player player)
         {
-            Vector2 offset = Projectile.velocity;
-            offset *= MOVE_DISTANCE - 20;
-            Vector2 pos = player.Center + offset - new Vector2(10, 10);
-
             if (Charge < MAX_CHARGE && player.channel)
             {
                 Charge++;
@@ -117,8 +112,8 @@ namespace WiitaMod.Projectiles.Magic
 
                 Vector2 adjustedPosition = Projectile.Center;
 
-                adjustedPosition.X = Projectile.Center.X - (int)(Math.Cos(rad) * dist) - Projectile.width / 2;
-                adjustedPosition.Y = Projectile.Center.Y - (int)(Math.Sin(rad) * dist) - Projectile.height / 2;
+                adjustedPosition.X = Projectile.Center.X - (int)(Math.Cos(rad) * dist);
+                adjustedPosition.Y = Projectile.Center.Y - (int)(Math.Sin(rad) * dist);
 
                 Dust dust = Dust.NewDustPerfect(adjustedPosition, DustID.Torch);
                 dust.scale = Main.rand.Next(10, 20) * 0.04f;

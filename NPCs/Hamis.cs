@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -69,6 +70,16 @@ namespace WiitaMod.NPCs
 
         public bool isGolden;
 
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(isGolden);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            isGolden = reader.ReadBoolean();
+        }
 
         public override void SetDefaults()
         {
@@ -144,10 +155,10 @@ namespace WiitaMod.NPCs
 
         public override void OnSpawn(IEntitySource source)
         {
-            if (Main.rand.Next(1, 101) == 69) //1% chance to spawn a golden hamis
+            Main.NewText(NPC.SpawnedFromStatue);
+            if (Main.rand.Next(1, 101) == 69 && !NPC.SpawnedFromStatue) //1% chance to spawn a golden hamis
             {
                 isGolden = true;
-                NPC.value = 200000; // 20 gold
             }
         }
 
@@ -189,6 +200,7 @@ namespace WiitaMod.NPCs
 
             if (isGolden)
             {
+                NPC.value = 200000; // 20 gold
                 for (int i = 0; i < 30; i++)
                 {
                     Dust.NewDust(NPC.Center, 15, 15, DustID.SparkForLightDisc);
