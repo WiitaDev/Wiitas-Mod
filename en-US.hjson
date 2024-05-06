@@ -186,7 +186,7 @@ Mods: {
 					'''
 					Summons Infernal Fireballs to circle around you when charging
 					When you stop charging you shoot out the Fireballs
-					Once fully charged the Fireballs have extra piercing and home onto enemies
+					Once fully charged the Fireballs have explode on impact and home onto enemies
 					'''
 			}
 		}

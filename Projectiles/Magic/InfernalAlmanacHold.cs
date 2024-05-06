@@ -45,7 +45,6 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
-            Projectile.scale = 0.75f;
             Projectile.DamageType = DamageClass.Magic;
         }
 
@@ -54,11 +53,17 @@ namespace WiitaMod.Projectiles.Magic
             return true;
         }
 
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.scale = 0.75f;
+        }
+
         public override void AI()
         {
             Projectile.timeLeft = 2;
             Timer++;
             Player player = Main.player[Projectile.owner];
+            Projectile.spriteDirection = Projectile.direction;
             Projectile.Center = new Vector2(player.MountedCenter.X + MOVE_DISTANCE * Projectile.direction, player.MountedCenter.Y);
 
             if (!player.channel)

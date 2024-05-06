@@ -58,26 +58,12 @@ namespace WiitaMod.Tiles
 
             var entitySource = new EntitySource_TileUpdate(x, y, context: "HamisStatue");
 
-            // If you want to make an NPC spawning statue, see below.
-            int npcIndex = -1;
-
             // 30 is the time before it can be used again. NPC.MechSpawn checks nearby for other spawns to prevent too many spawns. 3 in immediate vicinity, 6 nearby, 10 in world.
-            int spawnedNpcId = NPCType<Hamis>();
+            int spawnedNpcId = ModContent.NPCType<Hamis>();
 
             if (Wiring.CheckMech(x, y, 30) && NPC.MechSpawn(spawnX, spawnY, spawnedNpcId))
             {
-                npcIndex = NPC.NewNPC(entitySource, (int)spawnX, (int)spawnY - 12, spawnedNpcId);
-            }
-
-            if (npcIndex >= 0)
-            {
-                var npc = Main.npc[npcIndex];
-
-                npc.value = 0f;
-                npc.npcSlots = 0f;
-                // Prevents Loot if NPCID.Sets.NoEarlymodeLootWhenSpawnedFromStatue and !Main.HardMode or NPCID.Sets.StatueSpawnedDropRarity != -1 and NextFloat() >= NPCID.Sets.StatueSpawnedDropRarity or killed by traps.
-                // Prevents CatchNPC
-                npc.SpawnedFromStatue = true;
+                NPC.NewNPC(entitySource, (int)spawnX, (int)spawnY - 12, spawnedNpcId, ai2: -5); //ai2 is -5 because i cant get the NPC.SpawnedFromStatue shit to work
             }
         }
     }

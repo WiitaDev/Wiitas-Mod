@@ -29,7 +29,7 @@ namespace WiitaMod.Items.CraftingMaterials
         public override void AddRecipes()
         {
             CreateRecipe(5)
-                .AddRecipeGroup("HardmodeTier3", 15)
+                .AddRecipeGroup("HardmodeOreTier3", 15)
                 .AddIngredient(ItemID.FallenStar, 2)
                 .AddTile(TileID.AdamantiteForge)
                 .Register();

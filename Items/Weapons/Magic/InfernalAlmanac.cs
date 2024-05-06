@@ -20,7 +20,7 @@ namespace WiitaMod.Items.Weapons.Magic
 
             Item.damage = 30;
             Item.DamageType = DamageClass.Magic;
-            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.useStyle = ItemUseStyleID.Thrust;
             Item.mana = 8;
             Item.useAnimation = 20;
             Item.useTime = 20;

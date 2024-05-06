@@ -1,6 +1,6 @@
 0.2.2:
 - Tweaked the Hamis Pet sprite a little
-- Added the Gold Hamis (1% chance for a Hamis to be golden)
+- Added the Gold Hamis (0.5% chance for a Hamis to be golden)
 - Hamis can now spawn in groups
 - Changed the icon to match upcoming content
 - Added the Infernal Almanac

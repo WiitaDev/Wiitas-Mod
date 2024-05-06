@@ -23,6 +23,8 @@ namespace WiitaMod.NPCs
         {
             // DisplayName.SetDefault("Hamis");
 
+            NPCID.Sets.NoEarlymodeLootWhenSpawnedFromStatue[Type] = true;
+
             Main.npcFrameCount[NPC.type] = 17;
         }
         // Here we define an enum we will use with the State slot. Using an ai slot as a means to store "state" can simplify things greatly. Think flowchart.
@@ -74,11 +76,13 @@ namespace WiitaMod.NPCs
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(isGolden);
+            writer.Write(confused);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             isGolden = reader.ReadBoolean();
+            confused = reader.ReadInt32();
         }
 
         public override void SetDefaults()
@@ -91,9 +95,9 @@ namespace WiitaMod.NPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.value = 50f;
-            NPC.knockBackResist = 0.5f;
             NPC.aiStyle = -1; // 3 = Fighter AI(zombie, etc.), -1 = custom AI
             NPC.scale = 1.5f;
+            NPC.knockBackResist = 0.5f;
             NPC.netSpam = 1;
             NPC.npcSlots = 0.5f;
 
@@ -106,8 +110,7 @@ namespace WiitaMod.NPCs
             if (!NPC.SpawnedFromStatue)
             {
                 //npcLoot.Add(ItemDropRule.Common(ItemID.GoldOre, 1)); // 100% chance to drop Gold Ore
-                npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 50)); // 1% chance to drop in normal mode and 2% in expert/master
-                npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisHat>(), 200, 100)); // 0.5% chance to drop in normal mode and 1% in expert/master
+                npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<HamisPetItem>(), 100, 100)); // 1% chance to drop in normal mode and 1% in expert/master
             }
         }
 
@@ -144,6 +147,30 @@ namespace WiitaMod.NPCs
             SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/HamisBite").WithPitchOffset(Main.rand.NextFloat(0.25f, 0.50f)), NPC.Center);
         }
 
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            AI_Timer = -15;
+            AI_State = (float)ActionState.Run;
+
+            for (int i = 0; i < 10; i++)
+            {
+                Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.Blood, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f), 0, default, 0.75f);
+            }
+
+            if (NPC.life <= 0) 
+            {
+                for (int i = 0; i < Main.rand.Next(3, 5); i++)
+                {
+                    Vector2 GoreSpeed = new Vector2(Main.rand.NextFloat(0f, 2f), Main.rand.NextFloat(0f, 2f));
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.position, GoreSpeed, Main.rand.Next(135, 137), 0.75f);
+                }
+                for (int i = 0; i < 40; i++)
+                {
+                    Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.Blood, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f), 0, default, 0.75f);
+                }
+            }
+        }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneNormalCaverns)
@@ -155,8 +182,15 @@ namespace WiitaMod.NPCs
 
         public override void OnSpawn(IEntitySource source)
         {
-            Main.NewText(NPC.SpawnedFromStatue);
-            if (Main.rand.Next(1, 101) == 69 && !NPC.SpawnedFromStatue) //1% chance to spawn a golden hamis
+            if (NPC.ai[2] == -5) // sets ai[2] to -5 when it is spawned from a hamis statue
+            {
+                NPC.SpawnedFromStatue = true;
+                NPC.value = 0f;
+                NPC.npcSlots = 0f;
+                NPC.ai[2] = 0;
+            }
+
+            if (Main.rand.Next(1, 201) == 1 && !NPC.SpawnedFromStatue) //0.5% chance to spawn a golden hamis
             {
                 isGolden = true;
             }
@@ -176,15 +210,8 @@ namespace WiitaMod.NPCs
 
         public override void OnKill()
         {
-            for (int i = 0; i < Main.rand.Next(3, 5); i++)
-            {
-                Vector2 GoreSpeed = new Vector2(Main.rand.NextFloat(0f, 2f), Main.rand.NextFloat(0f, 2f));
-                Gore.NewGore(NPC.GetSource_Death(), NPC.position, GoreSpeed, Main.rand.Next(135, 137), 0.75f);
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.Blood, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f), 0, default, 0.75f);
-            }
+            if (isGolden)
+                Item.NewItem(NPC.GetSource_Death(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.GoldCoin, Main.rand.Next(25,41)) ;
         }
 
         public override void AI()
@@ -193,17 +220,16 @@ namespace WiitaMod.NPCs
             NPC.spriteDirection = NPC.direction * -1;
             confused = NPC.confused ? -1 : 1;
 
-            if (NPC.velocity.Y != 0)
+            if (NPC.velocity.Y != 0 && AI_Timer > 0)
             {
                 AI_State = (float)ActionState.Fall;
             }
 
             if (isGolden)
             {
-                NPC.value = 200000; // 20 gold
-                for (int i = 0; i < 30; i++)
+                if(Main.rand.Next(1,8) == 1)
                 {
-                    Dust.NewDust(NPC.Center, 15, 15, DustID.SparkForLightDisc);
+                    Dust.NewDust(NPC.Center, 15, 15, DustID.TreasureSparkle);
                 }
             }
 
@@ -225,19 +251,12 @@ namespace WiitaMod.NPCs
                     break;
                 case (float)ActionState.Fall:
 
-                    Player target = Main.player[NPC.target];
                     NPC.TargetClosest(true);
+                    Player target = Main.player[NPC.target];
 
                     if (NPC.velocity.X == 0)
                     {
-                        if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget) // AND I'm not at max "left" velocity
-                        {
-                            NPC.velocity.X -= Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the left
-                        }
-                        if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget) // AND I'm not at max "right" velocity
-                        {
-                            NPC.velocity.X += Main.rand.NextFloat(0.36f, 0.56f); // accelerate to the right
-                        }
+                        Move(target, true);
                     }
 
                     if (NPC.velocity.Y == 0)
@@ -251,7 +270,7 @@ namespace WiitaMod.NPCs
                             AI_Timer = 0;
                         }
 
-                        AI_State = (float)ActionState.Idle;
+                        AI_State = (float)ActionState.Idle;                        
 
                         NPC.velocity.X = 0;
                     }
@@ -420,7 +439,7 @@ namespace WiitaMod.NPCs
             // The faceTarget parameter means that npc.direction will automatically be 1 or -1 if the targeted player is to the right or left.
             // This is also automatically flipped if npc.confused.
             NPC.TargetClosest(true);
-            if (Main.player[NPC.target].Distance(NPC.Center) > 800f) { playerNoticed = false; }
+            if (Main.player[NPC.target].Distance(NPC.Center) > 1100f) { playerNoticed = false; }
 
             if (!Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, 20, 20) && playerNoticed == false) { playerNoticed = false; return; } else { playerNoticed = true; }
 
@@ -457,35 +476,41 @@ namespace WiitaMod.NPCs
 
         private void Run()
         {
-            Player target = Main.player[NPC.target];
             NPC.TargetClosest(true);
+            Player target = Main.player[NPC.target];
 
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget || NPC.velocity.X < 4 && NPC.confused) // AND I'm not at max "left" velocity
-            {
-                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
-            }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0)
-            {
-                NPC.velocity = Vector2.Zero;
-                AI_State = (float)ActionState.Notice;
-                AI_Timer = 0;
-            }
+            Move(target, false);
 
-            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget || NPC.velocity.X > -4 && NPC.confused) // AND I'm not at max "right" velocity
-            {
-                NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the right
-            }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0)
-            {
-                NPC.velocity = Vector2.Zero;
-                AI_State = (float)ActionState.Notice;
-                AI_Timer = 0;
-            }
-            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 800f)
+            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 1100f)
             {
                 // Out targeted player seems to have left our range, so we'll go back to sleep.
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Idle;
+            }
+        }
+
+        private void Move(Player target, bool onlyMove) 
+        {
+            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget || (NPC.velocity.X < 4 && NPC.confused)) // AND I'm not at max "left" velocity
+            {
+                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
+            }
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 && !onlyMove)
+            {
+                NPC.velocity = Vector2.Zero;
+                AI_State = (float)ActionState.Notice;
+                AI_Timer = 0;
+            }
+
+            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget || (NPC.velocity.X > -4 && NPC.confused)) // AND I'm not at max "right" velocity
+            {
+                NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the right
+            }
+            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 && !onlyMove)
+            {
+                NPC.velocity = Vector2.Zero;
+                AI_State = (float)ActionState.Notice;
+                AI_Timer = 0;
             }
         }
 
@@ -553,8 +578,8 @@ namespace WiitaMod.NPCs
 
         public override void OnSpawn(IEntitySource source)
         {
-            int amount = Main.rand.Next(3, 6);
-            if (Main.rand.Next(1, 31) == 1)
+            int amount = Main.rand.Next(2, 4);
+            if (Main.rand.Next(1, 31) == 1) // 3.3333% chance of spawning 15 hamis group
             {
                 amount = 15;
             }
@@ -563,15 +588,19 @@ namespace WiitaMod.NPCs
             {
                 NPC.NewNPC(source, (int)NPC.Center.X + Main.rand.Next(-12, 13), (int)NPC.Center.Y + Main.rand.Next(-3, 4), ModContent.NPCType<Hamis>());
             }
-
+            
             NPC.life = 0;
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            database.Entries.Remove(bestiaryEntry);
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneNormalCaverns)
             {
-                return SpawnCondition.Cavern.Chance * 0.25f; // Spawn with 45% the chance of a regular zombie.
+                return SpawnCondition.Cavern.Chance * 0.15f; // Spawn with 15% the chance of a regular zombie.
             }
             return 0f;
         }

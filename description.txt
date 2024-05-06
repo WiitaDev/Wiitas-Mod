@@ -5,7 +5,6 @@
 Wiita's Mod is a mediocre content mod that adds random stuff
 
 < Current stuff in the mod >
-
 - Hamis (enemy) and a pet for it from Noita :) 
 - HamHat (Alternate version of Magic Hat)
 - Fried Seagull
