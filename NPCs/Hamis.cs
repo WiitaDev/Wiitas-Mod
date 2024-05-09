@@ -481,7 +481,7 @@ namespace WiitaMod.NPCs
 
             Move(target, false);
 
-            if (!NPC.HasValidTarget || Main.player[NPC.target].Distance(NPC.Center) > 1100f)
+            if (!NPC.HasValidTarget)
             {
                 // Out targeted player seems to have left our range, so we'll go back to sleep.
                 NPC.velocity = Vector2.Zero;
@@ -491,26 +491,22 @@ namespace WiitaMod.NPCs
 
         private void Move(Player target, bool onlyMove) 
         {
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget || (NPC.velocity.X < 4 && NPC.confused)) // AND I'm not at max "left" velocity
-            {
-                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
-            }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 && !onlyMove)
+            if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 && !onlyMove)
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
                 AI_Timer = 0;
+                return;
+            }
+
+            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget || (NPC.velocity.X < 4 && NPC.confused)) // AND I'm not at max "left" velocity
+            {
+                NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
             }
 
             if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget || (NPC.velocity.X > -4 && NPC.confused)) // AND I'm not at max "right" velocity
             {
                 NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the right
-            }
-            else if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 && !onlyMove)
-            {
-                NPC.velocity = Vector2.Zero;
-                AI_State = (float)ActionState.Notice;
-                AI_Timer = 0;
             }
         }
 

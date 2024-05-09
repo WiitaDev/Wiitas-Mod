@@ -126,7 +126,10 @@ namespace WiitaMod.Projectiles.Magic
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * Projectile.direction, Projectile.velocity.X * Projectile.direction) - 1.57f * Projectile.direction;
                 if (!flag)
                 {
-                    Projectile.velocity = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * speed;
+                    if (player == Main.LocalPlayer)
+                    {
+                        Projectile.velocity = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * speed;
+                    }
                     Projectile.friendly = true;
 
                     int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;

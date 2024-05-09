@@ -55,7 +55,6 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.scale = 0.75f;
         }
 
         public override void AI()
@@ -63,6 +62,7 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.timeLeft = 2;
             Timer++;
             Player player = Main.player[Projectile.owner];
+            Projectile.scale = 0.75f;
             Projectile.spriteDirection = Projectile.direction;
             Projectile.Center = new Vector2(player.MountedCenter.X + MOVE_DISTANCE * Projectile.direction, player.MountedCenter.Y);
 
