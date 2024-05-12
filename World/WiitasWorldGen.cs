@@ -43,7 +43,7 @@ namespace WiitaMod.World
                 }));
             }
 
-            int Index = tasks.FindIndex(genpass => genpass.Name.Equals("Settle Liquids Again"));
+            int Index = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
             if (Index != -1)
             {
                 tasks.Insert(Index + 1, new PassLegacy("Tropical Ocean", (progress, configuration) =>

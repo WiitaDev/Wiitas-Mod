@@ -1,11 +1,7 @@
-using Humanizer;
 using Microsoft.Xna.Framework;
-using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent.Generation;
 using Terraria.GameContent.RGB;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +11,7 @@ using WiitaMod.Walls;
 
 namespace WiitaMod.World
 {
-    class TropicalOceanGeneration : ModSystem /// I hope that calamity people don't sue me or something lol
+    class TropicalOceanGeneration : ModSystem /// Totally not blatantly stolen from calamitys sulphurous sea code
     {
 
         public const int TotalSandBeforeWaterMin = 22;
@@ -24,9 +20,7 @@ namespace WiitaMod.World
 
         public const float TopWaterDepthPercentage = 0.175f;
 
-        public const float TopWaterDescentSmoothnessMin = 0.19f;
-
-        public const float TopWaterDescentSmoothnessMax = 0.20f;
+        public const float TopWaterDescentSmoothness = 0.19f;
 
         public const int DepthForWater = 5;
 
@@ -63,9 +57,9 @@ namespace WiitaMod.World
                     6400 => 0.85f,
 
                     // Large worlds.
-                    _ => 0.925f
+                    _ => 0.9f
                 };
-                return (int)((Main.rockLayer + 112 - YStart) * depthFactor);
+                return (int)((Main.rockLayer + 180 - YStart) * depthFactor);
             }
         }
 
@@ -76,6 +70,12 @@ namespace WiitaMod.World
         }
 
         public static int CaveStart
+        {
+            get;
+            set;
+        }
+
+        public static int BeachWidth
         {
             get;
             set;
@@ -120,9 +120,11 @@ namespace WiitaMod.World
             SurfaceMounds();
 
             GenerateBeach();
-            PreventSandFalling();
 
-            GenVars.structures.AddStructure(new(GetActualX(2) - BiomeWidth / 2 - 10, YStart - BlockDepth / 2 - 10, BiomeWidth + 20, BlockDepth + 20));
+            PreventSandFalling();
+            RemoveAloneBlocks();
+
+            GenVars.structures.AddProtectedStructure(new(GetActualX(2) - BiomeWidth / 2 - 10, YStart - BlockDepth / 2 - 10, BiomeWidth + 20, BlockDepth + 20));
         }
 
         public void GenerateSand()
@@ -186,7 +188,7 @@ namespace WiitaMod.World
             int maxDepth = MaxTopWaterDepth;
             int totalSandTilesBeforeWater = WorldGen.genRand.Next(TotalSandBeforeWaterMin, TotalSandBeforeWaterMax);
             int width = (int)((BiomeWidth - totalSandTilesBeforeWater) * 0.895f);
-            float descentSmoothness = WorldGen.genRand.NextFloat(TopWaterDescentSmoothnessMin, TopWaterDescentSmoothnessMax);
+            float descentSmoothness = TopWaterDescentSmoothness;
 
             int heightSeed = WorldGen.genRand.Next();
 
@@ -251,40 +253,76 @@ namespace WiitaMod.World
         public void GenerateCaveTunnel()
         {
             int startX = GetActualX(BiomeWidth / 5);
-            int dir = (Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1) * (BiomeWidth - 400) / 50;
+            int dir = Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1;
             int startY = CaveStart + 20 + BlockDepth / 3;
-            var v = WorldGen.digTunnel(startX, startY, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); //spawn point
 
+            Point bossCaveStart = new(GetActualX((int)((BiomeWidth - TotalSandBeforeWaterMax) * 0.8f)), CaveStart + (BiomeWidth - 400) / 10 + BlockDepth / 5);
+            int bossYRadius = 30;
+            int bossXRadius = 55;
+            var bossCircle = new Shapes.Circle(bossXRadius, bossYRadius);
+
+            WorldUtils.Gen(bossCaveStart, bossCircle, Actions.Chain([new Actions.ClearTile(), new Actions.SetLiquid()])); // haha funni boss area
+            for(int i = bossCaveStart.Y; i <= bossCaveStart.Y + bossYRadius; i++) 
+            {
+                for(int x = bossCaveStart.X - bossXRadius; x <= bossCaveStart.X + bossXRadius; x++)
+                    WorldUtils.Gen(new(x,i), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(), new Actions.SetLiquid()]));
+            }
+
+            var v = WorldGen.digTunnel(startX, startY, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); //spawn point
             int offset = 0;
             for (int y = YStart; y < startY; y++)
             {
-                Main.tile[startX, y].Get<TileWallWireStateData>().HasTile = false;
-                Main.tile[startX, y].LiquidAmount = byte.MaxValue;
+                //Main.tile[startX, y].Get<TileWallWireStateData>().HasTile = false;
+                //Main.tile[startX, y].LiquidAmount = byte.MaxValue;
 
-                offset = WorldGen.genRand.Next(-1, 2) * 2;
+                offset += WorldGen.genRand.Next(-1, 2);
 
-                WorldGen.digTunnel(startX + offset, y, dir * 0.1f, -BiomeWidth / 150, 1, WorldGen.genRand.Next(2, 4), Wet: true); // entrance tunnels
+                if(y % 4 == 1)
+                    WorldGen.digTunnel(startX + offset, y, 0, BiomeWidth / 150, 7, WorldGen.genRand.Next(2, 4), Wet: true); // entrance tunnel
             }
 
 
-            for (int i = 1; i <= 5; i++)
-                WorldGen.digTunnel(v.X, v.Y, dir * -2, WorldGen.genRand.NextFloat(-0.12f, 0.2f), 30, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //backwards expanding tunnels
+            for (int i = 1; i <= 4; i++)
+                WorldGen.digTunnel(v.X, v.Y, dir * -2, WorldGen.genRand.NextFloat(-0.12f, 0.3f), 25, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //backwards expanding tunnels
 
             for (int i = 1; i <= 6; i++)
-                WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(0.12f, 0.2f) * -1, 40, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //random leading tunnels
+                WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(0.12f, 0.2f) * -1, 35, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //random leading tunnels
 
-            v = WorldGen.digTunnel(v.X, v.Y, dir * 2, WorldGen.genRand.NextFloat(-0.1f, 0.02f), 70, 2); //tiny leading tunnel
+            v = WorldGen.digTunnel(v.X, v.Y, dir * 2, -0.2f, 70, 3, Wet: true); //tiny leading tunnel
+
+            Vector2 bossDir = bossCaveStart.ToVector2() - new Vector2((int)v.X, (int)v.Y);
+            bossDir.Normalize();
 
             for (int i = 1; i <= 3; i++)
-                v = WorldGen.digTunnel(v.X, v.Y, dir, WorldGen.genRand.NextFloat(-0.3f, 0.3f), 10, WorldGen.genRand.Next(3, 6) + (BiomeWidth - 400) / 30, Wet: true); //continue from tiny
+                v = WorldGen.digTunnel(v.X, v.Y, bossDir.X, bossDir.Y, 15, WorldGen.genRand.Next(3, 6), Wet: true); //continue from tiny
 
-            for (int i = 1; i <= 6; i++)
-                WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(-0.2f, 0.08f), 40, WorldGen.genRand.Next(3, 5) + (BiomeWidth - 400) / 30, Wet: true); //random middle tunnels
+            var m = WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(0.05f, 0.015f), 40, WorldGen.genRand.Next(3, 5), Wet: true); //random middle tunnels
+            for (int i = 1; i <= 5; i++)
+                m = WorldGen.digTunnel(v.X, v.Y, dir * 1.5, WorldGen.genRand.NextFloat(0.05f, 0.015f), 40, WorldGen.genRand.Next(3, 5), Wet: true); //random middle tunnels
+
+            if(Main.maxTilesX != 4200)   //medium & large world
+            {
+                for (int i = 1; i <= 7; i++)
+                    WorldGen.digTunnel(m.X, m.Y, Main.rand.NextFloat(-0.75f,0.75f), WorldGen.genRand.NextFloat(0.015f, 0.45f), 60, WorldGen.genRand.Next(5, 7), Wet: true); //Expand from middle
+            }
+
+            for (int i = 1; i <= 12 + (BiomeWidth - 400) / 30; i++)
+            {
+                bossDir = bossCaveStart.ToVector2() - new Vector2((int)v.X, (int)v.Y);
+                bossDir.Normalize();
+                if(i <= 4) 
+                {
+                    bossDir = new(0.1f * -dir, -0.5f); //for the first 4 tunnels go straight up
+                }
+
+                v = WorldGen.digTunnel(v.X, v.Y, bossDir.X, bossDir.Y, 30, WorldGen.genRand.Next(3, 5), Wet: true); //finally go to boss room
+
+            }
         }
 
         private void GenerateBeach()
         {
-            int beachWidth = WorldGen.genRand.Next(180, 240 + 1);
+            BeachWidth = WorldGen.genRand.Next(200, 240 + 1);
             var searchCondition = Searches.Chain(new Searches.Down(3000), new Conditions.IsSolid());
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
             ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
@@ -295,15 +333,20 @@ namespace WiitaMod.World
                 return;
 
             // Transform the landscape.
-            for (int i = BiomeWidth - 10; i <= BiomeWidth + beachWidth; i++)
+            for (int i = BiomeWidth - 10; i <= BiomeWidth + BeachWidth; i++)
             {
                 int x = GetActualX(i);
-                float xRatio = Utils.GetLerpValue(BiomeWidth - 10, BiomeWidth + beachWidth, i, true);
+                float xRatio = Utils.GetLerpValue(BiomeWidth - 10, BiomeWidth + BeachWidth, i, true);
                 float ditherChance = Utils.GetLerpValue(0.92f, 0.99f, xRatio, true);
-                int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 75f + 1f);
+                int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 110f + 1f);
                 for (int y = YStart - 80; y < YStart + depth; y++)
                 {
                     Tile tileAtPosition = SafeTile(x, y);
+                    if(tileAtPosition.LiquidAmount > 0) 
+                    {
+                        tileAtPosition.LiquidAmount = 0; // remove any excess water
+                    }
+
                     if (tileAtPosition.HasTile && ValidBeachDestroyTiles.Contains(tileAtPosition.TileType))
                     {
                         // Kill trees manually so that no leftover tiles are present.
@@ -331,7 +374,7 @@ namespace WiitaMod.World
             int top = YStart - 90;
             int bottom = top + maxDepth + 1;
 
-            for (int i = 1; i < width + 240; i++) // +240 is the beach max lenght
+            for (int i = 1; i < width + BeachWidth; i++)
             {
                 int x = GetActualX(i);
 
@@ -347,20 +390,50 @@ namespace WiitaMod.World
 
         public void RemoveTilesAbove()
         {
-            for (int i = 0; i < BiomeWidth; i++)
+            for (int i = 1; i < BiomeWidth + BeachWidth; i++)
             {
                 int x = GetActualX(i);
                 for (int y = YStart - 140; y < YStart + 40; y++)
                 {
                     int type = SafeTile(x, y).TileType;
-                    if (YStartWhitelist.Contains(type) ||
-                        OtherTilesForDestroy.Contains(type))
+                    if (YStartWhitelist.Contains(type) || OtherTilesForDestroy.Contains(type))
                         SafeTile(x, y).Get<TileWallWireStateData>().HasTile = false;
                     if (WallsForDestroy.Contains(SafeTile(x, y).WallType))
                         SafeTile(x, y).WallType = 0;
+
+                    if(i > BiomeWidth - TotalSandBeforeWaterMax) 
+                    {
+                        if(SafeTile(x,y).LiquidAmount > 0) 
+                        {
+                            SafeTile(x, y).LiquidAmount = 0;
+                        }
+                    }
                 }
             }
         }
+
+        public void RemoveAloneBlocks() 
+        {
+            int top = YStart - 90;
+            int bottom = YStart + BlockDepth;
+
+            for (int i = 1; i < BiomeWidth; i++)
+            {
+                int x = GetActualX(i);
+                for (int y = top; y < bottom; y++)
+                {
+                    Tile t = SafeTile(x, y);
+                    if (t.Get<TileWallWireStateData>().HasTile) 
+                    {
+                        WorldUtils.Gen(new Point(x,y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.Smooth()])); // also smooth all the blocks
+
+                        if(!SafeTile(x - 1, y).Get<TileWallWireStateData>().HasTile && !SafeTile(x + 1, y).Get<TileWallWireStateData>().HasTile)
+                            WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(), new Actions.SetLiquid()]));
+                    }
+                }
+            }
+        }
+
         public void SandstoneLine()
         {
             int width = BiomeWidth;
@@ -503,6 +576,7 @@ namespace WiitaMod.World
             TileID.JungleVines,
             TileID.JunglePlants,
             TileID.JunglePlants2,
+            TileID.OasisPlants,
             TileID.PlantDetritus,
             TileID.CorruptJungleGrass,
             TileID.CrimsonJungleGrass,

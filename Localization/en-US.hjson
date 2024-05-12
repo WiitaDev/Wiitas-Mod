@@ -181,5 +181,17 @@ Mods: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
 		}
+
+		Biomes: {
+			TropicalOceanBiome: {
+				DisplayName: Tropical Ocean Biome
+				TownNPCDialogueName: the Tropical Ocean Biome
+			}
+
+			TropicalCavernsBiome: {
+				DisplayName: Tropical Caverns Biome
+				TownNPCDialogueName: the Tropical Caverns Biome
+			}
+		}
 	}
 }
