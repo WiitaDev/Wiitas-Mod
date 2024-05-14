@@ -13,13 +13,12 @@ namespace WiitaMod.Systems
             => CommandType.World;
 
         public override string Command
-        => "cavestart";
+        => "biome";
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            Main.NewText(Main.worldSurface + 25);
-            Main.NewText(Main.rockLayer + 75);
-            Main.NewText(caller.Player.position.ToTileCoordinates().Y);
+            Main.NewText(caller.Player.InModBiome(ModContent.GetInstance<TropicalOceanBiome>()));
+            Main.NewText(caller.Player.InModBiome(ModContent.GetInstance<TropicalCavernsBiome>()));
         }
     }
 }

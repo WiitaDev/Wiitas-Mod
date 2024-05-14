@@ -6,7 +6,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Tiles;
 using WiitaMod.Assets.Textures.Backgrounds;
-using System.Drawing;
 
 namespace WiitaMod.World
 {
@@ -27,9 +26,9 @@ namespace WiitaMod.World
 
         // Populate the Bestiary Filter
         public override string BestiaryIcon => base.BestiaryIcon;
-        //public override string BackgroundPath => base.BackgroundPath;
-        //public override Color? BackgroundColor => base.BackgroundColor;
-        //public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
+        public override string BackgroundPath => "WiitaMod/Assets/Textures/Backgrounds/TropicalOceanMapBG";
+        public override Color? BackgroundColor => base.BackgroundColor;
+        public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
 
         // Calculate when the biome is active.
         public override bool IsBiomeActive(Player player)

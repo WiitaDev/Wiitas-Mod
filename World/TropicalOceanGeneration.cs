@@ -425,10 +425,10 @@ namespace WiitaMod.World
                     Tile t = SafeTile(x, y);
                     if (t.Get<TileWallWireStateData>().HasTile) 
                     {
-                        WorldUtils.Gen(new Point(x,y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.Smooth()])); // also smooth all the blocks
+                        WorldUtils.Gen(new Point(x,y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.Smooth(true)])); // also smooth all the blocks
 
                         if(!SafeTile(x - 1, y).Get<TileWallWireStateData>().HasTile && !SafeTile(x + 1, y).Get<TileWallWireStateData>().HasTile)
-                            WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(), new Actions.SetLiquid()]));
+                            WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(true), new Actions.SetLiquid()]));
                     }
                 }
             }

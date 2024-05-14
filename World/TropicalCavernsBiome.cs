@@ -25,9 +25,9 @@ namespace WiitaMod.World
 
         // Populate the Bestiary Filter
         public override string BestiaryIcon => base.BestiaryIcon;
-        //public override string BackgroundPath => base.BackgroundPath;
-        //public override Color? BackgroundColor => base.BackgroundColor;
-        //public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
+        public override string BackgroundPath => "WiitaMod/Assets/Textures/Backgrounds/TropicalCavernsMapBG";
+        public override Color? BackgroundColor => base.BackgroundColor;
+        public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
 
         // Calculate when the biome is active.
         public override bool IsBiomeActive(Player player)
@@ -50,7 +50,7 @@ namespace WiitaMod.World
                 // Small worlds.
                 4200 => 25,
 
-                // Medium worlds.
+                // Medium worlds. //TODO: gotta make these somehow follow the ocean bottom
                 6400 => 20,
 
                 // Large worlds.
