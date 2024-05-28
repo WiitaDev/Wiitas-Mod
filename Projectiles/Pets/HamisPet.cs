@@ -116,43 +116,16 @@ namespace WiitaMod.Projectiles.Pets
             Projectile.width = 15;
             Projectile.height = 15;
             Projectile.damage = 0;
-            Projectile.penetrate = 2;
+            Projectile.penetrate = -1;
             Projectile.scale = 1f;
             Projectile.timeLeft = 600;
             Projectile.friendly = true;
             Projectile.hostile = false;
         }
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-
-        }
-
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            if(Projectile.penetrate == 2) 
-            {
-                Projectile.penetrate = -1;
-                return false;
-            }
-            else 
-            {
-                return true;
-            }
-        }
 
         public override void AI()
         {
             Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction) + MathHelper.ToRadians(90f) * Projectile.direction;
-            if (Projectile.owner == Main.myPlayer)
-            {
-                if (Projectile.penetrate != 2)
-                {
-                    Projectile.alpha = 255;
-                    Projectile.Resize(250, 250);
-                    Projectile.penetrate = -1;
-                    Projectile.timeLeft = 3;
-                }
-            }
 
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1f);
             dust.scale = 0.1f + Main.rand.Next(5) * 0.1f;
@@ -168,41 +141,7 @@ namespace WiitaMod.Projectiles.Pets
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
-            for (int i = 0; i < 50; i++)
-            {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
-                dust.velocity *= 1.4f;
-            }
-
-            // Fire Dust spawn
-            for (int i = 0; i < 80; i++)
-            {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
-                dust.noGravity = true;
-                dust.velocity *= 5f;
-                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
-                dust.velocity *= 3f;
-            }
-            for (int g = 0; g < 2; g++)
-            {
-                var goreSpawnPosition = new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f);
-                Gore gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X += 1.5f;
-                gore.velocity.Y += 1.5f;
-                gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X -= 1.5f;
-                gore.velocity.Y += 1.5f;
-                gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X += 1.5f;
-                gore.velocity.Y -= 1.5f;
-                gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X -= 1.5f;
-                gore.velocity.Y -= 1.5f;
-            }
+            ProjectileHelper.Explode(Projectile.whoAmI, 250, 250, true, true);
         }
     }
 }
