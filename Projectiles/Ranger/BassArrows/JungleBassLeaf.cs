@@ -28,7 +28,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             Projectile.height = 14;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.aiStyle = 0;
-            Projectile.knockBack = 2f;
+            Projectile.knockBack = 0;
             Projectile.tileCollide = false;
             Projectile.penetrate = 1;
             Projectile.ArmorPenetration = 20;

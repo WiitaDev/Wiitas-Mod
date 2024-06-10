@@ -35,14 +35,17 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<BassArrow>();
 			Item.useAmmo = AmmoID.Arrow;
-			Item.shootSpeed = 9f;
+			Item.shootSpeed = 14f;
 
 		}
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
-			type = ModContent.ProjectileType<BassArrow>();
-		}
+            velocity.Normalize();
+            velocity *= Item.shootSpeed;
+            knockback = Item.knockBack;
+            type = ModContent.ProjectileType<BassArrow>();
+        }
 
 		public override void AddRecipes()
 		{
