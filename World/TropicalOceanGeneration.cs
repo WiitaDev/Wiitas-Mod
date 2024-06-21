@@ -1,10 +1,12 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.GameContent.RGB;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 using WiitaMod.Tiles;
 using WiitaMod.Walls;
@@ -13,6 +15,29 @@ namespace WiitaMod.World
 {
     class TropicalOceanGeneration : ModSystem /// Totally not blatantly stolen from calamitys sulphurous sea code
     {
+
+        public override void SaveWorldData(TagCompound tag)
+        {
+            if (CaveStart != 0)
+            {
+                tag["tropicalCaveStart"] = CaveStart;
+            }
+        }
+        public override void LoadWorldData(TagCompound tag)
+        {
+            CaveStart = tag.GetAsInt("tropicalCaveStart");
+        }
+
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write(CaveStart);
+        }
+
+        public override void NetReceive(BinaryReader reader)
+        {
+            CaveStart = reader.ReadInt32();
+        }
+
 
         public const int TotalSandBeforeWaterMin = 22;
 
@@ -95,7 +120,7 @@ namespace WiitaMod.World
             var searchCondition = Searches.Chain(new Searches.Down(3000), new Conditions.IsSolid());
             Point determinedPoint;
             int ypos = 0;
-            for (int y = 1; y < GenVars.worldSurfaceHigh; y++) 
+            for (int y = 200; y < GenVars.worldSurfaceHigh; y++) 
             {
                 if (Main.tile[xCheckPosition, y].HasTile && ValidBeachConvertTiles.Contains(Main.tile[xCheckPosition, y].TileType)) 
                 {
@@ -121,8 +146,8 @@ namespace WiitaMod.World
 
             GenerateBeach();
 
+            RemoveAloneAndSmoothBlocks();
             PreventSandFalling();
-            RemoveAloneBlocks();
 
             GenVars.structures.AddProtectedStructure(new(GetActualX(2) - BiomeWidth / 2 - 10, YStart - BlockDepth / 2 - 10, BiomeWidth + 20, BlockDepth + 20));
         }
@@ -244,7 +269,7 @@ namespace WiitaMod.World
 
                 // Clear water that's above the level for some reason.
                 for (int y = top - 150; y < top + 2; y++)
-                    Main.tile[x, y].LiquidAmount = 0;
+                    SafeTile(x, y).LiquidAmount = 0;
 
             }
 
@@ -266,6 +291,8 @@ namespace WiitaMod.World
             {
                 for(int x = bossCaveStart.X - bossXRadius; x <= bossCaveStart.X + bossXRadius; x++)
                     WorldUtils.Gen(new(x,i), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(), new Actions.SetLiquid()]));
+
+                WorldGen.PlaceObject(bossCaveStart.X, i, (ushort)ModContent.TileType<CrabBossAltar>());
             }
 
             var v = WorldGen.digTunnel(startX, startY, 0, 0, 5, WorldGen.genRand.Next(6, 9), Wet: true); //spawn point
@@ -412,7 +439,7 @@ namespace WiitaMod.World
             }
         }
 
-        public void RemoveAloneBlocks() 
+        public void RemoveAloneAndSmoothBlocks() 
         {
             int top = YStart - 90;
             int bottom = YStart + BlockDepth;
@@ -425,9 +452,10 @@ namespace WiitaMod.World
                     Tile t = SafeTile(x, y);
                     if (t.Get<TileWallWireStateData>().HasTile) 
                     {
-                        WorldUtils.Gen(new Point(x,y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.Smooth(true)])); // also smooth all the blocks
+                        if(i > 10)
+                            WorldUtils.Gen(new Point(x,y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.Smooth(true)])); // also smooth all the blocks
 
-                        if(!SafeTile(x - 1, y).Get<TileWallWireStateData>().HasTile && !SafeTile(x + 1, y).Get<TileWallWireStateData>().HasTile)
+                        if(!SafeTile(x - 1, y).Get<TileWallWireStateData>().HasTile && !SafeTile(x + 1, y).Get<TileWallWireStateData>().HasTile && i > 5)
                             WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(true), new Actions.SetLiquid()]));
                     }
                 }
@@ -448,7 +476,7 @@ namespace WiitaMod.World
             {
                 for (int y = YStart; y < YStart + depth; y++)
                 {
-                    int sandstoneLineOffset = (int)(FractalBrownianMotion(i * 0.00115f, y * 0.00115f, sandstoneSeed, 7) * 30) + (int)(depth * 0.58f);
+                    int sandstoneLineOffset = (int)(FractalBrownianMotion(i * 0.00115f, y * 0.00115f, sandstoneSeed, 7) * 30) + (int)(depth * 0.45f);
 
 
                     sandstoneLineOffset -= (int)(Math.Pow(Utils.GetLerpValue(width * 0.1f, width * 0.8f, i, true), 1.72f) * 67f);
@@ -626,6 +654,9 @@ namespace WiitaMod.World
             WallID.DirtUnsafe3,
             WallID.DirtUnsafe4,
             WallID.Cave6Unsafe, // Rocky dirt wall
+            WallID.MudUnsafe,
+            WallID.LivingWoodUnsafe,
+            WallID.LivingWood,
             WallID.Grass,
             WallID.GrassUnsafe,
             WallID.Flower,
@@ -647,6 +678,9 @@ namespace WiitaMod.World
             TileID.CrimsonGrass,
             TileID.ClayBlock,
             TileID.Mud,
+            TileID.LivingWood,
+            TileID.LeafBlock,
+            TileID.Platforms,
             TileID.Copper,
             TileID.Tin,
             TileID.Iron,
@@ -672,6 +706,10 @@ namespace WiitaMod.World
             TileID.Containers,
             TileID.DyePlants,
             TileID.JungleGrass,
+            TileID.PlantDetritus,
+            TileID.JunglePlants,
+            TileID.JunglePlants2,
+            TileID.BeeHive,
             TileID.SeaOats
         };
         #endregion Lists

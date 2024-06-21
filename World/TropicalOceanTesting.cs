@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Terraria.WorldBuilding;
 using Terraria.GameContent.Generation;
 using WiitaMod.Tiles;
+using Terraria.GameContent.Biomes.Desert;
+using Terraria.GameContent.Biomes;
 
 namespace WiitaMod.World
 {
@@ -29,7 +31,7 @@ namespace WiitaMod.World
             // Code to test placed here:
             //WorldGen.TileRunner(x - 1, y, WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(2, 8), TileID.CobaltBrick);
             //WorldGen.digTunnel(x, y, 1, 2, 2, 3, true);
-            if (Main.tile[x, y].HasTile && !Main.tile[x - 1, y].HasTile && !Main.tile[x + 1, y].HasTile)
+            /*if (Main.tile[x, y].HasTile && !Main.tile[x - 1, y].HasTile && !Main.tile[x + 1, y].HasTile)
             {
                 Main.NewText("bong");
                 WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.ClearTile(), new Actions.SetLiquid()]));
@@ -39,7 +41,8 @@ namespace WiitaMod.World
                 Main.NewText(Main.tile[x, y].HasTile);
                 Main.NewText(Main.tile[x -1, y].HasTile);
                 Main.NewText(Main.tile[x + 1, y].HasTile);
-            }
+            }*/
+
         }
     }
 }

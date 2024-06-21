@@ -36,7 +36,7 @@ namespace WiitaMod.World
 
             // Limit this biome to the x area of the biome (english is not englishing)
             bool b2;
-            if (Main.dungeonX > Main.maxTilesX / 2)
+            if (Main.dungeonX > Main.maxTilesX / 2) //true if dungeon is on the right side
             {
                 b2 = player.position.ToTileCoordinates().X < TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
             }
@@ -45,20 +45,8 @@ namespace WiitaMod.World
                 b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
             }
 
-            int offsetY = Main.maxTilesX switch
-            {
-                // Small worlds.
-                4200 => 25,
 
-                // Medium worlds. //TODO: gotta make these somehow follow the ocean bottom
-                6400 => 20,
-
-                // Large worlds.
-                _ => 90
-            };
-
-
-            bool b3 = player.position.ToTileCoordinates().Y < (Main.rockLayer + 75) && player.position.ToTileCoordinates().Y > (Main.worldSurface + offsetY);
+            bool b3 = player.position.ToTileCoordinates().Y < (TropicalOceanGeneration.CaveStart + 500) && player.position.ToTileCoordinates().Y > (TropicalOceanGeneration.CaveStart + 20);
 
             return b1 && b2 && b3;
         }

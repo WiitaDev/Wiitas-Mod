@@ -1,0 +1,4 @@
+CrabBoss: {
+	EntryName: Crab Boss
+	SpawnInfo: Use a [i:WiitaMod/CrabBossSummonItem] at the [i:WiitaMod/CrabBossAltarItem].
+}

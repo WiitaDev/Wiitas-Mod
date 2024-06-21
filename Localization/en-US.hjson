@@ -152,9 +152,27 @@ Mods: {
 				DisplayName: Tropical Sandstone Wall Item
 				Tooltip: ""
 			}
+
+			CrabBossSummonItem: {
+				DisplayName: Crab Boss Summon Item
+				Tooltip: ""
+			}
+
+			CrabBossAltar: {
+				DisplayName: Crab Boss Altar
+				Tooltip: ""
+			}
+
+			CrabBossAltarItem: {
+				DisplayName: Crab Boss Altar Item
+				Tooltip: ""
+			}
 		}
 
-		NPCs.Hamis.DisplayName: Hamis
+		NPCs: {
+			Hamis.DisplayName: Hamis
+			CrabBoss.DisplayName: Crab Boss
+		}
 
 		Projectiles: {
 			PalladinsShieldProjectile.DisplayName: Palladin's shield
@@ -175,11 +193,13 @@ Mods: {
 			ExampleCustomSwingProjectile.DisplayName: Example Custom Swing Projectile
 			CustomSwingProjectile.DisplayName: Custom Swing Projectile
 			TropicalSandProjectile.DisplayName: Tropical Sand Projectile
+			CrabBossSpawnEffect.DisplayName: Crab Boss Spawn Effect
 		}
 
 		Tiles: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
+			CrabBossAltar.MapEntry: Crab Boss Altar
 		}
 
 		Biomes: {
