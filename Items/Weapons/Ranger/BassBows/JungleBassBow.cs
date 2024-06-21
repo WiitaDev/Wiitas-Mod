@@ -15,10 +15,10 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			/* Tooltip.SetDefault("Arrows turn into Leaf Bass" + 
 							 "\nThe Leaf Bass breaks into homing leaves" +
 							 "\nThe leaves ignore 20 enemy defense"); */
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Item.ResearchUnlockCount = 1;
+            ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
 
-
-		}
+        }
 
 		public override void SetDefaults()
 		{
@@ -31,19 +31,22 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			Item.useTime = 26;
 			Item.useAnimation = 26;
 			Item.useStyle = ItemUseStyleID.Shoot;
-			Item.knockBack = 1;
+			Item.knockBack = 2f;
 			Item.value = Item.sellPrice(0, 1, 0, 0);
 			Item.rare = ItemRarityID.Blue;
 			Item.UseSound = SoundID.Item5;
 			Item.autoReuse = true;
 			Item.shoot = ProjectileID.WoodenArrowFriendly;
 			Item.useAmmo = AmmoID.Arrow;
-			Item.shootSpeed = 8f;
+			Item.shootSpeed = 12.5f;
 
 		}
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-		{
+        {
+            velocity.Normalize();
+            velocity *= Item.shootSpeed;
+            knockback = Item.knockBack;
             type = ModContent.ProjectileType<JungleBassArrow>();
         }
 

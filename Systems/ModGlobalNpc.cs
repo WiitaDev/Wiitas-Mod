@@ -16,13 +16,13 @@ namespace WiitaMod.Systems
         {
             if (projectile.type == ModContent.ProjectileType<HamisNuke>())
             {
-                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog)
+                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == 687)
                 {
                     modifiers.FinalDamage += npc.lifeMax - 1;
                 }
                 else
                 {
-                    modifiers.FinalDamage -= 1;
+                    modifiers.FinalDamage *= 0;
                 }
             }
         }
@@ -38,10 +38,11 @@ namespace WiitaMod.Systems
         {
             if (shop.NpcType == NPCID.ArmsDealer)
             {
-                shop.Add(new Item(ModContent.ItemType<IllegalRocketLauncherParts>())
+                shop.InsertAfter(ItemID.IllegalGunParts, ModContent.ItemType<IllegalRocketLauncherParts>(), Condition.TimeNight, Condition.DownedPlantera);
+                /*shop.Add(new Item(ModContent.ItemType<IllegalRocketLauncherParts>())
                 {
                     //add custom stuff here exmple "shopCustomPrice = 2"
-                });
+                });*/
             }
 
         }

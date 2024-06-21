@@ -19,7 +19,7 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
                              + "'Is it a Flamethrower or a Laser?'\n"
                              + "'Weaker but more Agile!'"); */
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Item.ResearchUnlockCount = 1;
 		}
 
 		public override void SetDefaults()

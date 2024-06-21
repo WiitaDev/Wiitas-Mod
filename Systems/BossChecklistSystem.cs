@@ -5,7 +5,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Items.Consumable;
+using WiitaMod.Items.Consumables;
 using WiitaMod.NPCs.Bosses;
 using Terraria.Localization;
 

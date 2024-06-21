@@ -1,16 +1,8 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
-using WiitaMod.Items.Armor.Vanity;
-using WiitaMod.Items.Pets;
-using WiitaMod.Items.Placeable;
 using WiitaMod.Systems;
 
 namespace WiitaMod.NPCs.Bosses
@@ -64,9 +56,9 @@ namespace WiitaMod.NPCs.Bosses
             {
                 NPC.aiStyle = NPCAIStyleID.Piranha;
             }
-            else 
+            else
             {
-                if(NPC.aiStyle == NPCAIStyleID.Piranha) 
+                if (NPC.aiStyle == NPCAIStyleID.Piranha)
                 {
                     SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/NerdDogSound"), NPC.Center);
                 }

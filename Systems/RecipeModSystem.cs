@@ -50,6 +50,51 @@ namespace WiitaMod.Systems
                 ItemID.AdamantiteBar
             });
             RecipeGroup.RegisterGroup("HardmodeTier3", Hard3);
+            
+
+            //Ores vvvv            
+            
+            RecipeGroup PreHardOre1 = new RecipeGroup(() => Lang.misc[37] + " Copper Ore", new int[]
+            {
+                ItemID.CopperOre,
+                ItemID.TinOre
+            });
+            RecipeGroup.RegisterGroup("PrehardOreTier1", PreHardOre1);
+
+            RecipeGroup PreHardOre2 = new RecipeGroup(() => Lang.misc[37] + " Iron Ore", new int[]
+            {
+                ItemID.IronOre,
+                ItemID.LeadOre
+            });
+            RecipeGroup.RegisterGroup("PrehardOreTier2", PreHardOre2);
+
+            RecipeGroup PreHardOre3 = new RecipeGroup(() => Lang.misc[37] + " Gold Ore", new int[]
+            {
+                ItemID.GoldOre,
+                ItemID.PlatinumOre
+            });
+            RecipeGroup.RegisterGroup("PrehardOreTier3", PreHardOre3);
+
+            RecipeGroup HardOre1 = new RecipeGroup(() => Lang.misc[37] + " Cobalt Ore", new int[]
+            {
+                ItemID.CobaltOre,
+                ItemID.PalladiumOre
+            });
+            RecipeGroup.RegisterGroup("HardmodeOreTier1", HardOre1);
+
+            RecipeGroup HardOre2 = new RecipeGroup(() => Lang.misc[37] + " Mythril Ore", new int[]
+            {
+                ItemID.MythrilOre,
+                ItemID.OrichalcumOre
+            });
+            RecipeGroup.RegisterGroup("HardmodeOreTier2", HardOre2);
+
+            RecipeGroup HardOre3 = new RecipeGroup(() => Lang.misc[37] + " Titanium Ore", new int[]
+            {
+                ItemID.TitaniumOre,
+                ItemID.AdamantiteOre
+            });
+            RecipeGroup.RegisterGroup("HardmodeOreTier3", HardOre3);
         }
 
         public override void AddRecipes()

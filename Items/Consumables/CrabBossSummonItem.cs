@@ -8,7 +8,7 @@ using WiitaMod.Items.Placeable;
 using WiitaMod.NPCs.Bosses;
 using WiitaMod.World;
 
-namespace WiitaMod.Items.Consumable
+namespace WiitaMod.Items.Consumables
 {
 	public class CrabBossSummonItem : ModItem
 	{

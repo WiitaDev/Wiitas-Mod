@@ -167,11 +167,47 @@ Mods: {
 				DisplayName: Crab Boss Altar Item
 				Tooltip: ""
 			}
+
+			MedievalProsthetic: {
+				DisplayName: Medieval Prosthetic
+				Tooltip: ""
+			}
+
+			FriedSeagull: {
+				DisplayName: Fried Seagull
+				Tooltip: ""
+			}
+
+			AstralAlloy: {
+				DisplayName: Astral Alloy
+				Tooltip: ""
+			}
+
+			InfernalAlmanac: {
+				DisplayName: Infernal Almanac
+				Tooltip: ""
+			}
+
+			CoralWarhammer: {
+				DisplayName: Coral Warhammer
+				Tooltip: ""
+			}
+
+			CosmicBassBow: {
+				DisplayName: Cosmic Bass Bow
+				Tooltip: ""
+			}
+
+			ThundercoreRifle: {
+				DisplayName: Thundercore Rifle
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
 			Hamis.DisplayName: Hamis
 			CrabBoss.DisplayName: Crab Boss
+			HamisGroup.DisplayName: Hamis Group
 		}
 
 		Projectiles: {
@@ -194,6 +230,15 @@ Mods: {
 			CustomSwingProjectile.DisplayName: Custom Swing Projectile
 			TropicalSandProjectile.DisplayName: Tropical Sand Projectile
 			CrabBossSpawnEffect.DisplayName: Crab Boss Spawn Effect
+			InfernalAlmanacHold.DisplayName: Infernal Almanac Hold
+			InfernalAlmanacProj.DisplayName: Infernal Almanac Proj
+			CoralWarhammerHold.DisplayName: Coral Warhammer Hold
+			BigCosmicBassArrow.DisplayName: Big Cosmic Bass Arrow
+			CosmicBassArrow.DisplayName: Cosmic Bass Arrow
+			CosmicBassBowHold.DisplayName: Cosmic Bass Bow Hold
+			CosmicProjectile.DisplayName: Cosmic Projectile
+			ThundercoreProj.DisplayName: Thundercore Proj
+			ThundercoreRifleHold.DisplayName: Thundercore Rifle Hold
 		}
 
 		Tiles: {

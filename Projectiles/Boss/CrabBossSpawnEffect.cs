@@ -60,7 +60,7 @@ namespace WiitaMod.Projectiles.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            default(Effects.UltimaBlueTrail).Draw(Projectile);
+            default(Effects.LargeBlueTrail).Draw(Projectile);
             return false;
         }
 

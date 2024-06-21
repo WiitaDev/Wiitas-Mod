@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using WiitaMod.Items.Consumable;
+using WiitaMod.Items.Consumables;
 using WiitaMod.Items.Placeable;
 using WiitaMod.NPCs.Bosses;
 using WiitaMod.Projectiles.Magic;

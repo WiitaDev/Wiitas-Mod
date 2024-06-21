@@ -1,5 +1,5 @@
-displayName = Wiita's Mod
+displayName = Wiita's Mod (Tropical Ocean Test)
 author = Wiita
 version = 0.3.0
-buildIgnore = .gitignore, *.sln, *.csproj, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*
+buildIgnore = .gitignore, *.sln, *.csproj, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*, Effects\fxCompiler\*
 hideCode = true

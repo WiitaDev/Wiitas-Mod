@@ -37,7 +37,6 @@ namespace WiitaMod.Projectiles.Summon
             Projectile.aiStyle = 66;
             Projectile.friendly = true;
             Projectile.minion = true;
-            // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
             Projectile.minionSlots = 1f;
         }
 

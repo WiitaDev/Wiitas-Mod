@@ -1,13 +1,14 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WiitaMod.Projectiles.Ranger.BassArrows
+namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
 {
-    public class GalacticBassArrow : ModProjectile
+    public class CosmicBassArrow : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -21,10 +22,11 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             Projectile.width = 18;
             Projectile.height = 18;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = 0;
             Projectile.knockBack = 2f;
             Projectile.tileCollide = true;
             Projectile.penetrate = 1;
+            Projectile.timeLeft = 220;
             Projectile.friendly = true;
             Projectile.hostile = false;
         }
@@ -38,6 +40,8 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 
         public override void AI()
         {
+            Projectile.velocity *= 0.98f;
+            Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * (float)Projectile.direction, Projectile.velocity.X * (float)Projectile.direction) + 1.57f * Projectile.direction;
             if (Projectile.ai[1] == 100)
             {
                 Projectile.spriteDirection = -1;

@@ -1,89 +1,31 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using ReLogic.Content;
+using WiitaMod.Systems;
 
-namespace WiitaMod.Items.Weapons.Melee
+namespace WiitaMod.Projectiles.Melee
 {
-    // ExampleCustomSwingSword is an example of a sword with a custom swing using a held projectile
-    // This is great if you want to make melee weapons with complex swing behaviour
-    public class CustomSwingSword : ModItem
+    public class CoralWarhammerHold : ModProjectile
     {
-        public int attackType = 0; // keeps track of which attack it is
-        public int comboExpireTimer = 0; // we want the attack pattern to reset if the weapon is not used for certain period of time
-
-        public override void SetDefaults()
-        {
-            Item.width = 46;
-            Item.height = 48;
-            Item.value = Item.sellPrice(gold: 2, silver: 50);
-            Item.rare = ItemRarityID.Green;
-            Item.useTime = 40; // Only changes the tooltip
-            Item.useAnimation = 40;
-            Item.useStyle = ItemUseStyleID.Shoot;
-
-            Item.knockBack = 7;
-            Item.autoReuse = true;
-            Item.damage = 50;
-            Item.DamageType = DamageClass.Melee;
-            Item.noMelee = true;
-            Item.noUseGraphic = true;
-
-            Item.shoot = ModContent.ProjectileType<CustomSwingProjectile>(); // The sword as a projectile
-        }
-
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            // Using the shoot function, we override the swing projectile to set ai[0] (which attack it is)
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, Main.myPlayer, attackType);
-            attackType = (attackType + 1) % 2; // Increment attackType to make sure next swing is different
-            comboExpireTimer = 0; // Every time the weapon is used, we reset this so the combo does not expire
-            return false; // return false to prevent original projectile from being shot
-        }
-
-        public override void UpdateInventory(Player player)
-        {
-            if (comboExpireTimer++ >= 120) // after 120 ticks (== 2 seconds) in inventory, reset the attack pattern
-                attackType = 0;
-        }
-
-        public override bool MeleePrefix()
-        {
-            return true; // return true to allow weapon to have melee prefixes (e.g. Legendary)
-        }
-
-        public override void AddRecipes()
-        {
-        }
-    }
-
-
-    public class CustomSwingProjectile : ModProjectile
-    {
-        // We define some constants that determine the swing range of the sword
-        // Not that we use multipliers here since that simplifies the amount of tweaks for these interactions
-        // You could change the values or even replace them entirely, but they are tweaked with looks in mind
-        private const float SWINGRANGE = 1.3f * (float)Math.PI; // The angle a swing attack covers (300 deg)
-        private const float FIRSTHALFSWING = 0.45f; // How much of the swing happens before it reaches the target angle (in relation to swingRange)
-        private const float SPINRANGE = 2f * (float)Math.PI; // The angle a spin attack covers (630 degrees)
-        private const float WINDUP = 0.15f; // How far back the player's hand goes when winding their attack (in relation to swingRange)
-        private const float UNWIND = 0.4f; // When should the sword start disappearing
+        private const float SWINGRANGE = 1.1f * (float)Math.PI; // The angle a swing attack covers (180 + 18 deg)
+        private const float FIRSTHALFSWING = 0.65f; // How much of the swing happens before it reaches the target angle (in relation to swingRange)
+        private const float SPINRANGE = 3.5f * (float)Math.PI; // The angle a spin attack covers (630 degrees)
+        private const float FRONTSWINGRANGE = 2.25f * (float)Math.PI; // The angle a front swing attack covers (360 + 90 degrees)
+        private const float WINDUP = 0.35f; // How far back the player's hand goes when winding their attack (in relation to swingRange)
+        private const float UNWIND = 0.1f; // When should the weapon start disappearing
         private const float SPINTIME = 2.5f; // How much longer a spin is than a swing
 
         private enum AttackType // Which attack is being performed
         {
-            // Swings are normal sword swings that can be slightly aimed
-            // Swings goes through the full cycle of animations
             Swing,
-            // Spins are swings that go full circle
-            // They are slower and deal more knockback
+            FrontSwing,
             Spin,
         }
 
@@ -114,29 +56,24 @@ namespace WiitaMod.Items.Weapons.Melee
         // Variables to keep track of during runtime
         private ref float InitialAngle => ref Projectile.ai[1]; // Angle aimed in (with constraints)
         private ref float Timer => ref Projectile.ai[2]; // Timer to keep track of progression of each stage
-        private ref float Progress => ref Projectile.localAI[1]; // Position of sword relative to initial angle
-        private ref float Size => ref Projectile.localAI[2]; // Size of sword
+        private ref float Progress => ref Projectile.localAI[1]; // Position of weapon relative to initial angle
+        private ref float Size => ref Projectile.localAI[2]; // Size of weapon
 
         // We define timing functions for each stage, taking into account melee attack speed
-        // Note that you can change this to suit the need of your projectile
-        private float prepTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
-        private float execTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+        private float prepTime => 16f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+        private float execTime => 10f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
         private float hideTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
-
-        public override string Texture => "WiitaMod/Items/Weapons/Melee/CustomSwingSword"; // Use texture of item as projectile texture
         private Player Owner => Main.player[Projectile.owner];
 
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40; // Needed for the trail
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 46; // Hitbox width of projectile
-            Projectile.height = 48; // Hitbox height of projectile
+            Projectile.width = 66; // Hitbox width of projectile
+            Projectile.height = 66; // Hitbox height of projectile
             Projectile.friendly = true; // Projectile hits enemies
             Projectile.timeLeft = 10000; // Time it takes for projectile to expire
             Projectile.penetrate = -1; // Projectile pierces infinitely
@@ -150,11 +87,15 @@ namespace WiitaMod.Items.Weapons.Melee
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.spriteDirection = Main.MouseWorld.X > Owner.MountedCenter.X ? 1 : -1;
-            float targetAngle = (Main.MouseWorld - Owner.MountedCenter).ToRotation();
+            float targetAngle = Projectile.spriteDirection == 1 ? (float)Math.PI / 2 : (float)-Math.PI / 2;
 
             if (CurrentAttack == AttackType.Spin)
             {
                 InitialAngle = (float)(-Math.PI / 2 - Math.PI * 1 / 3 * Projectile.spriteDirection); // For the spin, starting angle is designated based on direction of hit
+            }
+            else if (CurrentAttack == AttackType.FrontSwing) 
+            {           
+                InitialAngle = (float)(-Math.PI / 2 - Math.PI * 1 / 3 * Projectile.spriteDirection); 
             }
             else
             {
@@ -201,9 +142,6 @@ namespace WiitaMod.Items.Weapons.Melee
                 return;
             }
 
-            // AI depends on stage and attack
-            // Note that these stages are to facilitate the scaling effect at the beginning and end
-            // If this is not desireable for you, feel free to simplify
             switch (CurrentStage)
             {
                 case AttackStage.Prepare:
@@ -217,13 +155,13 @@ namespace WiitaMod.Items.Weapons.Melee
                     break;
             }
 
-            SetSwordPosition();
+            SetWeaponPosition();
             Timer++;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            // Calculate origin of sword (hilt) based on orientation and offset sword rotation (as sword is angled in its sprite)
+            // Calculate origin of weapon (hilt) based on orientation and offset weapon rotation (as weapon is angled in its sprite)
             Vector2 origin;
             float rotationOffset;
             SpriteEffects effects;
@@ -240,21 +178,16 @@ namespace WiitaMod.Items.Weapons.Melee
                 rotationOffset = MathHelper.ToRadians(135f);
                 effects = SpriteEffects.FlipHorizontally;
             }
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
-            DrawData swordData = new DrawData(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
-            Main.EntitySpriteDraw(swordData);
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
 
-            //default(Effects.SwingEffect).Draw(Projectile, origin);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
 
-            //Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size;
-            DrawData ringBackData = new DrawData(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
-            Main.EntitySpriteDraw(ringBackData);
-
+            // Since we are doing a custom draw, prevent it from normally drawing
             return false;
         }
 
-        // Find the start and end of the sword and use a line collider to check for collision with enemies
+        // Find the start and end of the weapon and use a line collider to check for collision with enemies
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             Vector2 start = Owner.MountedCenter;
@@ -290,7 +223,7 @@ namespace WiitaMod.Items.Weapons.Melee
         }
 
         // Function to easily set projectile and arm position
-        public void SetSwordPosition()
+        public void SetWeaponPosition()
         {
             Projectile.rotation = InitialAngle + Projectile.spriteDirection * Progress; // Set projectile rotation
 
@@ -300,20 +233,20 @@ namespace WiitaMod.Items.Weapons.Melee
 
             armPosition.Y += Owner.gfxOffY;
             Projectile.Center = armPosition; // Set projectile to arm position
-            Projectile.scale = Size * 1.2f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
+            Projectile.scale = Size * 1.35f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
 
             Owner.heldProj = Projectile.whoAmI; // set held projectile to this projectile
         }
 
-        // Function facilitating the taking out of the sword
+        // Function facilitating the taking out of the weapon
         private void PrepareStrike()
         {
             Progress = WINDUP * SWINGRANGE * (1f - Timer / prepTime); // Calculates rotation from initial angle
-            Size = MathHelper.SmoothStep(0, 1, Timer / prepTime); // Make sword slowly increase in size as we prepare to strike until it reaches max
+            Size = MathHelper.SmoothStep(0.25f, 1, Timer / prepTime); // Make weapon slowly increase in size as we prepare to strike until it reaches max
 
             if (Timer >= prepTime)
             {
-                SoundEngine.PlaySound(SoundID.Item1); // Play sword sound here since playing it on spawn is too early
+                SoundEngine.PlaySound(SoundID.Item1); // Play weapon sound here since playing it on spawn is too early
                 CurrentStage = AttackStage.Execute; // If attack is over prep time, we go to next stage
             }
         }
@@ -330,13 +263,21 @@ namespace WiitaMod.Items.Weapons.Melee
                     CurrentStage = AttackStage.Unwind;
                 }
             }
+            else if (CurrentAttack == AttackType.FrontSwing)
+            {
+                Progress = MathHelper.SmoothStep(0, FRONTSWINGRANGE, (1f - UNWIND) * Timer / (execTime * SPINTIME));
+                if (Timer >= execTime * SPINTIME)
+                {
+                    CurrentStage = AttackStage.Unwind;
+                }
+            }
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
 
                 if (Timer == (int)(execTime * SPINTIME * 3 / 4))
                 {
-                    SoundEngine.PlaySound(SoundID.Item1); // Play sword sound again
+                    SoundEngine.PlaySound(SoundID.Item1); // Play weapon sound again
                     Projectile.ResetLocalNPCHitImmunity(); // Reset the local npc hit immunity for second half of spin
                 }
 
@@ -347,18 +288,28 @@ namespace WiitaMod.Items.Weapons.Melee
             }
         }
 
-        // Function facilitating the latter half of the swing where the sword disappears
+        // Function facilitating the latter half of the swing where the weapon disappears
         private void UnwindStrike()
         {
             if (CurrentAttack == AttackType.Swing)
             {
-                Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) + UNWIND * Timer / hideTime);
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make sword slowly decrease in size as we end the swing to make a smooth hiding animation
+                Progress = MathHelper.SmoothStep(0, SWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
+                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
 
                 if (Timer >= hideTime)
                 {
                     Projectile.Kill();
                 }
+            }
+            else if (CurrentAttack == AttackType.FrontSwing) 
+            {
+                Progress = MathHelper.SmoothStep(0, FRONTSWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
+                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
+
+                if (Timer >= hideTime)
+                {
+                    Projectile.Kill();
+                }            
             }
             else
             {

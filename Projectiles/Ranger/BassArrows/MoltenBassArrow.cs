@@ -41,6 +41,9 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
         public override void AI()
         {
             Projectile.spriteDirection = Projectile.direction;
+            Lighting.AddLight(Projectile.Center, Color.Orange.ToVector3() * 0.78f);
+
+            if (Projectile.lavaWet) return;
 
             if (Projectile.wet)
             {
@@ -55,12 +58,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<RockyMoltenBassArrow>(), 20, 0, Main.myPlayer);
 
             }
-            else
-            {
-                Projectile.active = true;
-            }
-
-            Lighting.AddLight(Projectile.Center, Color.Orange.ToVector3() * 0.78f);
         }
 
         public override bool PreDraw(ref Color lightColor)

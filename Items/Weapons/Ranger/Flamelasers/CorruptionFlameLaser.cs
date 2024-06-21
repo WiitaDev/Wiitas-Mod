@@ -14,12 +14,12 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Cursed Flamelaser");
-			/* Tooltip.SetDefault("Uses gel for ammo\n"
+            // DisplayName.SetDefault("Cursed Flamelaser");
+            /* Tooltip.SetDefault("Uses gel for ammo\n"
 							 + "'Is it a Flamethrower or a Laser?'\n"
                              + "'Stronger but more Sluggish!'"); */
 
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
 		}
 
 		public override void SetDefaults()
