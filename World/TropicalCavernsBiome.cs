@@ -38,11 +38,11 @@ namespace WiitaMod.World
             bool b2;
             if (Main.dungeonX > Main.maxTilesX / 2) //true if dungeon is on the right side
             {
-                b2 = player.position.ToTileCoordinates().X < TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
+                b2 = player.position.ToTileCoordinates().X < TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
             else
             {
-                b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
+                b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
 
 

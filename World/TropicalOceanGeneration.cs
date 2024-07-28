@@ -177,7 +177,7 @@ namespace WiitaMod.World
                     {
                         Main.tile[x, y].TileType = sandID;
 
-                        if (!Main.tile[x, y + 1].HasTile && Main.tile[x, y].TileType == sandID && y >= (int)GenVars.worldSurfaceLow) // Check for floating sand blocks
+                        if (!Main.tile[x, y + 1].HasTile && Main.tile[x, y].TileType == sandID && y >= YStart + 100) // Check for floating sand blocks
                         {
                             Main.tile[x, y].TileType = sandstoneID;
                         }
@@ -281,7 +281,7 @@ namespace WiitaMod.World
             int dir = Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1;
             int startY = CaveStart + 20 + BlockDepth / 3;
 
-            Point bossCaveStart = new(GetActualX((int)((BiomeWidth - TotalSandBeforeWaterMax) * 0.8f)), CaveStart + (BiomeWidth - 400) / 10 + BlockDepth / 5);
+            Point bossCaveStart = new(GetActualX((int)((BiomeWidth - TotalSandBeforeWaterMax) * 0.8f)), CaveStart + (BiomeWidth - 400) / 10 + BlockDepth / 8);
             int bossYRadius = 30;
             int bossXRadius = 55;
             var bossCircle = new Shapes.Circle(bossXRadius, bossYRadius);
@@ -337,9 +337,9 @@ namespace WiitaMod.World
             {
                 bossDir = bossCaveStart.ToVector2() - new Vector2((int)v.X, (int)v.Y);
                 bossDir.Normalize();
-                if(i <= 4) 
+                if(i <= 6) 
                 {
-                    bossDir = new(0.1f * -dir, -0.5f); //for the first 4 tunnels go straight up
+                    bossDir = new(0.1f * -dir, -0.5f); //for the first 6 tunnels go straight up
                 }
 
                 v = WorldGen.digTunnel(v.X, v.Y, bossDir.X, bossDir.Y, 30, WorldGen.genRand.Next(3, 5), Wet: true); //finally go to boss room

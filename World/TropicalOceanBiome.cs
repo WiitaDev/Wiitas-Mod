@@ -46,14 +46,14 @@ namespace WiitaMod.World
                 b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
             }
 
-            bool b3 = player.ZoneSkyHeight || player.ZoneOverworldHeight || (player.position.ToTileCoordinates().Y < (Main.rockLayer - Main.maxTilesY / 13));
+            bool b3 = player.ZoneSkyHeight || player.ZoneOverworldHeight || (player.position.ToTileCoordinates().Y < TropicalOceanGeneration.CaveStart);
 
             return b1 || (b2 && b3);
         }
 
 
         // Declare biome priority. The default is BiomeLow so this is only necessary if it needs a higher priority.
-        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
+        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeMedium;
     }
 
     public class TropicalOceanTileCount : ModSystem

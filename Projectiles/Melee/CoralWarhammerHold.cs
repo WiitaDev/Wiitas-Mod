@@ -87,7 +87,7 @@ namespace WiitaMod.Projectiles.Melee
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.spriteDirection = Main.MouseWorld.X > Owner.MountedCenter.X ? 1 : -1;
-            float targetAngle = Projectile.spriteDirection == 1 ? (float)Math.PI / 2 : (float)-Math.PI / 2;
+            float targetAngle = (float)-Math.PI / 2;
 
             if (CurrentAttack == AttackType.Spin)
             {
@@ -233,7 +233,7 @@ namespace WiitaMod.Projectiles.Melee
 
             armPosition.Y += Owner.gfxOffY;
             Projectile.Center = armPosition; // Set projectile to arm position
-            Projectile.scale = Size * 1.35f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
+            Projectile.scale = 1.35f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
 
             Owner.heldProj = Projectile.whoAmI; // set held projectile to this projectile
         }

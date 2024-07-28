@@ -23,8 +23,8 @@ namespace WiitaMod.NPCs.Bosses
         {
             NPC.width = 200;
             NPC.height = 200;
-            NPC.damage = 18;
-            NPC.defense = 15;
+            NPC.damage = 22;
+            NPC.defense = 10;
             NPC.lifeMax = 3200;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;

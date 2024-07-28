@@ -23,6 +23,8 @@ Items: {
 	}
 
 	GalacticBassBow: {
+		DisplayName: Galactic Bass Bow
+		Tooltip: ""
 	}
 
 	BassBow: {

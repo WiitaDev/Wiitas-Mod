@@ -34,6 +34,7 @@ namespace WiitaMod.Systems
 
         int shockwaveProgress = 400;
 
+
         public override void ResetEffects()
         {
             HealthFlowerEquipped = false;
@@ -70,6 +71,24 @@ namespace WiitaMod.Systems
                 flamesShot = 0;
             }
         }
+
+        public override void UpdateDead()
+        {
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC npc = Main.npc[i];
+
+                if (npc.active && npc.boss)
+                {
+                    return;
+                }
+            }
+
+            int respawnTimerSet = 180; // 3 seconds
+            if (Player.respawnTimer > respawnTimerSet)
+                Player.respawnTimer = respawnTimerSet;
+        }
+
         public override void OnHurt(Player.HurtInfo info)
         {
             if (Player.statLife <= Player.statLifeMax2 / 2 && HealthFlowerEquipped && Player.HasBuff(BuffID.PotionSickness) == false)

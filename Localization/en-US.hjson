@@ -60,16 +60,6 @@ Mods: {
 				Tooltip: Arrows turn into bass
 			}
 
-			GalacticBassBow: {
-				DisplayName: Cosmic Bass Bow
-				Tooltip:
-					'''
-					Arrows turn into Cosmic Bass
-					When you hit an enemy with Cosmic Bass, it creates a ring around the enemy
-					The ring shoots outs Cosmic projectiles that deal 75% damage of the weapon
-					'''
-			}
-
 			JungleBassBow: {
 				DisplayName: Leaf Bass Bow
 				Tooltip:
@@ -164,18 +154,24 @@ Mods: {
 			}
 
 			CrabBossAltarItem: {
-				DisplayName: Crab Boss Altar Item
+				DisplayName: Crab Boss Altar
 				Tooltip: ""
 			}
 
 			MedievalProsthetic: {
 				DisplayName: Medieval Prosthetic
-				Tooltip: ""
+				Tooltip:
+					'''
+					100% increased flight time
+					30% increased flight movement speed
+					5% reduced max health
+					'The prosthetic is so badly made that you take damage when walking'
+					'''
 			}
 
 			FriedSeagull: {
 				DisplayName: Fried Seagull
-				Tooltip: ""
+				Tooltip: "'Vermin with wings? Chicken of the sea? Or just an opportunity missed?'"
 			}
 
 			AstralAlloy: {
@@ -185,29 +181,51 @@ Mods: {
 
 			InfernalAlmanac: {
 				DisplayName: Infernal Almanac
-				Tooltip: ""
+				Tooltip:
+					'''
+					Summons Infernal Fireballs to circle around you when charging
+					When you stop charging you shoot out the Fireballs
+					Once fully charged the Fireballs explode on impact and home onto enemies
+					'''
 			}
 
 			CoralWarhammer: {
 				DisplayName: Coral Warhammer
-				Tooltip: ""
+				Tooltip: epik hamer
 			}
 
 			CosmicBassBow: {
 				DisplayName: Cosmic Bass Bow
-				Tooltip: ""
+				Tooltip:
+					'''
+					Arrows turn into Cosmic Bass
+					Charging the weapon partially shoots bursts of Cosmic Bass
+					Charging the weapon fully shoots a strong homing Cosmic Bass
+					The strong Cosmic Bass explodes into homing Cosmic Projectiles
+					'''
 			}
 
 			ThundercoreRifle: {
 				DisplayName: Thundercore Rifle
+				Tooltip: "'big thunder boom lightning amazing'"
+			}
+
+			CoralStaff: {
+				DisplayName: Coral Staff
+				Tooltip: very not cool staff
+			}
+
+			TropicalOceanPylonItem: {
 				Tooltip: ""
+				DisplayName: Tropical Ocean Pylon Item
 			}
 		}
 
 		NPCs: {
 			Hamis.DisplayName: Hamis
-			CrabBoss.DisplayName: Crab Boss
+			CrabBoss.DisplayName: Carrus Insura
 			HamisGroup.DisplayName: Hamis Group
+			TropicalCoralCrab.DisplayName: Tropical Coral Crab
 		}
 
 		Projectiles: {
@@ -239,12 +257,15 @@ Mods: {
 			CosmicProjectile.DisplayName: Cosmic Projectile
 			ThundercoreProj.DisplayName: Thundercore Proj
 			ThundercoreRifleHold.DisplayName: Thundercore Rifle Hold
+			CoralStaffHold.DisplayName: Coral Staff Hold
+			CoralStaffProj.DisplayName: Coral Staff Proj
 		}
 
 		Tiles: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
 			CrabBossAltar.MapEntry: Crab Boss Altar
+			TropicalOceanPylon.MapEntry: Tropical Ocean Pylon
 		}
 
 		Biomes: {
@@ -257,6 +278,12 @@ Mods: {
 				DisplayName: Tropical Caverns Biome
 				TownNPCDialogueName: the Tropical Caverns Biome
 			}
+		}
+
+		Conditions: {
+			DownedTropicalCrabBoss: Mods.WiitaMod.Conditions.DownedTropicalCrabBoss
+			InTropicalCaverns: Mods.WiitaMod.Conditions.InTropicalCaverns
+			InTropicalOcean: Mods.WiitaMod.Conditions.InTropicalOcean
 		}
 	}
 }
