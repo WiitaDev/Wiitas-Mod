@@ -4,12 +4,18 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Ranger.BassArrows;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger.BassBows
 {
 	public class JungleBassBow : ModItem
-	{
-		public override void SetStaticDefaults()
+    {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Leaf Bass Bow");
 			/* Tooltip.SetDefault("Arrows turn into Leaf Bass" + 

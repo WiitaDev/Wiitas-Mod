@@ -8,7 +8,12 @@ namespace WiitaMod.Items.Accessories
 {
 	public class MedievalProsthetic : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{                                        
 			Item.ResearchUnlockCount = 1;
 		}
@@ -16,7 +21,7 @@ namespace WiitaMod.Items.Accessories
 		public override void SetDefaults()
 		{
 			Item.accessory = true;
-			Item.value = Item.sellPrice(0, 1, 0, 0);
+			Item.value = Item.sellPrice(0, 0, 50, 0);
 			Item.rare = ItemRarityID.LightRed;
 		}
 
@@ -48,7 +53,7 @@ namespace WiitaMod.Items.Accessories
 					if(player.whoAmI == Main.myPlayer)
 						player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " tripped on a rock and died."), Main.rand.Next(1, 4), 0, armorPenetration: 9999, dodgeable: false, knockback: 0, cooldownCounter: 20);
 				}
-				damageTimer = 10;
+				damageTimer = 20;
 			}
 			else 
 			{
@@ -62,7 +67,7 @@ namespace WiitaMod.Items.Accessories
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.Wood, 15);
 			recipe.AddRecipeGroup("PrehardTier2", 3);
-			recipe.AddIngredient(ItemID.SoulofFlight, 5);
+			//recipe.AddIngredient(ItemID.SoulofFlight, 5);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}

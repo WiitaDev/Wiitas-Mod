@@ -11,8 +11,13 @@ using WiitaMod.Systems;
 namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 {
 	public class CrimsonFlameLaser : ModItem
-	{
-		public override void SetStaticDefaults()
+    {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Bloody Flamelaser");
 			/* Tooltip.SetDefault("Uses gel for ammo\n"

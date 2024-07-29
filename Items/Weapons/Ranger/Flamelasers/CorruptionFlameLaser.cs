@@ -12,7 +12,12 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 {
 	public class CorruptionFlameLaser : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
             // DisplayName.SetDefault("Cursed Flamelaser");
             /* Tooltip.SetDefault("Uses gel for ammo\n"

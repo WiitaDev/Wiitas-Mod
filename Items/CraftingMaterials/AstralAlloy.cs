@@ -4,12 +4,18 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.CraftingMaterials
 {
 	public class AstralAlloy : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Illegal Rocket Launcher Parts");
 			// Tooltip.SetDefault("'Banned everywhere'");

@@ -5,11 +5,17 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Tiles;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Consumables.Food
 {
-    internal class FriedSeagull : ModItem
+    public class FriedSeagull : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 5;

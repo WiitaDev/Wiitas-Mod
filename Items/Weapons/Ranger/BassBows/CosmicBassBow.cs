@@ -4,12 +4,18 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger.BassBows
 {
 	public class CosmicBassBow : ModItem
-	{
-		public override void SetStaticDefaults()
+    {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Cosmic Bass Bow");
 			/* Tooltip.SetDefault("Arrows turn into Cosmic Bass" +

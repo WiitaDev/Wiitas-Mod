@@ -6,11 +6,16 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Buffs;
 using WiitaMod.Projectiles.Summon;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Summon
 {
     public class ShadowflameApparitionStaff : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Shadowflame Apparition Staff"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.

@@ -59,6 +59,11 @@ namespace WiitaMod.Projectiles.Magic
 
     internal class PalladinsShield : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
         public override string Texture => $"Terraria/Images/Item_{ItemID.PaladinsShield}";
 
         public override void SetStaticDefaults()

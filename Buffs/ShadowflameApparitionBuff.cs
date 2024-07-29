@@ -1,11 +1,17 @@
 using Terraria;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Summon;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Buffs
 {
     public class ShadowflameApparitionBuff : ModBuff
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Shadowflame Apparition");

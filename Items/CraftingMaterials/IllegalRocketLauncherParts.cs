@@ -4,17 +4,23 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.CraftingMaterials
 {
 	public class IllegalRocketLauncherParts : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Illegal Rocket Launcher Parts");
 			// Tooltip.SetDefault("'Banned everywhere'");
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Item.ResearchUnlockCount = 1;
 
 		}
 

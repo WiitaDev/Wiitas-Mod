@@ -50,7 +50,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = 5;
+            Projectile.idStaticNPCHitCooldown = 7;
             Projectile.hide = true;
             Projectile.timeLeft = 360;
         }

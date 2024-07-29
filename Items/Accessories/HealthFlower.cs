@@ -8,13 +8,18 @@ namespace WiitaMod.Items.Accessories
 {
 	public class HealthFlower : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Health Flower");
 			/* Tooltip.SetDefault("Automatically use healing potions when taking lethal damage to prevent death" +
 							 "\nOr when your health is under 50% & you take damage from an enemy"); */
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Item.ResearchUnlockCount = 1;
 		}
 
 		public override void SetDefaults()

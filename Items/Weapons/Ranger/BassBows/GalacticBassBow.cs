@@ -1,11 +1,17 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger.BassBows
 {
     public class GalacticBassBow : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Cosmic Bass Bow");

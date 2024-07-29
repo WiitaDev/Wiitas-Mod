@@ -1,17 +1,18 @@
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Systems;
 using WiitaMod.Tiles;
 
 namespace WiitaMod.Items.Placeable
 {
-    internal class HamisBannerItem : ModItem
+    public class HamisBannerItem : ModItem
     {
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Hamis Banner");
             // Tooltip.SetDefault("Nearby players get a bonus against: Hamis");
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

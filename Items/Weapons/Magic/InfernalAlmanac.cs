@@ -5,12 +5,18 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Magic;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Magic
 {
 	public class InfernalAlmanac : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
             Item.ResearchUnlockCount = 1;
         }

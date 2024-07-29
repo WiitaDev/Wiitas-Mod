@@ -4,17 +4,23 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Ranger.Sandlion;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Ammo
 {
 	public class SandlionAmmo : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Sandlion");
 			// Tooltip.SetDefault("'I wonder if i can shoot this...'");
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
+			Item.ResearchUnlockCount = 99;
 
 		}
 

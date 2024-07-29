@@ -6,17 +6,17 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Buffs;
 using WiitaMod.Projectiles.Pets;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Pets
 {
-    internal class HamisPetItem : ModItem
+    public class HamisPetItem : ModItem
     {
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Chilly Egg");
             // Tooltip.SetDefault("Summons a Hamis");
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

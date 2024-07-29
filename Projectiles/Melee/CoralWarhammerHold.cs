@@ -87,15 +87,15 @@ namespace WiitaMod.Projectiles.Melee
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.spriteDirection = Main.MouseWorld.X > Owner.MountedCenter.X ? 1 : -1;
-            float targetAngle = Projectile.spriteDirection == 1 ? (float)Math.PI / 2 : (float)-Math.PI / 2;
+            float targetAngle = (float)-Math.PI / 2;
 
             if (CurrentAttack == AttackType.Spin)
             {
                 InitialAngle = (float)(-Math.PI / 2 - Math.PI * 1 / 3 * Projectile.spriteDirection); // For the spin, starting angle is designated based on direction of hit
             }
-            else if (CurrentAttack == AttackType.FrontSwing) 
-            {           
-                InitialAngle = (float)(-Math.PI / 2 - Math.PI * 1 / 3 * Projectile.spriteDirection); 
+            else if (CurrentAttack == AttackType.FrontSwing)
+            {
+                InitialAngle = (float)(-Math.PI / 2 - Math.PI * 1 / 3 * Projectile.spriteDirection);
             }
             else
             {
@@ -233,7 +233,7 @@ namespace WiitaMod.Projectiles.Melee
 
             armPosition.Y += Owner.gfxOffY;
             Projectile.Center = armPosition; // Set projectile to arm position
-            Projectile.scale = Size * 1.35f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
+            Projectile.scale = 1.35f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
 
             Owner.heldProj = Projectile.whoAmI; // set held projectile to this projectile
         }
@@ -242,7 +242,7 @@ namespace WiitaMod.Projectiles.Melee
         private void PrepareStrike()
         {
             Progress = WINDUP * SWINGRANGE * (1f - Timer / prepTime); // Calculates rotation from initial angle
-            Size = MathHelper.SmoothStep(0.25f, 1, Timer / prepTime); // Make weapon slowly increase in size as we prepare to strike until it reaches max
+            Size = 1f;
 
             if (Timer >= prepTime)
             {
@@ -257,6 +257,7 @@ namespace WiitaMod.Projectiles.Melee
             if (CurrentAttack == AttackType.Swing)
             {
                 Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) * Timer / execTime);
+                Size = 1f;
 
                 if (Timer >= execTime)
                 {
@@ -266,6 +267,9 @@ namespace WiitaMod.Projectiles.Melee
             else if (CurrentAttack == AttackType.FrontSwing)
             {
                 Progress = MathHelper.SmoothStep(0, FRONTSWINGRANGE, (1f - UNWIND) * Timer / (execTime * SPINTIME));
+                Projectile.Opacity = MathHelper.SmoothStep(1f, 0.25f, (1f - UNWIND) * Timer / execTime);
+                Size = 1f;
+
                 if (Timer >= execTime * SPINTIME)
                 {
                     CurrentStage = AttackStage.Unwind;
@@ -274,6 +278,7 @@ namespace WiitaMod.Projectiles.Melee
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
+                Size = 1f;
 
                 if (Timer == (int)(execTime * SPINTIME * 3 / 4))
                 {
@@ -294,27 +299,27 @@ namespace WiitaMod.Projectiles.Melee
             if (CurrentAttack == AttackType.Swing)
             {
                 Progress = MathHelper.SmoothStep(0, SWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
+                Size = 1f;
 
                 if (Timer >= hideTime)
                 {
                     Projectile.Kill();
                 }
             }
-            else if (CurrentAttack == AttackType.FrontSwing) 
+            else if (CurrentAttack == AttackType.FrontSwing)
             {
                 Progress = MathHelper.SmoothStep(0, FRONTSWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
+                Size = MathHelper.SmoothStep(0.25f, 1f, Timer / hideTime); // Make weapon slowly increase in size as we prepare to strike until it reaches max;
 
                 if (Timer >= hideTime)
                 {
                     Projectile.Kill();
-                }            
+                }
             }
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) + UNWIND / 2 * Timer / (hideTime * SPINTIME / 2));
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / (hideTime * SPINTIME / 2));
+                Size = 1f;
 
                 if (Timer >= hideTime * SPINTIME / 2)
                 {

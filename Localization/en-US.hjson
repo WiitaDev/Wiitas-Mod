@@ -228,5 +228,17 @@ Mods: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
 		}
+
+		Configs: {
+			WiitaModServerConfig: {
+				DisplayName: Wiita Mod Server Config
+				Headers.Content: Content
+
+				OnlyHamis: {
+					Label: Only Hamis
+					Tooltip: Disables all content except Hamis/Noita related content
+				}
+			}
+		}
 	}
 }

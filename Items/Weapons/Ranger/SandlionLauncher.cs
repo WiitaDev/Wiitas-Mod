@@ -6,12 +6,17 @@ using Terraria.ModLoader;
 using WiitaMod.Items.Ammo;
 using WiitaMod.Items.CraftingMaterials;
 using WiitaMod.Projectiles.Ranger.Sandlion;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger
 {
 	public class SandlionLauncher : ModItem
-	{
-		public override void SetStaticDefaults()
+    {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Sandlion Launcher");
 			// Tooltip.SetDefault("'This is an amazing idea!'");

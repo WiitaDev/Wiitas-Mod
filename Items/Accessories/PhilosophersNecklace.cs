@@ -8,12 +8,17 @@ namespace WiitaMod.Items.Accessories
 {
 	public class PhilosophersNecklace : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Philosopher's Necklace");
 			// Tooltip.SetDefault("Reduces the cooldown of healing potions by 25%\nIncreases length of invincibility after taking damage");
 
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Item.ResearchUnlockCount = 1;
 		}
 
 		public override void SetDefaults()

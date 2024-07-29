@@ -3,44 +3,47 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Items.Ammo;
 using WiitaMod.Items.CraftingMaterials;
 using WiitaMod.Projectiles.Ranger;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger
 {
-	public class ThundercoreRifle : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			Item.ResearchUnlockCount = 1;
+    public class ThundercoreRifle : ModItem
+    {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
             ItemID.Sets.gunProj[Type] = true;
         }
 
-		public override void SetDefaults()
-		{
-			Item.damage = 580;
-			Item.crit = 20;
-			Item.noMelee = true;
-			Item.DamageType = DamageClass.Ranged;
-			Item.width = 92;
-			Item.height = 34;
-			Item.useTime = 90;
-			Item.useAnimation = 90;
-			Item.useStyle = ItemUseStyleID.Shoot;
-			Item.knockBack = 8;
-			Item.value = Item.sellPrice(0, 2, 0, 0);
-			Item.rare = ItemRarityID.Yellow;
-			Item.UseSound = SoundID.Thunder;
-			Item.autoReuse = false;
-			Item.shoot = ModContent.ProjectileType<ThundercoreRifleHold>();
-			Item.useAmmo = AmmoID.Bullet;
-			Item.shootSpeed = 6f;
-		}
+        public override void SetDefaults()
+        {
+            Item.damage = 580;
+            Item.crit = 20;
+            Item.noMelee = true;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 92;
+            Item.height = 34;
+            Item.useTime = 90;
+            Item.useAnimation = 90;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.knockBack = 8;
+            Item.value = Item.sellPrice(0, 12, 0, 0);
+            Item.rare = ItemRarityID.Yellow;
+            Item.UseSound = SoundID.Thunder;
+            Item.autoReuse = false;
+            Item.shoot = ModContent.ProjectileType<ThundercoreRifleHold>();
+            Item.useAmmo = AmmoID.Bullet;
+            Item.shootSpeed = 6f;
+        }
 
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ThundercoreRifleHold>()] <= 0;
@@ -48,12 +51,12 @@ namespace WiitaMod.Items.Weapons.Ranger
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<ThundercoreRifleHold>()] <= 0)
             {
-				if (player.altFunctionUse == 0)
-				{
-					Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<ThundercoreRifleHold>(), damage, 0, player.whoAmI);
-					Main.player[player.whoAmI].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
-					Main.player[player.whoAmI].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 400;
-				}
+                if (player.altFunctionUse == 0)
+                {
+                    Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<ThundercoreRifleHold>(), damage, 0, player.whoAmI);
+                    Main.player[player.whoAmI].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
+                    Main.player[player.whoAmI].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 400;
+                }
             }
 
             return false;
@@ -80,21 +83,21 @@ namespace WiitaMod.Items.Weapons.Ranger
         }
 
         public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ModContent.ItemType<AstralAlloy>(), 8);
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ModContent.ItemType<AstralAlloy>(), 8);
             recipe.AddRecipeGroup("HardmodeTier3", 3);
-			recipe.AddIngredient(ItemID.SoulofSight, 10);
-			recipe.AddIngredient(ItemID.SoulofFright, 5);
-			recipe.AddIngredient(ItemID.Ectoplasm, 3);
+            recipe.AddIngredient(ItemID.SoulofSight, 10);
+            recipe.AddIngredient(ItemID.SoulofFright, 5);
+            recipe.AddIngredient(ItemID.Ectoplasm, 3);
             recipe.AddTile(TileID.MythrilAnvil);
-			recipe.Register();
-		}
+            recipe.Register();
+        }
 
-		public override Vector2? HoldoutOffset()
-		{
-			Vector2 offset = new Vector2(-50, -6);
-			return offset;
-		}
-	}
+        public override Vector2? HoldoutOffset()
+        {
+            Vector2 offset = new Vector2(-50, -6);
+            return offset;
+        }
+    }
 }

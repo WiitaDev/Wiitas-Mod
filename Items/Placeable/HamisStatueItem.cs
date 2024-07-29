@@ -3,16 +3,22 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items.Pets;
+using WiitaMod.Systems;
 using WiitaMod.Tiles;
 
 namespace WiitaMod.Items.Placeable
 {
-    internal class HamisStatueItem : ModItem
+    public class HamisStatueItem : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
+        }
+
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Hamis Statue");
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
