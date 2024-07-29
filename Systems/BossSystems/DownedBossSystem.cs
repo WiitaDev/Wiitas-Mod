@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace WiitaMod.Systems
+namespace WiitaMod.Systems.BossSystems
 {
     public class DownedBossSystem : ModSystem
     {

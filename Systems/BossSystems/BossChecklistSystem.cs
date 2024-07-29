@@ -9,7 +9,7 @@ using WiitaMod.Items.Consumables;
 using WiitaMod.NPCs.Bosses;
 using Terraria.Localization;
 
-namespace WiitaMod.Systems
+namespace WiitaMod.Systems.BossSystems
 {
     public class BossChecklistSystem : ModSystem
     {

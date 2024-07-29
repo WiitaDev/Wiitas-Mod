@@ -8,7 +8,9 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Particles;
 using WiitaMod.Systems;
+using WiitaMod.Systems.ParticleSystems;
 
 namespace WiitaMod.Projectiles.Melee
 {
@@ -156,6 +158,8 @@ namespace WiitaMod.Projectiles.Melee
             }
 
             SetWeaponPosition();
+
+
             Timer++;
         }
 
@@ -254,6 +258,11 @@ namespace WiitaMod.Projectiles.Melee
         // Function facilitating the first half of the swing
         private void ExecuteStrike()
         {
+            for (int i = 0; i < 3; i++)
+            {
+                ParticleManager.SpawnParticle(new SmokeParticle(Projectile.Center + Vector2.UnitX.RotatedBy(Projectile.rotation) * 70f, Main.rand.NextVector2Circular(3f,3f), Color.Blue, 60, 0.35f, 0.35f));
+            }
+
             if (CurrentAttack == AttackType.Swing)
             {
                 Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) * Timer / execTime);

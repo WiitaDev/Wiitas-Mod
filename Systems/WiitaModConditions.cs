@@ -1,15 +1,10 @@
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Graphics.Effects;
+using WiitaMod.Systems.BossSystems;
 using WiitaMod.World;
 
 namespace WiitaMod.Systems
 {
-    public static class ExampleConditions
+    public static class WiitaModConditions
     {
         public static Condition InTropicalOcean = new Condition("Mods.WiitaMod.Conditions.InTropicalOcean", () => Main.LocalPlayer.InModBiome<TropicalOceanBiome>());
         public static Condition InTropicalCaverns = new Condition("Mods.WiitaMod.Conditions.InTropicalCaverns", () => Main.LocalPlayer.InModBiome<TropicalCavernsBiome>());

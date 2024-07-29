@@ -3,7 +3,7 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Systems;
+using WiitaMod.Systems.BossSystems;
 
 namespace WiitaMod.NPCs.Bosses
 {

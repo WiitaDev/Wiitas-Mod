@@ -7,6 +7,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Systems;
+using WiitaMod.Particles;
+using WiitaMod.Systems.ParticleSystems;
 
 namespace WiitaMod.Projectiles.Magic
 {
@@ -64,6 +66,8 @@ namespace WiitaMod.Projectiles.Magic
             CircleAround(player); // set position into orbit before spawning dust
 
             SoundEngine.PlaySound(SoundID.Item20, player.Center);
+
+
             for (int i = 0; i < 20; i++)
             {
                 Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Lava, Main.rand.NextVector2CircularEdge(Main.rand.Next(2, 5), Main.rand.Next(2, 5)), 0, default, 1.25f);
@@ -100,6 +104,7 @@ namespace WiitaMod.Projectiles.Magic
                 Channeling = false;
             }
 
+            //ParticleManager.SpawnParticle(new TestParticle(Projectile.Center, Main.rand.NextVector2CircularEdge(2f,2f), Color.Yellow, Color.OrangeRed, 1f, 100));
             float maxDetectRadius = 250f; // The maximum radius at which a projectile can detect a target
             float speed = 17f; // The speed at which the projectile moves towards the target
             float turnSpeed = 250f;

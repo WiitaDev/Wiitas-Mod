@@ -3,13 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Dusts;
 
 namespace WiitaMod.Projectiles.Ranger
 {
@@ -82,11 +80,10 @@ namespace WiitaMod.Projectiles.Ranger
                 points.Add(endPoint);
 
                 for (int i = 0; i < points.Count; i++)
-                {            
+                {
                     if (i > 0)
                     {
                         HomeToEnemies(i);
-
                     }
                     offsets.Add(Main.rand.NextVector2Circular(2, 5).RotatedBy(Projectile.AngleTo(endPoint)) * Utils.GetLerpValue(1, points.Count * 0.3f, i, true) * Utils.GetLerpValue(points.Count - 1, points.Count * 0.7f, i, true));
                     velocities.Add(Projectile.DirectionTo(endPoint).RotatedByRandom(1.5f) * Main.rand.NextFloat(2f, 6f));
@@ -141,7 +138,7 @@ namespace WiitaMod.Projectiles.Ranger
         }
 
 
-        private void HomeToEnemies(int i) 
+        private void HomeToEnemies(int i)
         {
             float closestDistance = 1000;
             NPC closestTarget = null;
@@ -154,8 +151,8 @@ namespace WiitaMod.Projectiles.Ranger
                     closestDistance = target.Distance(points[i]);
                 }
             }
-            if(closestDistance < 150 && closestTarget != null)
-            points[i] = Main.rand.NextVector2FromRectangle(closestTarget.Hitbox);
+            if (closestDistance < 150 && closestTarget != null)
+                points[i] = Main.rand.NextVector2FromRectangle(closestTarget.Hitbox);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -182,7 +179,7 @@ namespace WiitaMod.Projectiles.Ranger
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if(target.type == NPCID.TheDestroyerBody) 
+            if (target.type == NPCID.TheDestroyerBody)
             {
                 modifiers.FinalDamage *= 0.1f;
             }

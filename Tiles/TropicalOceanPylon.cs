@@ -67,7 +67,7 @@ namespace WiitaMod.Tiles
             // As an example, if we want to sell the pylon if we're in the example surface, or example underground, when there is another NPC nearby.
             // Lets assume we don't care about happiness or crimson or corruption, so we won't include those conditions
             // This does not affect the teleport conditions, only the sale conditions
-            return new NPCShop.Entry(ModContent.ItemType<TropicalOceanPylonItem>(), Condition.AnotherTownNPCNearby, ExampleConditions.InTropicalOcean);
+            return new NPCShop.Entry(ModContent.ItemType<TropicalOceanPylonItem>(), Condition.AnotherTownNPCNearby, WiitaModConditions.InTropicalOcean);
 
             // Other standard pylon conditions are:
             // Condition.HappyEnoughToSellPylons
