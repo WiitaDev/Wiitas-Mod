@@ -14,7 +14,10 @@ namespace WiitaMod.Systems.ParticleSystems
     {
         private static readonly int MaxParticlesAllowed = 500;
 
-        private static Particle[] particles;
+        private static List<Particle> particles;
+        //List containing the particles to delete
+        private static List<Particle> particlesToKill;
+
         private static int nextVacantIndex;
         private static int activeParticles;
         private static Dictionary<Type, int> particleTypes;
@@ -25,7 +28,8 @@ namespace WiitaMod.Systems.ParticleSystems
 
         internal static void RegisterParticles()
         {
-            particles = new Particle[MaxParticlesAllowed];
+            particles = new List<Particle>();
+            particlesToKill = new List<Particle>();
             particleTypes = new Dictionary<Type, int>();
             particleTextures = new Dictionary<int, Texture2D>();
             particleInstances = new List<Particle>();
@@ -65,21 +69,17 @@ namespace WiitaMod.Systems.ParticleSystems
 
         public static void SpawnParticle(Particle particle)
         {
-            if (Main.netMode == Terraria.ID.NetmodeID.Server || activeParticles == MaxParticlesAllowed)
+            // Don't queue particles if the game is paused.
+            // This precedent is established with how Dust instances are created.
+            // Don't spawn particles if on the server side either, or if the particles dict is somehow null
+            if (Main.gamePaused || Main.dedServ || particles == null)
                 return;
 
-            particles[nextVacantIndex] = particle;
-            particle.ID = nextVacantIndex;
+            if (particles.Count >= MaxParticlesAllowed)
+                return;
+
+            particles.Add(particle);
             particle.Type = particleTypes[particle.GetType()];
-
-            if (nextVacantIndex + 1 < particles.Length && particles[nextVacantIndex + 1] == null)
-                nextVacantIndex++;
-            else
-                for (int i = 0; i < particles.Length; i++)
-                    if (particles[i] == null)
-                        nextVacantIndex = i;
-
-            activeParticles++;
         }
 
         public static void SpawnParticle(int type, Vector2 position, Vector2 velocity)
@@ -96,6 +96,11 @@ namespace WiitaMod.Systems.ParticleSystems
             SpawnParticle(particle);
         }
 
+        public static void RemoveParticle(Particle particle)
+        {
+            particlesToKill.Add(particle);
+        }
+
         /// <summary>
         /// Deletes the particle at the given index. You typically do not have to use this; use Particle.Kill() instead.
         /// </summary>
@@ -104,18 +109,6 @@ namespace WiitaMod.Systems.ParticleSystems
             particles[index] = null;
             activeParticles--;
             nextVacantIndex = index;
-        }
-
-        /// <summary>
-        /// Clears all the currently spawned particles.
-        /// </summary>
-        public static void ClearAllParticles()
-        {
-            for (int i = 0; i < particles.Length; i++)
-                particles[i] = null;
-
-            activeParticles = 0;
-            nextVacantIndex = 0;
         }
 
         internal static void UpdateAllParticles()
@@ -130,10 +123,24 @@ namespace WiitaMod.Systems.ParticleSystems
 
                 particle.Update();
             }
+
+            //Clear out particles whose time is up
+            particles.RemoveAll(particle => (particle.TimeActive >= particle.Lifetime && particle.SetLifetime) || particlesToKill.Contains(particle));
+            particlesToKill.Clear();
         }
 
-        internal static void DrawAllParticles(SpriteBatch spriteBatch)
+        internal static void DrawAllParticles(SpriteBatch sb)
         {
+            if (particles.Count == 0)
+                return;
+
+            sb.End();
+            var rasterizer = Main.Rasterizer;
+            rasterizer.ScissorTestEnable = true;
+            Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
+            Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
+
+            //Batch the particles to avoid constant restarting of the spritebatch
             foreach (Particle particle in particles)
             {
                 if (particle == null)
@@ -144,38 +151,49 @@ namespace WiitaMod.Systems.ParticleSystems
                 else
                     batchedAlphaBlendParticles.Add(particle);
             }
-            spriteBatch.End();
-
             if (batchedAlphaBlendParticles.Count > 0)
             {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, null, null, Main.GameViewMatrix.ZoomMatrix);
+                sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
                 foreach (Particle particle in batchedAlphaBlendParticles)
+                {
                     if (particle.UseCustomDraw)
-                        particle.CustomDraw(spriteBatch);
+                        particle.CustomDraw(sb);
                     else
-                        spriteBatch.Draw(particleTextures[particle.Type], particle.Position - Main.screenPosition, null, particle.Color, particle.Rotation, particle.Origin, particle.Scale * Main.GameViewMatrix.Zoom, SpriteEffects.None, 0f);
-
-                spriteBatch.End();
+                    {
+                        Rectangle frame = particleTextures[particle.Type].Frame(1, particle.FrameVariants, 0, particle.Variant);
+                        sb.Draw(particleTextures[particle.Type], particle.Position - Main.screenPosition, frame, particle.Color, particle.Rotation, frame.Size() * 0.5f,
+                            particle.Scale, SpriteEffects.None, 0f);
+                    }
+                }
+                sb.End();
             }
 
             if (batchedAdditiveBlendParticles.Count > 0)
             {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                rasterizer = RasterizerState.CullNone;
+                rasterizer.ScissorTestEnable = true;
+                Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
+                Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
+                sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
                 foreach (Particle particle in batchedAdditiveBlendParticles)
+                {
                     if (particle.UseCustomDraw)
-                        particle.CustomDraw(spriteBatch);
+                        particle.CustomDraw(sb);
                     else
-                        spriteBatch.Draw(particleTextures[particle.Type], particle.Position - Main.screenPosition, null, particle.Color, particle.Rotation, particle.Origin, particle.Scale * Main.GameViewMatrix.Zoom, SpriteEffects.None, 0f);
-
-                spriteBatch.End();
+                    {
+                        Rectangle frame = particleTextures[particle.Type].Frame(1, particle.FrameVariants, 0, particle.Variant);
+                        sb.Draw(particleTextures[particle.Type], particle.Position - Main.screenPosition, frame, particle.Color, particle.Rotation, frame.Size() * 0.5f, particle.Scale, SpriteEffects.None, 0f);
+                    }
+                }
+                sb.End();
             }
 
             batchedAlphaBlendParticles.Clear();
             batchedAdditiveBlendParticles.Clear();
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         }
 
         /// <summary>

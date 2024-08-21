@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.IO;
 using Terraria;
@@ -22,7 +23,7 @@ namespace WiitaMod.Projectiles.Melee
         private const float FRONTSWINGRANGE = 2.25f * (float)Math.PI; // The angle a front swing attack covers (360 + 90 degrees)
         private const float WINDUP = 0.35f; // How far back the player's hand goes when winding their attack (in relation to swingRange)
         private const float UNWIND = 0.1f; // When should the weapon start disappearing
-        private const float SPINTIME = 2.5f; // How much longer a spin is than a swing
+        private const float SPINTIME = 3f; // How much longer a spin is than a swing
 
         private enum AttackType // Which attack is being performed
         {
@@ -184,10 +185,13 @@ namespace WiitaMod.Projectiles.Melee
             }
 
             Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D spinEffect = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/SemiCircleSlash", AssetRequestMode.ImmediateLoad).Value;
+            Color spinColor = Color.RoyalBlue;
+            spinColor.A = 0;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            //Main.spriteBatch.Draw(spinEffect, Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.Size / 2 * Owner.GetAdjustedItemScale(Owner.HeldItem) - Main.screenPosition, default, spinColor, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
 
-            // Since we are doing a custom draw, prevent it from normally drawing
             return false;
         }
 
@@ -246,7 +250,6 @@ namespace WiitaMod.Projectiles.Melee
         private void PrepareStrike()
         {
             Progress = WINDUP * SWINGRANGE * (1f - Timer / prepTime); // Calculates rotation from initial angle
-            Size = MathHelper.SmoothStep(0.25f, 1, Timer / prepTime); // Make weapon slowly increase in size as we prepare to strike until it reaches max
 
             if (Timer >= prepTime)
             {
@@ -258,15 +261,17 @@ namespace WiitaMod.Projectiles.Melee
         // Function facilitating the first half of the swing
         private void ExecuteStrike()
         {
-            for (int i = 0; i < 3; i++)
-            {
-                ParticleManager.SpawnParticle(new SmokeParticle(Projectile.Center + Vector2.UnitX.RotatedBy(Projectile.rotation) * 70f, Main.rand.NextVector2Circular(3f,3f), Color.Blue, 60, 0.35f, 0.35f));
-            }
+            Vector2 particleVel = Vector2.Zero;
 
             if (CurrentAttack == AttackType.Swing)
             {
                 Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) * Timer / execTime);
 
+                for (int i = 0; i < 3; i++)
+                {
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(3f, 3f), Color.RoyalBlue, 90, 0.45f, 0.75f, 0, true);
+                    ParticleManager.SpawnParticle(smokeParticle);
+                }
                 if (Timer >= execTime)
                 {
                     CurrentStage = AttackStage.Unwind;
@@ -275,6 +280,16 @@ namespace WiitaMod.Projectiles.Melee
             else if (CurrentAttack == AttackType.FrontSwing)
             {
                 Progress = MathHelper.SmoothStep(0, FRONTSWINGRANGE, (1f - UNWIND) * Timer / (execTime * SPINTIME));
+                Projectile.Opacity = MathHelper.SmoothStep(1f, 0.25f, (1f - UNWIND) * Timer / execTime);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(3f, 3f), Color.RoyalBlue, 90, 0.45f, 0.75f, 0, true);
+
+                    ParticleManager.SpawnParticle(smokeParticle);
+                }
+
+
                 if (Timer >= execTime * SPINTIME)
                 {
                     CurrentStage = AttackStage.Unwind;
@@ -283,6 +298,13 @@ namespace WiitaMod.Projectiles.Melee
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
+
+                for (int i = 0; i < 4; i++)
+                {
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(3f, 3f), Color.RoyalBlue, 90, 0.45f, 0.75f, 0, true);
+
+                    ParticleManager.SpawnParticle(smokeParticle);
+                }
 
                 if (Timer == (int)(execTime * SPINTIME * 3 / 4))
                 {
@@ -303,7 +325,6 @@ namespace WiitaMod.Projectiles.Melee
             if (CurrentAttack == AttackType.Swing)
             {
                 Progress = MathHelper.SmoothStep(0, SWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
 
                 if (Timer >= hideTime)
                 {
@@ -313,7 +334,6 @@ namespace WiitaMod.Projectiles.Melee
             else if (CurrentAttack == AttackType.FrontSwing) 
             {
                 Progress = MathHelper.SmoothStep(0, FRONTSWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
 
                 if (Timer >= hideTime)
                 {
@@ -323,7 +343,6 @@ namespace WiitaMod.Projectiles.Melee
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) + UNWIND / 2 * Timer / (hideTime * SPINTIME / 2));
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / (hideTime * SPINTIME / 2));
 
                 if (Timer >= hideTime * SPINTIME / 2)
                 {

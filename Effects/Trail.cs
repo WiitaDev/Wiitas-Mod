@@ -11,47 +11,6 @@ namespace WiitaMod.Effects
     [StructLayout(LayoutKind.Sequential, Size = 1)]
     // THANK YOU SO MUCH "ThePaperLuigi" or "The-Stars-Above" FOR THIS CODE!!
 
-    public struct SlashEffect
-    {
-
-        public const int TotalIllusions = 1;
-
-        public const int FramesPerImportantTrail = 60;
-
-        private static VertexStrip _vertexStrip = new VertexStrip();
-
-        public Color ColorStart;
-
-        public Color ColorEnd;
-
-        public void Draw(Projectile proj)
-        {
-            _ = proj.ai[1];
-            MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
-            int num = 1;
-            int num2 = 0;
-            int num3 = 0;
-            float w = 0.6f;
-            miscShaderData.UseShaderSpecificData(new Vector4(num, num2, num3, w));
-            miscShaderData.Apply();
-            _vertexStrip.PrepareStrip(proj.oldPos, proj.oldRot, StripColors, StripWidth, -Main.screenPosition + proj.Size / 2f, proj.oldPos.Length, includeBacksides: true);
-            _vertexStrip.DrawTrail();
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        }
-
-        private Color StripColors(float progressOnStrip)
-        {
-            Color result = Color.Lerp(this.ColorStart, this.ColorEnd, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, clamped: true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, clamped: true));
-            result.A /= 2;
-            return result;
-        }
-
-        private float StripWidth(float progressOnStrip)
-        {
-            return 36f;
-        }
-    }
-
     public struct PurpleTrail
     {
         private static VertexStrip _vertexStrip = new VertexStrip();
@@ -537,38 +496,6 @@ namespace WiitaMod.Effects
         }
     }
 
-    public struct MedBlueTrail
-    {
-        private static VertexStrip _vertexStrip = new VertexStrip();
-
-        public void Draw(Projectile proj)
-        {
-            MiscShaderData miscShaderData = GameShaders.Misc["RainbowRod"];
-            miscShaderData.UseSaturation(-2.8f);
-            miscShaderData.UseOpacity(4f);
-            miscShaderData.Apply();
-            _vertexStrip.PrepareStripWithProceduralPadding(proj.oldPos, proj.oldRot, StripColors, StripWidth, -Main.screenPosition + proj.Size / 2f);
-            _vertexStrip.DrawTrail();
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        }
-
-        private Color StripColors(float progressOnStrip)
-        {
-            Color value = Main.hslToRgb(.225f, .39f, 0.7f);
-            //Color result = Color.Lerp(Color.Black, value, Utils.GetLerpValue(-0.2f, 0.5f, progressOnStrip, clamped: true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
-            Color result = Color.LightBlue;
-            result.A = 0;
-            return result;
-        }
-
-        private float StripWidth(float progressOnStrip)
-        {
-            float num = 1.6f;
-            float lerpValue = Utils.GetLerpValue(-0f, 0.2f, progressOnStrip, clamped: true);
-            num *= 1f - (1f - lerpValue) * (1f - lerpValue);
-            return MathHelper.Lerp(0f, 32f, num);
-        }
-    }
     public struct LargeRedTrail
     {
         private static VertexStrip _vertexStrip = new VertexStrip();

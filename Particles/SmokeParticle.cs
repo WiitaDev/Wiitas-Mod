@@ -39,7 +39,6 @@ namespace WiitaMod.Particles
             StrongVisual = required;
             Glowing = glowing;
             HueShift = hueshift;
-
         }
 
         public override void Update()
