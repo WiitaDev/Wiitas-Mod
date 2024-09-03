@@ -18,7 +18,7 @@ namespace WiitaMod.Tiles
 {
     public class CrabBossAltar : ModTile
     {
-        public override string Texture => $"Terraria/Images/Tiles_{TileID.DefendersForge}";
+        //public override string Texture => $"Terraria/Images/Tiles_{TileID.DefendersForge}";
         public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
@@ -32,6 +32,7 @@ namespace WiitaMod.Tiles
             AddMapEntry(new Color(10, 75, 245), name);
 
             TileID.Sets.DisableSmartCursor[Type] = true;
+            //TileID.Sets.HasOutlines[Type] = true;
             TileID.Sets.GeneralPlacementTiles[Type] = false;
             TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
             TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Type] = true;

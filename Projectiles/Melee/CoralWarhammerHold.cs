@@ -170,27 +170,33 @@ namespace WiitaMod.Projectiles.Melee
             Vector2 origin;
             float rotationOffset;
             SpriteEffects effects;
+            SpriteEffects effects2;
 
             if (Projectile.spriteDirection > 0)
             {
                 origin = new Vector2(0, Projectile.height);
                 rotationOffset = MathHelper.ToRadians(45f);
                 effects = SpriteEffects.None;
+                effects2 = SpriteEffects.FlipVertically;
             }
             else
             {
                 origin = new Vector2(Projectile.width, Projectile.height);
                 rotationOffset = MathHelper.ToRadians(135f);
                 effects = SpriteEffects.FlipHorizontally;
+                effects2 = SpriteEffects.FlipHorizontally;
             }
 
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D spinEffect = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/SemiCircleSlash", AssetRequestMode.ImmediateLoad).Value;
-            Color spinColor = Color.RoyalBlue;
+            Texture2D spinEffect = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/CircleSlash", AssetRequestMode.ImmediateLoad).Value;
+            Color spinColor = Color.Cyan;
             spinColor.A = 0;
 
+            float spinEffectOpacity = (1f - Projectile.Opacity);
+
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
-            //Main.spriteBatch.Draw(spinEffect, Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.Size / 2 * Owner.GetAdjustedItemScale(Owner.HeldItem) - Main.screenPosition, default, spinColor, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+
+            Main.spriteBatch.Draw(spinEffect, Projectile.Center - Main.screenPosition, default, spinColor * spinEffectOpacity, Projectile.rotation + rotationOffset, new Vector2(Projectile.width, Projectile.height), Projectile.scale, effects2, 0);
 
             return false;
         }
@@ -269,7 +275,7 @@ namespace WiitaMod.Projectiles.Melee
 
                 for (int i = 0; i < 3; i++)
                 {
-                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(3f, 3f), Color.RoyalBlue, 90, 0.45f, 0.75f, 0, true);
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(4f, 4f), Color.RoyalBlue, 90, 0.45f, 0.75f, MathHelper.ToRadians(2), true);
                     ParticleManager.SpawnParticle(smokeParticle);
                 }
                 if (Timer >= execTime)
@@ -284,7 +290,7 @@ namespace WiitaMod.Projectiles.Melee
 
                 for (int i = 0; i < 3; i++)
                 {
-                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(3f, 3f), Color.RoyalBlue, 90, 0.45f, 0.75f, 0, true);
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(4f, 4f), Color.RoyalBlue, 90, 0.45f, 0.75f, MathHelper.ToRadians(2), true);
 
                     ParticleManager.SpawnParticle(smokeParticle);
                 }
@@ -298,10 +304,11 @@ namespace WiitaMod.Projectiles.Melee
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
+                Projectile.Opacity = MathHelper.SmoothStep(1f, 0.25f, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
 
                 for (int i = 0; i < 4; i++)
                 {
-                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(3f, 3f), Color.RoyalBlue, 90, 0.45f, 0.75f, 0, true);
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center + new Vector2(1.35f, 0).RotatedBy(Projectile.rotation) * Projectile.height * Owner.GetAdjustedItemScale(Owner.HeldItem), Main.rand.NextVector2Circular(4f, 4f), Color.RoyalBlue, 90, 0.45f, 0.75f, MathHelper.ToRadians(2), true);
 
                     ParticleManager.SpawnParticle(smokeParticle);
                 }

@@ -22,6 +22,7 @@ public static class ProjectileHelper
         projectile.position.Y -= projectile.height / 2;
 
         projectile.Damage();
+        projectile.ResetLocalNPCHitImmunity();
 
         Main.projectileIdentity[projectile.owner, projectile.identity] = -1;
 

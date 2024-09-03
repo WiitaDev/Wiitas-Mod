@@ -10,36 +10,34 @@ namespace WiitaMod.Particles
 {
     public class FireParticle : Particle //this is lifted form the public calamity mod repository
     {
-        private Color _startColor;
-        private Color _endColor;
-        public int MaxTime;
-
-        private const float FADETIME = 0.3f;
-
-        public delegate void UpdateAction(Particle particle);
-
-        private readonly UpdateAction _action;
-
+        public float RelativePower;
+        public override bool SetLifetime => true;
         public override int FrameVariants => 3;
+
+        public Color BrightColor;
+        public Color DarkColor;
+
 
         public override string Texture => "WiitaMod/Particles/Fire";
 
-        public FireParticle(Vector2 position, Vector2 velocity, Color startColor, Color endColor, float scale, int lifetime, UpdateAction action = null)
+        public FireParticle(Vector2 relativePosition, int lifetime, float scale, float relativePower, Color brightColor, Color darkColor)
         {
-            Position = position;
-            Velocity = velocity;
-            _startColor = startColor;
-            _endColor = endColor;
+            Position = relativePosition;
+            Velocity = Vector2.Zero;
             Scale = scale;
-            MaxTime = lifetime;
-            _action = action;
+            Variant = Main.rand.Next(3);
+            Lifetime = lifetime;
+            RelativePower = relativePower;
+            BrightColor = brightColor;
+            DarkColor = darkColor;
         }
 
         public override void Update()
         {
-            Scale += 0.05f;
+            Scale += RelativePower * 0.01f;
+            Position.Y -= RelativePower * 3f;
 
-            Color = Color.Lerp(_startColor, _endColor, LifetimeCompletion);
+            Color = Color.Lerp(BrightColor, DarkColor, LifetimeCompletion);
             Color = Color.Lerp(Color, Color.SaddleBrown, Utils.GetLerpValue(0.95f, 0.7f, LifetimeCompletion, true));
             Color = Color.Lerp(Color, Color.White, Utils.GetLerpValue(0.1f, 0.25f, LifetimeCompletion, true) * Utils.GetLerpValue(0.4f, 0.25f, LifetimeCompletion, true) * 0.7f);
             Color *= Utils.GetLerpValue(0f, 0.15f, LifetimeCompletion, true) * Utils.GetLerpValue(1f, 0.8f, LifetimeCompletion, true) * 0.6f;

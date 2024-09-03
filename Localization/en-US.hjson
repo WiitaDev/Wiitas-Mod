@@ -259,6 +259,7 @@ Mods: {
 			ThundercoreRifleHold.DisplayName: Thundercore Rifle Hold
 			CoralStaffHold.DisplayName: Coral Staff Hold
 			CoralStaffProj.DisplayName: Coral Staff Proj
+			CrabBouncyProj.DisplayName: Crab Bouncy Proj
 		}
 
 		Tiles: {

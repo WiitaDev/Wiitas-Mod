@@ -1,8 +1,11 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Projectiles.Magic;
 using WiitaMod.Systems.BossSystems;
 
 namespace WiitaMod.NPCs.Bosses
@@ -10,6 +13,20 @@ namespace WiitaMod.NPCs.Bosses
     [AutoloadBossHead]
     public class CrabBoss : ModNPC
     {
+        private enum AttackTypes
+        {
+            BouncyProjectiles = 0,
+        }
+
+        public ref float Timer => ref NPC.ai[0];
+
+        private float AIState
+        {
+            get => NPC.ai[0];
+            set => NPC.ai[0] = value;
+        }
+
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 1;
@@ -31,7 +48,7 @@ namespace WiitaMod.NPCs.Bosses
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = false;
-            NPC.value = Item.buyPrice(gold: 5);
+            NPC.value = Item.buyPrice(gold: 15);
             NPC.SpawnWithHigherTime(30);
             NPC.boss = true;
             NPC.npcSlots = 10f; // Take up open spawn slots, preventing random NPCs from spawning during the fight
@@ -50,28 +67,61 @@ namespace WiitaMod.NPCs.Bosses
             }
         }
 
+        public override void OnSpawn(IEntitySource source)
+        {
+            AIState = (int)AttackTypes.BouncyProjectiles;
+        }
+
         public override void AI()
         {
+            Timer++;
+            NPC.TargetClosest(true);
+
             if (NPC.life > 3200 * 0.8f) //more than 80% of health
             {
-                NPC.aiStyle = NPCAIStyleID.Piranha;
+                NPC.aiStyle = -1;
+                NPC.noGravity = false;
             }
             else
             {
-                if (NPC.aiStyle == NPCAIStyleID.Piranha)
+                if (NPC.aiStyle == -1) // phase change
                 {
                     SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/NerdDogSound"), NPC.Center);
+                    Timer = 0;
+                    NPC.aiStyle = -2;
                 }
-
-                NPC.aiStyle = NPCAIStyleID.Worm;
-                NPC.noTileCollide = true;
             }
+
+            switch (AIState)
+            {
+                case (int)AttackTypes.BouncyProjectiles:
+
+                    int attackInterval = NPC.aiStyle == -1 ? 60 : 30; // attack slower in first phase
+                    float projSpeed = NPC.aiStyle == -1 ? 5 : 7.5f;
+
+                    if (Timer >= attackInterval)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Player target = Main.player[NPC.target];
+
+                            // Calculate direction and speed of the projectile
+                            Vector2 direction = target.Center - NPC.Center;
+                            direction.Normalize();
+                            direction *= 5f; // Set the speed of the projectile
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, direction, ModContent.ProjectileType<CrabBouncyProj>(), NPC.damage / 3, 1f);
+                        }
+
+                        Timer = 0;
+                    }
+                    break;
+            }
+
         }
 
         public override void OnKill()
         {
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedTropicalCrabBoss, -1);
-            Main.NewText(DownedBossSystem.downedTropicalCrabBoss);
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

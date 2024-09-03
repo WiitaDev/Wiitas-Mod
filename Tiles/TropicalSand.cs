@@ -1,9 +1,9 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.GameContent.Metadata;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using WiitaMod.Projectiles;
 
 namespace WiitaMod.Tiles
@@ -13,13 +13,12 @@ namespace WiitaMod.Tiles
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileMergeDirt[Type] = true;
-            Main.tileBlendAll[Type] = true;
             Main.tileBlockLight[Type] = true;
-            Main.tileLighted[Type] = true;
+            TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Sand"]);
 
             TileID.Sets.CanBeDugByShovel[Type] = true;
             TileID.Sets.Conversion.Sand[Type] = true;
+            TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
             TileID.Sets.Falling[Type] = true;
             TileID.Sets.ForAdvancedCollision.ForSandshark[Type] = true;
 

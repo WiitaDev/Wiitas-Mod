@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Items.Placeable;
 using WiitaMod.Tiles;
 
 namespace WiitaMod.Projectiles
@@ -85,39 +87,53 @@ namespace WiitaMod.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            if (Projectile.owner == Main.myPlayer && !Projectile.noDropItem)
+            Point p = Projectile.Center.ToTileCoordinates();
+            // If the sand is dying outside the world border, cancel placing sand.
+            if (p.X < 0 || p.X >= Main.maxTilesX || p.Y < 0 || p.Y >= Main.maxTilesY)
+                return;
+            Tile placer = Main.tile[p.X, p.Y];
+
+            // If the sand hit a half brick, but was mostly going downwards (at a lower than 45 degree angle), then stack atop the half brick.
+            if (placer.IsHalfBlock && Projectile.velocity.Y > 0f && Math.Abs(Projectile.velocity.Y) > Math.Abs(Projectile.velocity.X))
+                placer = Main.tile[p.X, --p.Y];
+
+            bool ValidTileBelow = true;
+            bool SlopeTileBelow = false;
+
+            // Attempt to place sand and unslope tile below if available
+            // Under no circumstances can falling sand destroy minecart tracks.
+            if (!placer.HasTile && placer.TileType != TileID.MinecartTrack)
             {
-                int tileX = (int)(Projectile.position.X + Projectile.width / 2) / 16;
-                int tileY = (int)(Projectile.position.Y + Projectile.width / 2) / 16;
-
-                Tile tile = Main.tile[tileX, tileY];
-                Tile tileBelow = Main.tile[tileX, tileY + 1];
-
-                if (tile.IsHalfBlock && Projectile.velocity.Y > 0f && System.Math.Abs(Projectile.velocity.Y) > System.Math.Abs(Projectile.velocity.X))
-                    tileY--;
-
-                if (!tile.HasTile)
+                if (p.Y + 1 < Main.maxTilesY)
                 {
-                    bool onMinecartTrack = tileY < Main.maxTilesY - 2 && tileBelow != null && tileBelow.HasTile && tileBelow.TileType == TileID.MinecartTrack;
-
-                    if (!onMinecartTrack)
-                        WorldGen.PlaceTile(tileX, tileY, tileType, false, true);
-
-                    if (!onMinecartTrack && tile.HasTile && tile.TileType == tileType)
+                    Tile under = Main.tile[p.X, p.Y + 1];
+                    if (under.HasTile)
                     {
-                        if (tileBelow.IsHalfBlock || tileBelow.Slope != 0)
-                        {
-                            WorldGen.SlopeTile(tileX, tileY + 1, 0);
-
-                            if (Main.netMode == NetmodeID.Server)
-                                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 14, tileX, tileY + 1);
-                        }
-
-                        if (Main.netMode != NetmodeID.SinglePlayer)
-                            NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, tileX, tileY, tileType);
+                        if (under.TileType == TileID.MinecartTrack)
+                            ValidTileBelow = false;
+                        else if (under.IsHalfBlock || under.Slope != 0)
+                            SlopeTileBelow = true;
                     }
                 }
+
+                if (ValidTileBelow)
+                {
+                    bool PlacedBlock = WorldGen.PlaceTile(p.X, p.Y, tileType, false, true);
+                    WorldGen.SquareTileFrame(p.X, p.Y);
+
+                    if (PlacedBlock && SlopeTileBelow)
+                    {
+                        WorldGen.SlopeTile(p.X, p.Y + 1);
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                            NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 14, p.X, p.Y + 1);
+                    }
+                    if (PlacedBlock && Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, p.X, p.Y, tileType);
+                }
             }
+            // Give the block back if you literally can't place it
+            else
+                Item.NewItem(Projectile.GetSource_DropAsItem(), Projectile.position, Projectile.width, Projectile.height, ModContent.ItemType<TropicalSandItem>());
         }
     }
 }
