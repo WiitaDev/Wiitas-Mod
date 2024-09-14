@@ -39,11 +39,11 @@ namespace WiitaMod.World
             bool b2;
             if (Main.dungeonX > Main.maxTilesX / 2)
             {
-                b2 = player.position.ToTileCoordinates().X < TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
+                b2 = player.position.ToTileCoordinates().X < TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
             else
             {
-                b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth + 30);
+                b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
 
             bool b3 = player.ZoneSkyHeight || player.ZoneOverworldHeight || (player.position.ToTileCoordinates().Y < TropicalOceanGeneration.CaveStart);
@@ -63,8 +63,8 @@ namespace WiitaMod.World
 
         public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
-            tropicalSandCount = tileCounts[ModContent.TileType<TropicalSand>()];
-            tropicalSandstoneCount = tileCounts[TileID.SmoothSandstone];
+            tropicalSandCount = tileCounts[ModContent.TileType<TropicalSand>()] + tileCounts[ModContent.TileType<CompressedSandstone>()];
+            tropicalSandstoneCount = tileCounts[ModContent.TileType<TropicalSand>()] + tileCounts[ModContent.TileType<CompressedSandstone>()];
         }
     }
 }

@@ -18,10 +18,9 @@ namespace WiitaMod.Systems
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            if(caller == Main.LocalPlayer)
-            Main.NewText(caller.Player.InModBiome(ModContent.GetInstance<TropicalOceanBiome>()));
             Main.NewText(caller.Player.InModBiome(ModContent.GetInstance<TropicalCavernsBiome>()));
             Main.NewText(TropicalOceanGeneration.CaveStart);
+            Main.NewText(TropicalOceanGeneration.BiomeWidth);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace WiitaMod.Tiles
         {
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
+            Main.tileMergeDirt[Type] = true;
+            Main.tileBlendAll[Type] = true;
             TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Sand"]);
 
             TileID.Sets.CanBeDugByShovel[Type] = true;

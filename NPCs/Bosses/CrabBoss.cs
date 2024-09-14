@@ -22,8 +22,8 @@ namespace WiitaMod.NPCs.Bosses
 
         private float AIState
         {
-            get => NPC.ai[0];
-            set => NPC.ai[0] = value;
+            get => NPC.ai[1];
+            set => NPC.ai[1] = value;
         }
 
 
@@ -89,12 +89,13 @@ namespace WiitaMod.NPCs.Bosses
                     SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/NerdDogSound"), NPC.Center);
                     Timer = 0;
                     NPC.aiStyle = -2;
+                    AIState = (int)AttackTypes.BouncyProjectiles;
                 }
             }
 
             switch (AIState)
             {
-                case (int)AttackTypes.BouncyProjectiles:
+                case (float)AttackTypes.BouncyProjectiles:
 
                     int attackInterval = NPC.aiStyle == -1 ? 60 : 30; // attack slower in first phase
                     float projSpeed = NPC.aiStyle == -1 ? 5 : 7.5f;
@@ -111,7 +112,6 @@ namespace WiitaMod.NPCs.Bosses
                             direction *= 5f; // Set the speed of the projectile
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, direction, ModContent.ProjectileType<CrabBouncyProj>(), NPC.damage / 3, 1f);
                         }
-
                         Timer = 0;
                     }
                     break;

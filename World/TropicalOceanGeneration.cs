@@ -20,7 +20,7 @@ namespace WiitaMod.World
         {
             if (CaveStart != 0)
             {
-                tag["tropicalCaveStart"] = CaveStart;
+                tag["tropicalCaveStart"] = CaveStart; // real important for tropical caverns *biome*
             }
         }
         public override void LoadWorldData(TagCompound tag)
@@ -139,7 +139,6 @@ namespace WiitaMod.World
             GenerateSand();
             GenerateWater();
             GenerateCaveTunnel();
-            GenerateBeachLedge();
 
             RemoveTilesAbove();
 
@@ -148,6 +147,7 @@ namespace WiitaMod.World
             SurfaceMounds();
 
             GenerateBeach();
+            GenerateBeachLedge();
 
             RemoveAloneAndSmoothBlocks();
             PreventSandFalling();
@@ -160,7 +160,8 @@ namespace WiitaMod.World
             int width = BiomeWidth + 1;
             int maxDepth = BlockDepth;
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
-            ushort sandstoneID = (ushort)ModContent.TileType<CompressedSandstone>();
+            ushort compsandstoneID = (ushort)ModContent.TileType<CompressedSandstone>();
+            ushort sandstoneID = (ushort)TileID.HardenedSand;
             ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
 
             for (int i = 1; i < width; i++)
@@ -180,9 +181,12 @@ namespace WiitaMod.World
                     {
                         Main.tile[x, y].TileType = sandID;
 
-                        if (!Main.tile[x, y + 1].HasTile && Main.tile[x, y].TileType == sandID && y >= YStart + 100) // Check for floating sand blocks
+                        if (!Main.tile[x, y + 1].HasTile && Main.tile[x, y].TileType == sandID) // Check for floating sand blocks
                         {
-                            Main.tile[x, y].TileType = sandstoneID;
+                            if(y <= YStart + 100)
+                                Main.tile[x, y].TileType = sandstoneID;
+                            else
+                                Main.tile[x, y].TileType = compsandstoneID;
                         }
 
                         if (y >= top + 45)
@@ -197,6 +201,7 @@ namespace WiitaMod.World
                         Main.tile[x, y].Get<TileWallWireStateData>().Slope = SlopeType.Solid;
                         Main.tile[x, y].Get<TileWallWireStateData>().IsHalfBlock = false;
                         Main.tile[x, y].Get<TileWallWireStateData>().HasTile = true;
+                        Main.tile[x, y].LiquidAmount = 0;
                     }
                 }
 
@@ -352,27 +357,23 @@ namespace WiitaMod.World
 
         private void GenerateBeachLedge() 
         {
-            BeachWidth = WorldGen.genRand.Next(160, 200 + 1);
-            var searchCondition = Searches.Chain(new Searches.Down(3000), new Conditions.IsSolid());
+            BeachWidth = WorldGen.genRand.Next(120, 160 + 1);
+            //ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
             ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
 
 
-            // Stop immediately if for some strange reason a valid tile could not be located for the beach starting point.
-            if (!WorldUtils.Find(new Point(BiomeWidth + 4, (int)GenVars.worldSurfaceLow - 10), searchCondition, out Point determinedPoint))
-                return;
-
             // Create the beach ledge
-            for (int i = BiomeWidth + BeachWidth; i >= BiomeWidth; i++)
+            for (int i = BiomeWidth; i >= BiomeWidth - BeachWidth; i--)
             {
                 int x = GetActualX(i);
-                float xRatio = Utils.GetLerpValue(BiomeWidth, BiomeWidth + BeachWidth, i, true);
-                int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 90f + 1f);
-                for (int y = YStart + depth; y < YStart; y++)
+                float xRatio = Utils.GetLerpValue(BiomeWidth, BiomeWidth - BeachWidth, i, true);
+                int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 50f + 1f);
+                for (int y = YStart; y < YStart + depth; y++)
                 {
-                    Tile tileAtPosition = SafeTile(x, y);
+                    Tile t = SafeTile(x, y);
 
-                    WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
+                    WorldUtils.Gen(new (x, y), new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
                     {
                         new Actions.SetTile(sandID, true),
                     }));
@@ -430,7 +431,7 @@ namespace WiitaMod.World
             int maxDepth = BlockDepth;
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
             ushort sandstoneID = (ushort)ModContent.TileType<CompressedSandstone>();
-            ushort smoothsandstoneID = TileID.Sandstone;
+            ushort smoothsandstoneID = TileID.HardenedSand;
 
             int top = YStart - 90;
             int bottom = top + maxDepth + 1;
