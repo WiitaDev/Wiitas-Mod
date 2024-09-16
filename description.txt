@@ -1,4 +1,4 @@
-!! This Mod Is Very VERY Early Access!! 
+!! This Mod Is Very VERY Early Access !! 
 
 <!> Multiplayer Supported <!>
 
@@ -12,6 +12,8 @@ Wiita's Mod is a mediocre content mod that adds random stuff
 - 1 new mage weapon
 - 1 new summoner weapon
 - 3 new accessories
+
+<!!!> If you only want Hamis/Noita related content check the config <!!!>
 
 < Developers >
 - Wiita (Main dev, programming, some art & everything else)

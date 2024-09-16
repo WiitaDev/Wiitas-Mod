@@ -58,16 +58,15 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
             {
                 return;
             }
-            float turnSpeed = 150f;
+            float turnSpeed = 25f;
 
             // Homing calculations
             Vector2 targetPos = closestNPC.Center - Projectile.Center;
-            float length = targetPos.Length();
-            targetPos.Normalize();
+            targetPos.SafeNormalize(Vector2.UnitX);
 
-            Projectile.velocity = (Projectile.velocity * 20f + targetPos * (turnSpeed - length * 0.15f)) / 21f;
-            Projectile.velocity.Normalize();
-            Projectile.velocity *= 30;
+            Projectile.velocity = (Projectile.velocity * (turnSpeed - 1f) + targetPos) / turnSpeed;
+            //Projectile.velocity.Normalize();
+            //Projectile.velocity *= 30;
         }
 
         public override bool PreDraw(ref Color lightColor)

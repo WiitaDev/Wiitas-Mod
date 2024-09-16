@@ -24,10 +24,10 @@ namespace WiitaMod.Items.Weapons.Magic
 		public override void SetDefaults()
 		{
 
-            Item.damage = 30;
+            Item.damage = 28;
             Item.DamageType = DamageClass.Magic;
             Item.useStyle = ItemUseStyleID.Thrust;
-            Item.mana = 8;
+            Item.mana = 10;
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.reuseDelay = 10;
@@ -37,7 +37,7 @@ namespace WiitaMod.Items.Weapons.Magic
             Item.UseSound = SoundID.Item80;
             Item.shoot = ModContent.ProjectileType<InfernalAlmanacHold>();
             Item.rare = ItemRarityID.Orange;
-            Item.value = Item.sellPrice(0, 1);
+            Item.value = Item.sellPrice(0, 2);
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
@@ -61,8 +61,9 @@ namespace WiitaMod.Items.Weapons.Magic
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.HellstoneBar, 8);
+			recipe.AddIngredient(ItemID.HellstoneBar, 5);
 			recipe.AddIngredient(ItemID.Fireblossom, 3);
+			recipe.AddIngredient(ItemID.Book, 1);
 			recipe.AddTile(TileID.Bookcases);
 			recipe.Register();
 		}

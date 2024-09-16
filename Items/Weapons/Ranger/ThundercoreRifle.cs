@@ -26,7 +26,7 @@ namespace WiitaMod.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Item.damage = 580;
+            Item.damage = 480;
             Item.crit = 20;
             Item.noMelee = true;
             Item.DamageType = DamageClass.Ranged;
@@ -36,7 +36,7 @@ namespace WiitaMod.Items.Weapons.Ranger
             Item.useAnimation = 90;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 8;
-            Item.value = Item.sellPrice(0, 12, 0, 0);
+            Item.value = Item.sellPrice(0, 22, 0, 0);
             Item.rare = ItemRarityID.Yellow;
             Item.UseSound = SoundID.Thunder;
             Item.autoReuse = false;

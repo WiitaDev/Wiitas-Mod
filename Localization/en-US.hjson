@@ -189,11 +189,6 @@ Mods: {
 					Once fully charged the Fireballs explode on impact and home onto enemies
 					'''
 			}
-
-			CoralWarhammer: {
-				DisplayName: Coral Warhammer
-				Tooltip: ""
-			}
 		}
 
 		NPCs: {
@@ -218,10 +213,9 @@ Mods: {
 			CosmicBassArrow.DisplayName: Cosmic Bass Arrow
 			CosmicBassBowHold.DisplayName: Cosmic Bass Bow
 			BigCosmicBassArrow.DisplayName: Cosmic Bass
-			CosmicProjectile.DisplayName: Cosmic Projectile
-			InfernalAlmanacHold.DisplayName: Infernal Almanac Hold
+			CosmicProjectile.DisplayName: Cosmic Debri
+			InfernalAlmanacHold.DisplayName: Infernal Almanac
 			InfernalAlmanacProj.DisplayName: Infernal Fireball
-			CoralWarhammerHold.DisplayName: Coral Warhammer Hold
 		}
 
 		Tiles: {

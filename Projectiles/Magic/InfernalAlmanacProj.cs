@@ -6,7 +6,9 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Particles;
 using WiitaMod.Systems;
+using WiitaMod.Particles.ParticleSystems;
 
 namespace WiitaMod.Projectiles.Magic
 {
@@ -64,11 +66,12 @@ namespace WiitaMod.Projectiles.Magic
             CircleAround(player); // set position into orbit before spawning dust
 
             SoundEngine.PlaySound(SoundID.Item20, player.Center);
-            for (int i = 0; i < 20; i++)
+
+            for (int i = 0; i < 7; i++)
             {
-                Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Lava, Main.rand.NextVector2CircularEdge(Main.rand.Next(2, 5), Main.rand.Next(2, 5)), 0, default, 1.25f);
-                d.fadeIn = 0.1f;
-                d.noGravity = true;
+                SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Color.Orange, 90, 0.25f, 0.75f, MathHelper.ToRadians(2), true);
+
+                ParticleManager.SpawnParticle(smokeParticle);
             }
         }
 

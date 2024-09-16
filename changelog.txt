@@ -1,6 +1,7 @@
-0.2.2:
-- Tweaked the Hamis Pet sprite a little
-- Added the Gold Hamis (0.5% chance for a Hamis to be golden)
-- Hamis can now spawn in groups
-- Changed the icon to match upcoming content
-- Added the Infernal Almanac
+0.2.3:
+- Added a config to disable all other content except the Hamis/Noita related stuff
+- Added particles for better visuals
+- Changed the Hamis Statue sprite
+- Nerfed the Thundercore Rifle
+- Nerfed the Infernal Almanac
+- Reduced the Flamelaser weapons flame amount to one
