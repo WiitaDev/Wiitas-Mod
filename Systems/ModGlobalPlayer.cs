@@ -82,19 +82,22 @@ namespace WiitaMod.Systems
         public override void ModifyScreenPosition()
         {
             screenShakeTimerGlobal--;
-            if (screenShakeTimerGlobal < 0 && screenShakeTimerGlobal > -100)
+            if (ModContent.GetInstance<WiitaModClientConfig>().Screenshake)
             {
-                Main.screenPosition += new Vector2(Main.rand.Next(-screenShakeVelocity / 100, screenShakeVelocity / 100), Main.rand.Next(-screenShakeVelocity / 100, screenShakeVelocity / 100));
-                if (screenShakeVelocity >= 100)
+                if (screenShakeTimerGlobal < 0 && screenShakeTimerGlobal > -100)
                 {
-                    screenShakeVelocity -= 10;
+                    Main.screenPosition += new Vector2(Main.rand.Next(-screenShakeVelocity / 100, screenShakeVelocity / 100), Main.rand.Next(-screenShakeVelocity / 100, screenShakeVelocity / 100));
+                    if (screenShakeVelocity >= 100)
+                    {
+                        screenShakeVelocity -= 10;
+                    }
                 }
+                else
+                {
+                    screenShakeVelocity = 1000;
+                }
+                base.ModifyScreenPosition();
             }
-            else
-            {
-                screenShakeVelocity = 1000;
-            }
-            base.ModifyScreenPosition();
         }
 
 

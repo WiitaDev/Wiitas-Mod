@@ -225,12 +225,27 @@ Mods: {
 
 		Configs: {
 			WiitaModServerConfig: {
-				DisplayName: Wiita Mod Server Config
+				DisplayName: Wiita's Mod Server Config
 				Headers.Content: Content
 
 				OnlyHamis: {
 					Label: Only Hamis
 					Tooltip: Disables all content except Hamis/Noita related content
+				}
+
+				Screenshake: {
+					Label: Screenshake
+					Tooltip: Disables/Enables all screenshake effects
+				}
+			}
+
+			WiitaModClientConfig: {
+				DisplayName: Wiita's Mod Client Config
+				Headers.Visuals: Visuals
+
+				Screenshake: {
+					Label: Screenshake
+					Tooltip: ""
 				}
 			}
 		}
