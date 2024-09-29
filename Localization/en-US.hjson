@@ -139,7 +139,7 @@ Mods: {
 			}
 
 			TropicalSandstoneWallItem: {
-				DisplayName: Tropical Sandstone Wall Item
+				DisplayName: Tropical Sandstone Wall
 				Tooltip: ""
 			}
 
@@ -216,8 +216,13 @@ Mods: {
 			}
 
 			TropicalOceanPylonItem: {
-				Tooltip: ""
 				DisplayName: Tropical Ocean Pylon Item
+				Tooltip: ""
+			}
+
+			CompressedSandstoneItem: {
+				Tooltip: ""
+				DisplayName: Compressed Sandstone
 			}
 		}
 

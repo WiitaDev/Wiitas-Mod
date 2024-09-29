@@ -62,8 +62,6 @@ Items: {
 	}
 
 	CompressedSandstoneItem: {
-		Tooltip: ""
-		DisplayName: Compressed Sandstone Item
 	}
 }
 

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Terraria.DataStructures;
+using WiitaMod.World.TropicalOcean;
 
 namespace WiitaMod.World
 {
@@ -48,7 +49,7 @@ namespace WiitaMod.World
             {
                 tasks.Insert(Index + 1, new PassLegacy("Tropical Ocean", (progress, configuration) =>
                 {
-                    progress.Message = "Creating Tropical Ocean";
+                    progress.Message = "Creating The Tropical Ocean";
                     var tropicalOcean = ModContent.GetInstance<TropicalOceanGeneration>();
                     tropicalOcean.Generate();
                 }));
@@ -61,7 +62,7 @@ namespace WiitaMod.World
                 tasks.Insert(Index2, new PassLegacy("Shimmer", (progress, configuration) =>
                 {
                     progress.Message = "Relocate Shimmer";
-                    int num702 = 250; // changed this from 50 to 250 in order to get the shimmer to spawn lower, so that it doesn't collide with the tropical ocean !!!!!!!!!!!!!!!!!
+                    int num702 = 300; // changed this from 50 to 300 in order to get the shimmer to spawn lower, so that it doesn't collide with the tropical ocean !!!!!!!!!!!!!!!!!
                     int num703 = (int)(Main.worldSurface + Main.rockLayer) / 2 + num702;
                     int num704 = (int)((double)((Main.maxTilesY - 250) * 2) + Main.rockLayer) / 3;
                     if (num704 > Main.maxTilesY - 330 - 100 - 30)

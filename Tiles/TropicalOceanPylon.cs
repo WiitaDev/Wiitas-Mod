@@ -12,7 +12,7 @@ using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
 using WiitaMod.Items.Placeable;
 using WiitaMod.Systems;
-using WiitaMod.World;
+using WiitaMod.World.TropicalOcean;
 
 namespace WiitaMod.Tiles
 {

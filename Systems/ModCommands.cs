@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using WiitaMod.World;
+using WiitaMod.World.TropicalOcean;
 
 namespace WiitaMod.Systems
 {

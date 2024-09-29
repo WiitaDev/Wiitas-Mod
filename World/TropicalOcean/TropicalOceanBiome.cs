@@ -5,38 +5,39 @@ using Terraria.Graphics.Capture;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Tiles;
-using WiitaMod.Assets.Textures.Backgrounds;
-using Terraria.WorldBuilding;
+using WiitaMod.World.TropicalOcean.Background;
 
-namespace WiitaMod.World
+namespace WiitaMod.World.TropicalOcean
 {
     // Shows setting up two basic biomes. For a more complicated example, please request.
-    public class TropicalCavernsBiome : ModBiome
+    public class TropicalOceanBiome : ModBiome
     {
         // Select all the scenery
         //public override ModWaterStyle WaterStyle => ModContent.GetInstance<ExampleWaterStyle>(); // Sets a water style for when inside this biome
+        public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<TropicalOceanBackgroundStyle>();
         public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.GetInstance<TropicalCavernsBackgroundStyle>();
+
         public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
         // Select Music
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Assets/Music/TropicalCavernsMusic");
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Assets/Music/heisenburger");
 
         public override int BiomeTorchItemType => ItemID.CoralTorch;
         public override int BiomeCampfireItemType => ItemID.CoralCampfire;
 
         // Populate the Bestiary Filter
         public override string BestiaryIcon => base.BestiaryIcon;
-        public override string BackgroundPath => "WiitaMod/Assets/Textures/Backgrounds/TropicalCavernsMapBG";
+        public override string BackgroundPath => "WiitaMod/World/TropicalOcean/Background/TropicalOceanMapBG";
         public override Color? BackgroundColor => base.BackgroundColor;
         public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
 
         // Calculate when the biome is active.
         public override bool IsBiomeActive(Player player)
         {
-            bool b1 = ModContent.GetInstance<TropicalOceanTileCount>().tropicalSandstoneCount >= 240;
+            bool b1 = ModContent.GetInstance<TropicalOceanTileCount>().tropicalSandCount >= 120;
 
             // Limit this biome to the x area of the biome (english is not englishing)
             bool b2;
-            if (Main.dungeonX > Main.maxTilesX / 2) //true if dungeon is on the right side
+            if (Main.dungeonX > Main.maxTilesX / 2)
             {
                 b2 = player.position.ToTileCoordinates().X < TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
@@ -45,12 +46,25 @@ namespace WiitaMod.World
                 b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
 
+            bool b3 = player.ZoneSkyHeight || player.ZoneOverworldHeight || (player.position.ToTileCoordinates().Y < TropicalOceanGeneration.CaveStart);
 
-            bool b3 = player.position.ToTileCoordinates().Y < (TropicalOceanGeneration.CaveStart + 500) && player.position.ToTileCoordinates().Y > (TropicalOceanGeneration.CaveStart + 20);
-
-            return b1 && b2 && b3;
+            return b1 || (b2 && b3);
         }
 
-        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
+
+        // Declare biome priority. The default is BiomeLow so this is only necessary if it needs a higher priority.
+        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeMedium;
+    }
+
+    public class TropicalOceanTileCount : ModSystem
+    {
+        public int tropicalSandCount;
+        public int tropicalSandstoneCount;
+
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+        {
+            tropicalSandCount = tileCounts[ModContent.TileType<TropicalSand>()] + tileCounts[ModContent.TileType<CompressedSandstone>()];
+            tropicalSandstoneCount = tileCounts[ModContent.TileType<TropicalSand>()] + tileCounts[ModContent.TileType<CompressedSandstone>()];
+        }
     }
 }

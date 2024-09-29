@@ -9,7 +9,7 @@ using WiitaMod.Tiles;
 using Terraria.GameContent.Biomes.Desert;
 using Terraria.GameContent.Biomes;
 
-namespace WiitaMod.World
+namespace WiitaMod.World.TropicalOcean
 {
     class TropicalOceanTesting : ModSystem
     {

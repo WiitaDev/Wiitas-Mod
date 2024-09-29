@@ -1,10 +1,13 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Dusts;
 using WiitaMod.Projectiles.Magic;
 using WiitaMod.Systems.BossSystems;
 
@@ -38,8 +41,8 @@ namespace WiitaMod.NPCs.Bosses
 
         public override void SetDefaults()
         {
-            NPC.width = 200;
-            NPC.height = 200;
+            NPC.width = 256;
+            NPC.height = 256;
             NPC.damage = 22;
             NPC.defense = 10;
             NPC.lifeMax = 3200;
@@ -76,20 +79,41 @@ namespace WiitaMod.NPCs.Bosses
         {
             Timer++;
             NPC.TargetClosest(true);
+            Player target = Main.player[NPC.target];
 
-            if (NPC.life > 3200 * 0.8f) //more than 80% of health
+            float distanceToPlayer = Vector2.Distance(target.Center, NPC.Center);
+            float maxDistance = 4000f;
+
+            // Check if the player is too far away from the boss
+            if (distanceToPlayer > maxDistance || !target.active || target.dead)
+            {
+                NPC.EncourageDespawn(10);
+                NPC.noTileCollide = true;
+
+                for (int i = 0; i < 20; i++)
+                {
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Smoke);
+                }
+                return;
+            }
+            else 
+            {
+                NPC.noTileCollide = false;
+            }
+
+            if (NPC.life > 3200 * 0.7f) //more than 70% of health
             {
                 NPC.aiStyle = -1;
                 NPC.noGravity = false;
             }
             else
             {
-                if (NPC.aiStyle == -1) // phase change
+                if (NPC.aiStyle == -1) // phase change (run this code once)
                 {
                     SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/NerdDogSound"), NPC.Center);
+                    Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/CrabBossMusic2");
                     Timer = 0;
-                    NPC.aiStyle = -2;
-                    AIState = (int)AttackTypes.BouncyProjectiles;
+                    NPC.aiStyle = NPCAIStyleID.Unicorn;
                 }
             }
 
@@ -98,14 +122,11 @@ namespace WiitaMod.NPCs.Bosses
                 case (float)AttackTypes.BouncyProjectiles:
 
                     int attackInterval = NPC.aiStyle == -1 ? 60 : 30; // attack slower in first phase
-                    float projSpeed = NPC.aiStyle == -1 ? 5 : 7.5f;
-
+                    float projSpeed = NPC.aiStyle == -1 ? 5 : 9f;
                     if (Timer >= attackInterval)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Player target = Main.player[NPC.target];
-
                             // Calculate direction and speed of the projectile
                             Vector2 direction = target.Center - NPC.Center;
                             direction.Normalize();
@@ -119,6 +140,20 @@ namespace WiitaMod.NPCs.Bosses
 
         }
 
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (NPC.aiStyle != -1) //change to skating crab for phase 2
+            {
+                Texture2D Phase2Crab = ModContent.Request<Texture2D>("WiitaMod/NPCs/Bosses/CrabBoss2", AssetRequestMode.ImmediateLoad).Value;
+
+               // Color color = Color.White;
+               // color.A = 0;
+
+                Main.EntitySpriteDraw(Phase2Crab, NPC.BottomRight - Main.screenPosition, Phase2Crab.Frame(), drawColor, NPC.rotation, Phase2Crab.Size(), NPC.scale, 0, 0);
+                return false;
+            }
+            return true;
+        }
         public override void OnKill()
         {
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedTropicalCrabBoss, -1);

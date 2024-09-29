@@ -1,6 +1,6 @@
 using Terraria.ModLoader;
 
-namespace WiitaMod.Assets.Textures.Backgrounds
+namespace WiitaMod.World.TropicalOcean.Background
 {
     public class TropicalOceanBackgroundStyle : ModSurfaceBackgroundStyle
     {
@@ -30,7 +30,7 @@ namespace WiitaMod.Assets.Textures.Backgrounds
 
         public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
         {
-            return BackgroundTextureLoader.GetBackgroundSlot(Mod, "Assets/Textures/Backgrounds/TropicalOceanBackgroundClose");
+            return BackgroundTextureLoader.GetBackgroundSlot(Mod, "World/TropicalOcean/Background/TropicalOceanBackgroundClose");
         }
     }
 }

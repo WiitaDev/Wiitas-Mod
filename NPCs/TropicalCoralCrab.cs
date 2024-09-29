@@ -1,20 +1,8 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
-using WiitaMod.Items.Armor;
-using WiitaMod.Items.Pets;
-using WiitaMod.Items.Placeable;
-using WiitaMod.World;
+using WiitaMod.World.TropicalOcean;
 
 namespace WiitaMod.NPCs
 {
@@ -49,7 +37,7 @@ namespace WiitaMod.NPCs
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.Coral, minimumDropped: 3, maximumDropped: 8)); 
+            npcLoot.Add(ItemDropRule.Common(ItemID.Coral, minimumDropped: 3, maximumDropped: 8));
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

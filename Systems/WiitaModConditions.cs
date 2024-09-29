@@ -1,6 +1,6 @@
 using Terraria;
 using WiitaMod.Systems.BossSystems;
-using WiitaMod.World;
+using WiitaMod.World.TropicalOcean;
 
 namespace WiitaMod.Systems
 {
