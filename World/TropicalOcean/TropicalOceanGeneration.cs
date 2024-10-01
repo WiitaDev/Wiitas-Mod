@@ -10,6 +10,7 @@ using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 using WiitaMod.Tiles;
 using WiitaMod.Walls;
+using static System.Net.WebRequestMethods;
 
 namespace WiitaMod.World.TropicalOcean
 {
@@ -19,7 +20,7 @@ namespace WiitaMod.World.TropicalOcean
         {
             if (CaveStart != 0)
             {
-                tag["tropicalCaveStart"] = CaveStart; // real important for tropical caverns *biome*
+                tag["tropicalCaveStart"] = CaveStart; // real important for tropical caverns *biome* background and music stuff
             }
         }
         public override void LoadWorldData(TagCompound tag)
@@ -38,9 +39,7 @@ namespace WiitaMod.World.TropicalOcean
         }
 
 
-        public const int TotalSandBeforeWaterMin = 22;
-
-        public const int TotalSandBeforeWaterMax = 32;
+        public const int TotalSandBeforeWater = 30;
 
         public const float TopWaterDepthPercentage = 0.175f;
 
@@ -142,11 +141,11 @@ namespace WiitaMod.World.TropicalOcean
 
             RemoveTilesAbove();
 
-
-
             GenerateBeach();
             GenerateBeachLedge();
             SurfaceMounds();
+
+            CreateTrees();
 
             RemoveAloneAndSmoothBlocks();
             PreventSandFalling();
@@ -215,8 +214,7 @@ namespace WiitaMod.World.TropicalOcean
         public void GenerateWater()
         {
             int maxDepth = MaxTopWaterDepth;
-            int totalSandTilesBeforeWater = WorldGen.genRand.Next(TotalSandBeforeWaterMin, TotalSandBeforeWaterMax);
-            int width = (int)((BiomeWidth - totalSandTilesBeforeWater) * 0.895f);
+            int width = (int)((BiomeWidth - TotalSandBeforeWater) * 0.895f);
             float descentSmoothness = TopWaterDescentSmoothness;
 
             int heightSeed = WorldGen.genRand.Next();
@@ -238,7 +236,7 @@ namespace WiitaMod.World.TropicalOcean
 
                     Main.tile[x, y].WallType = WallID.None;
                     Main.tile[x, y].Get<TileWallWireStateData>().HasTile = false;
-                    WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([ new Actions.SetLiquid(0,255)]));
+                    WorldUtils.Gen(new(x, y), new Shapes.Rectangle(1, 1), Actions.Chain([new Actions.SetLiquid(0, 255)]));
 
 
                     if (i == width / 4 && y == bottom - 1) //Set Cavestart
@@ -273,7 +271,7 @@ namespace WiitaMod.World.TropicalOcean
                 }
 
                 // Clear water that's above the level for some reason.
-                for (int y = top - 150; y < top + 2; y++)
+                for (int y = top - 150; y < top; y++)
                     SafeTile(x, y).LiquidAmount = 0;
 
             }
@@ -286,7 +284,7 @@ namespace WiitaMod.World.TropicalOcean
             int dir = Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1;
             int startY = CaveStart + 20 + BlockDepth / 3;
 
-            Point bossCaveStart = new(GetActualX((int)((BiomeWidth - TotalSandBeforeWaterMax) * 0.8f)), CaveStart + (BiomeWidth - 400) / 10 + BlockDepth / 8);
+            Point bossCaveStart = new(GetActualX((int)((BiomeWidth - TotalSandBeforeWater) * 0.8f)), CaveStart + (BiomeWidth - 400) / 10 + BlockDepth / 8);
             int bossYRadius = 30;
             int bossXRadius = 55;
             var bossCircle = new Shapes.Circle(bossXRadius, bossYRadius);
@@ -354,21 +352,22 @@ namespace WiitaMod.World.TropicalOcean
 
         private void GenerateBeachLedge()
         {
-            BeachWidth = WorldGen.genRand.Next(150, 160 + 1);
+            int LedgeStart = (int)((BiomeWidth - TotalSandBeforeWater) * 0.895f);
+            int LedgeWidth = (int)(BiomeWidth * 0.42f);
             ushort sandID = (ushort)ModContent.TileType<TropicalSand>();
             ushort sandstoneID = TileID.HardenedSand;
             ushort wallID = (ushort)ModContent.WallType<TropicalSandstoneWall>();
 
 
             // Create the beach ledge
-            for (int i = BiomeWidth; i >= BiomeWidth - BeachWidth; i--)
+            for (int i = LedgeStart; i >= LedgeStart - LedgeWidth; i--)
             {
                 int x = GetActualX(i);
-                float xRatio = Utils.GetLerpValue(BiomeWidth, BiomeWidth - BeachWidth, i, true);
+                float xRatio = Utils.GetLerpValue(BiomeWidth, BiomeWidth - LedgeWidth, i, true);
                 int depth = (int)(Math.Sin((1f - xRatio) * MathHelper.PiOver2) * 50f + 1f);
                 for (int y = YStart; y < YStart + depth; y++)
                 {
-                    if(i <= BiomeWidth - BeachWidth + 3) { break; }
+                    if (i <= BiomeWidth - LedgeWidth + 3) { break; }
                     Tile t = SafeTile(x, y);
 
                     if (y > YStart + depth - WorldGen.genRand.Next(5, 8))
@@ -433,6 +432,36 @@ namespace WiitaMod.World.TropicalOcean
             }
         }
 
+        public void CreateTrees() 
+        {
+            for (int i = 1; i < BiomeWidth; i++)
+            {
+                // Only sometimes generate trees.
+                if (!WorldGen.genRand.NextBool(4))
+                    continue;
+
+                int x = GetActualX(i);
+                int y = YStart - 30;
+
+                // Search downward in hopes of finding a position to generate and grow an acorn.
+                // If no such downward tile exists, skip this tile.
+                if (!WorldUtils.Find(new(x, y), Searches.Chain(new Searches.Down(40), new Conditions.IsSolid()), out Point growPoint))
+                    continue;
+
+                x = growPoint.X;
+                y = growPoint.Y - 1;
+
+                // Ignore tiles if there's water above.
+                if (SafeTile(x, y).LiquidAmount > 0)
+                    continue;
+
+                Main.tile[x, y].TileType = TileID.Saplings;
+                Main.tile[x, y].Get<TileWallWireStateData>().HasTile = true;
+                if(!WorldGen.GrowPalmTree(x, y)) 
+                    WorldGen.KillTile(x, y);
+            }
+        }
+
         public void PreventSandFalling()
         {
             int width = BiomeWidth + 1;
@@ -449,7 +478,7 @@ namespace WiitaMod.World.TropicalOcean
                 for (int y = top; y < bottom; y++)
                 {
                     Tile tile = Main.tile[x, y];
-                    if (!WorldGen.SolidTile(Main.tile[x,y + 1])) // Check for floating sand blocks
+                    if (!WorldGen.SolidTile(Main.tile[x, y + 1])) // Check for floating sand blocks
                     {
                         if (tile.TileType == sandID)
                             tile.TileType = smoothsandstoneID;
@@ -471,7 +500,7 @@ namespace WiitaMod.World.TropicalOcean
                     if (WallsForDestroy.Contains(SafeTile(x, y).WallType))
                         SafeTile(x, y).WallType = 0;
 
-                    if (i > BiomeWidth - TotalSandBeforeWaterMax)
+                    if (i > BiomeWidth)
                     {
                         if (SafeTile(x, y).LiquidAmount > 0)
                         {
@@ -558,14 +587,14 @@ namespace WiitaMod.World.TropicalOcean
                     float noise = FractalBrownianMotion(i * 0.0079f, y * 0.0079f, heightSeed, 5) * 0.5f + 0.5f;
                     noise = MathHelper.Lerp(noise, 0.5f, Utils.GetLerpValue(width - 13f, width - 1f, i, true));
 
-                    int heightOffset = -(int)Math.Round(MathHelper.Lerp(-6, 10, noise));
+                    int heightOffset = -(int)Math.Round(MathHelper.Lerp(0, 10, noise));
                     for (int dy = 0; dy != heightOffset; dy += Math.Sign(heightOffset))
                     {
                         WorldUtils.Gen(new(x, y + dy), new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
                         {
                             heightOffset > 0 ? new Actions.ClearTile() : new Actions.SetTile(blockTileType, true),
                             new Actions.PlaceWall(MathHelper.Distance(dy, heightOffset) >= 3f && heightOffset < 0f ? wallID : WallID.None, true),
-                            new Actions.SetLiquid(),
+                            //new Actions.SetLiquid(),
                             new Actions.Smooth(true)
                         }));
                     }
@@ -656,6 +685,7 @@ namespace WiitaMod.World.TropicalOcean
             TileID.CrimsonThorns,
             TileID.CorruptPlants,
             TileID.CrimsonPlants,
+            TileID.MushroomPlants,
             TileID.DyePlants,
             TileID.Trees,
             TileID.Sunflower,
@@ -680,6 +710,7 @@ namespace WiitaMod.World.TropicalOcean
             TileID.Stalactite,
             TileID.ImmatureHerbs,
             TileID.MatureHerbs,
+            TileID.MushroomPlants,
             TileID.Pots,
             TileID.Pumpkins,
             TileID.FallenLog,

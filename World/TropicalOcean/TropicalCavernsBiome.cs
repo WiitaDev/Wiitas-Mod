@@ -25,7 +25,7 @@ namespace WiitaMod.World.TropicalOcean
 
         // Populate the Bestiary Filter
         public override string BestiaryIcon => base.BestiaryIcon;
-        public override string BackgroundPath => "WiitaMod/World/TropicalOcean/Background/TropicalCavernsMapBG";
+        public override string BackgroundPath => "WiitaMod/Assets/Textures/Backgrounds/TropicalCavernsMapBG";
         public override Color? BackgroundColor => base.BackgroundColor;
         public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
 

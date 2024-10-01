@@ -28,9 +28,9 @@ namespace WiitaMod.World.TropicalOcean.Background
             }
         }
 
-        public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
+        public override int ChooseFarTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot(Mod, "World/TropicalOcean/Background/TropicalOceanBackgroundClose");
+            return BackgroundTextureLoader.GetBackgroundSlot(Mod, "Assets/Textures/Backgrounds/TropicalOceanBackgroundClose");
         }
     }
 }

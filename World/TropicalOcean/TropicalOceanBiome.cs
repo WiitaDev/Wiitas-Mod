@@ -26,7 +26,7 @@ namespace WiitaMod.World.TropicalOcean
 
         // Populate the Bestiary Filter
         public override string BestiaryIcon => base.BestiaryIcon;
-        public override string BackgroundPath => "WiitaMod/World/TropicalOcean/Background/TropicalOceanMapBG";
+        public override string BackgroundPath => "WiitaMod/Assets/Textures/Backgrounds/TropicalOceanMapBG";
         public override Color? BackgroundColor => base.BackgroundColor;
         public override string MapBackground => BackgroundPath; // Re-uses Bestiary Background for Map Background
 
@@ -51,9 +51,8 @@ namespace WiitaMod.World.TropicalOcean
             return b1 || (b2 && b3);
         }
 
-
         // Declare biome priority. The default is BiomeLow so this is only necessary if it needs a higher priority.
-        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeMedium;
+        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
     }
 
     public class TropicalOceanTileCount : ModSystem
@@ -63,8 +62,8 @@ namespace WiitaMod.World.TropicalOcean
 
         public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
-            tropicalSandCount = tileCounts[ModContent.TileType<TropicalSand>()] + tileCounts[ModContent.TileType<CompressedSandstone>()];
-            tropicalSandstoneCount = tileCounts[ModContent.TileType<TropicalSand>()] + tileCounts[ModContent.TileType<CompressedSandstone>()];
+            tropicalSandCount = tileCounts[ModContent.TileType<TropicalSand>()];
+            tropicalSandstoneCount = tileCounts[ModContent.TileType<CompressedSandstone>()];
         }
     }
 }
