@@ -1,13 +1,7 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Input;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
-using Terraria.WorldBuilding;
-using Terraria.GameContent.Generation;
-using WiitaMod.Tiles;
-using Terraria.GameContent.Biomes.Desert;
-using Terraria.GameContent.Biomes;
 
 namespace WiitaMod.World.TropicalOcean
 {

@@ -10,7 +10,6 @@ using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 using WiitaMod.Tiles;
 using WiitaMod.Walls;
-using static System.Net.WebRequestMethods;
 
 namespace WiitaMod.World.TropicalOcean
 {
@@ -30,7 +29,8 @@ namespace WiitaMod.World.TropicalOcean
 
         public override void NetSend(BinaryWriter writer)
         {
-            writer.Write(CaveStart);
+            if(CaveStart != 0)
+                writer.Write(CaveStart);
         }
 
         public override void NetReceive(BinaryReader reader)

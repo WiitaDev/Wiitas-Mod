@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Tiles;
 using WiitaMod.World.TropicalOcean.Background;
+using WiitaMod.World.TropicalOcean.TropicalWater;
 
 namespace WiitaMod.World.TropicalOcean
 {
@@ -13,7 +14,7 @@ namespace WiitaMod.World.TropicalOcean
     public class TropicalOceanBiome : ModBiome
     {
         // Select all the scenery
-        //public override ModWaterStyle WaterStyle => ModContent.GetInstance<ExampleWaterStyle>(); // Sets a water style for when inside this biome
+        public override ModWaterStyle WaterStyle => ModContent.GetInstance<TropicalWaterStyle>(); // Sets a water style for when inside this biome
         public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<TropicalOceanBackgroundStyle>();
         public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.GetInstance<TropicalCavernsBackgroundStyle>();
 
@@ -46,7 +47,7 @@ namespace WiitaMod.World.TropicalOcean
                 b2 = player.position.ToTileCoordinates().X > TropicalOceanGeneration.GetActualX(TropicalOceanGeneration.BiomeWidth);
             }
 
-            bool b3 = player.ZoneSkyHeight || player.ZoneOverworldHeight || (player.position.ToTileCoordinates().Y < TropicalOceanGeneration.CaveStart);
+            bool b3 = player.ZoneSkyHeight || player.ZoneOverworldHeight || (player.position.ToTileCoordinates().Y < TropicalOceanGeneration.CaveStart + 10);
 
             return b1 || (b2 && b3);
         }

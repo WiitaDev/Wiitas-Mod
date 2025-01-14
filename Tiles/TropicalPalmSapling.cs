@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Numerics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -21,26 +22,28 @@ namespace WiitaMod.Tiles
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileLavaDeath[Type] = true;
-
-            TileID.Sets.CommonSapling[Type] = true;
-            TileID.Sets.TreeSapling[Type] = true;
-            TileID.Sets.SwaysInWindBasic[Type] = true;
-            TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
             TileObjectData.newTile.Width = 1;
             TileObjectData.newTile.Height = 2;
             TileObjectData.newTile.Origin = new Point16(0, 1);
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
+            TileObjectData.newTile.CoordinateHeights = new[] {16, 18};
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
-            TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<TropicalSand>() };
+            TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<TropicalSand>()};
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.DrawFlipHorizontal = true;
             TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
             TileObjectData.newTile.LavaDeath = true;
             TileObjectData.newTile.RandomStyleRange = 3;
+
             TileObjectData.addTile(Type);
+
+            TileID.Sets.TreeSapling[Type] = true;
+            TileID.Sets.CommonSapling[Type] = true;
+            TileID.Sets.SwaysInWindBasic[Type] = true;
+            TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]); // Make this tile interact with golf balls in the same way other plants do
+
             AddMapEntry(new Color(113, 90, 71), Language.GetText("MapObject.Sapling"));
             DustType = DustID.PalmWood;
             AdjTiles = new int[] { TileID.Saplings };
@@ -83,24 +86,37 @@ namespace WiitaMod.Tiles
 
     public class TropicalPalmTree : ModPalmTree
     {
+        private Asset<Texture2D> texture;
+        private Asset<Texture2D> topsTexture;
+        private Asset<Texture2D> oasisTopsTexture;
+
         public override void SetStaticDefaults()
         {
-            GrowsOnTileId = new int[] {ModContent.TileType<TropicalSand>() };
+            GrowsOnTileId = new int[1] {ModContent.TileType<TropicalSand>() };
+            texture = ModContent.Request<Texture2D>("WiitaMod/Tiles/TropicalPalm");
+            topsTexture = ModContent.Request<Texture2D>("WiitaMod/Tiles/TropicalPalmTops");
+            oasisTopsTexture = ModContent.Request<Texture2D>("WiitaMod/Tiles/TropicalPalmOasisTops");
         }
 
         public override TreePaintingSettings TreeShaderSettings => new TreePaintingSettings
         {
             UseSpecialGroups = true,
-            SpecialGroupMinimalHueValue = 0.153f,
+            SpecialGroupMinimalHueValue = 11f / 72f,
             SpecialGroupMaximumHueValue = 0.25f,
-            SpecialGroupMinimumSaturationValue = 0.8802f,
+            SpecialGroupMinimumSaturationValue = 0.88f,
             SpecialGroupMaximumSaturationValue = 1f
         };
 
-        public override Asset<Texture2D> GetTopTextures() => ModContent.Request<Texture2D>("CalamityMod/Tiles/Abyss/AcidWoodTreeTops");
-        public override Asset<Texture2D> GetTexture() => ModContent.Request<Texture2D>("CalamityMod/Tiles/Abyss/AcidWoodTree");
+        public override Asset<Texture2D> GetTexture() => texture;
+        public override Asset<Texture2D> GetTopTextures() => topsTexture;
+        public override Asset<Texture2D> GetOasisTopTextures() => oasisTopsTexture;
 
-        public override Asset<Texture2D> GetOasisTopTextures() => ModContent.Request<Texture2D>("CalamityMod/Tiles/Abyss/AcidWoodTreeOasisTops");
+
+        public override int SaplingGrowthType(ref int style)
+        {
+            style = 1;
+            return ModContent.TileType<TropicalPalmSapling>();
+        }
 
         public override int DropWood() => ItemID.PalmWood;
     }
