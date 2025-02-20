@@ -5,6 +5,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
+using WiitaMod.Tiles;
+using WiitaMod.Buffs;
 
 namespace WiitaMod.Systems
 {
@@ -111,12 +113,6 @@ namespace WiitaMod.Systems
                 Player.longInvince = true; //longInvince so that other accessories dont stack (this doesn't even work lol)
             }
             base.UpdateEquips();
-        }
-
-        public override void PostUpdateBuffs()
-        {
-
-
         }
 
         // Vanilla applies immunity time before this method and after PreHurt and Hurt

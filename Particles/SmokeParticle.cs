@@ -8,7 +8,7 @@ using WiitaMod.Particles.ParticleSystems;
 
 namespace WiitaMod.Particles
 {
-    public class SmokeParticle : Particle //this is lifted form the public calamity mod repository
+    public class SmokeParticle : Particle //this is lifted from the public calamity mod repository
     {
         public override bool SetLifetime => true;
         public override int FrameVariants => 7;

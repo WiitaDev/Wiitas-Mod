@@ -10,6 +10,11 @@ Mods: {
 				DisplayName: Shadowflame Apparition
 				Description: The Shadow Apparition will fight for you
 			}
+
+			BassBucketBuff: {
+				DisplayName: Bass Stench
+				Description: Bass Arrows deal 1% increased damage
+			}
 		}
 
 		Items: {
@@ -189,6 +194,20 @@ Mods: {
 					Once fully charged the Fireballs explode on impact and home onto enemies
 					'''
 			}
+
+			BassBucketItem: {
+				DisplayName: Bass Bucket
+				Tooltip: Increases bass arrows damage by 1%
+			}
+
+			PressureWasher: {
+				DisplayName: Pressure Washer
+				Tooltip:
+					'''
+					Ignores 75% of enemy defense
+					'Wash your enemies with 3000 PSI water!'
+					'''
+			}
 		}
 
 		NPCs: {
@@ -216,11 +235,15 @@ Mods: {
 			CosmicProjectile.DisplayName: Cosmic Debri
 			InfernalAlmanacHold.DisplayName: Infernal Almanac
 			InfernalAlmanacProj.DisplayName: Infernal Fireball
+			PressureWasherHold.DisplayName: Pressure Washer Hold
+			PressureWasherProj.DisplayName: Pressure Washer Proj
+			PressureWasherPathProj.DisplayName: Pressure Washer Path Proj
 		}
 
 		Tiles: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
+			BassBucket.MapEntry: Bass Bucket
 		}
 
 		Configs: {
@@ -245,7 +268,7 @@ Mods: {
 
 				Screenshake: {
 					Label: Screenshake
-					Tooltip: ""
+					Tooltip: Disables/Enables all screenshake effects
 				}
 			}
 		}

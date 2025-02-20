@@ -12,7 +12,7 @@ namespace WiitaMod.Particles.ParticleSystems
 
     public class ParticleManager //This code is form the Spirit Mods ParticleHandler
     {
-        private static readonly int MaxParticlesAllowed = 500;
+        private static readonly int MaxParticlesAllowed = 1000;
 
         private static List<Particle> particles;
         //List containing the particles to delete

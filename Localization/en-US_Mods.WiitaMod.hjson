@@ -73,6 +73,9 @@ Items: {
 
 	MedievalProsthetic: {
 	}
+
+	BassBucketItem: {
+	}
 }
 
 Buffs: {
@@ -80,5 +83,8 @@ Buffs: {
 	}
 
 	HamisPetBuff: {
+	}
+
+	BassBucketBuff: {
 	}
 }

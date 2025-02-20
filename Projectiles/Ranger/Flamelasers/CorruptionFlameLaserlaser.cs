@@ -226,6 +226,7 @@ namespace WiitaMod.Projectiles.Ranger.Flamelasers
                 }
             }
         }
+
         private void ChargeLaser(Player player)
         {
             // Kill the projectile if the player stops channeling

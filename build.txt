@@ -1,5 +1,5 @@
 displayName = Wiita's Mod
 author = Wiita
-version = 0.2.3
+version = 0.2.4
 buildIgnore = .gitignore, *.sln, *.csproj, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*, Effects\fxCompiler\*
 hideCode = true

@@ -81,7 +81,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                 }
                 BurstTimer++;
             }
-            if (IsAtMaxCharge && !player.channel || Projectile.timeLeft == 1)
+            if (Charge >= MAX_CHARGE - 1  && !player.channel || Projectile.timeLeft == 1)
             {
                 ShootBig(player);
                 Projectile.Kill();
@@ -89,7 +89,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
 
             if (IsAtMaxCharge)
             {
-                turnSpeed = 0.1f;
+                turnSpeed = 0.15f;
             }
         }
 

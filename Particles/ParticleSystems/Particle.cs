@@ -49,7 +49,7 @@ namespace WiitaMod.Particles.ParticleSystems
         /// <summary>
         /// Call this when you want to clear your particle and remove it from the world.
         /// </summary>
-        public void Kill() => ParticleManager.DeleteParticleAtIndex(ID);
+        public void Kill() => ParticleManager.RemoveParticle(this);
 
         /// <summary>
         /// Called every tick. Update your particle in this method.

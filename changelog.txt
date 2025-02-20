@@ -1,8 +1,3 @@
-0.2.3:
-- Added a config to disable all other content except the Hamis/Noita related stuff
-- Added a config to disable screenshake effects
-- Added particles for better visuals
-- Changed the Hamis Statue sprite
-- Nerfed the Thundercore Rifle
-- Nerfed the Infernal Almanac
-- Reduced the Flamelaser weapons to shoot only one flame
+0.2.4:
+- Added Bass Bucket (buff station)
+- Added Pressure Washer weapon
