@@ -4,7 +4,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Projectiles.Ranger;
-using WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger
@@ -36,7 +35,7 @@ namespace WiitaMod.Items.Weapons.Ranger
             Item.knockBack = 4f;
             Item.width = 78;
             Item.height = 42;
-                Item.damage = 15;
+                Item.damage = 20;
             //Item.UseSound = SoundID.Item100;
             Item.shoot = ProjectileID.WaterGun;
             Item.rare = ItemRarityID.Blue;
@@ -59,8 +58,9 @@ namespace WiitaMod.Items.Weapons.Ranger
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemID.WaterGun);
 			recipe.AddRecipeGroup("PrehardTier2", 12);
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
 

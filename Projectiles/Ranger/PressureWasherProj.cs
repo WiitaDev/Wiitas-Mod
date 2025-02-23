@@ -23,8 +23,8 @@ namespace WiitaMod.Projectiles.Ranger
 
         public const float MaxDistance = 650f;
 
-        public List<Vector2> points;
         public List<Projectile> pathProjectiles;
+        public List<List<Projectile>> connectedPaths;
 
         public Vector2 endPoint;
 
@@ -41,8 +41,7 @@ namespace WiitaMod.Projectiles.Ranger
             Projectile.penetrate = -1;
             Projectile.timeLeft = 69420;
             Projectile.tileCollide = false;
-            Projectile.manualDirectionChange = true;
-            Projectile.extraUpdates = 2;
+            Projectile.extraUpdates = 0;
             Projectile.usesIDStaticNPCImmunity = true;
             Projectile.idStaticNPCHitCooldown = 7;
         }
@@ -55,22 +54,17 @@ namespace WiitaMod.Projectiles.Ranger
 
             if (!player.channel)
             {
-                Projectile.Kill();
-                return;
+                if (Projectile.timeLeft > 19)
+                    Projectile.timeLeft = 19;
             }
 
-            if (Main.myPlayer == Projectile.owner && (Time % (1 + Projectile.extraUpdates) == 0 || Time <= (1 + Projectile.extraUpdates)))
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 35, Projectile.velocity * 35, ModContent.ProjectileType<PressureWasherPathProj>(), Projectile.damage, 0, Projectile.owner, Time % 5);
+            if (Main.myPlayer == Projectile.owner && player.channel)
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 35, Projectile.velocity * 35, ModContent.ProjectileType<PressureWasherPathProj>(), Projectile.damage, 0, Projectile.owner);
 
             if (Time > 0)
             {
-                endPoint = Projectile.Center;
-                FindEndpoint();
-
-                points = new List<Vector2>();
                 pathProjectiles = new List<Projectile>();
-
-                //points.Add(Projectile.Center);
+                connectedPaths = new List<List<Projectile>>();
 
                 for (int i = 0; i < Main.maxProjectiles; i++)
                 {
@@ -80,19 +74,8 @@ namespace WiitaMod.Projectiles.Ranger
                         pathProjectiles.Add(proj);
                     }
                 }
-                pathProjectiles = pathProjectiles.OrderBy(proj => proj.ai[0]).ToList();
 
-                List<Vector2> bezierPoints = new List<Vector2>();
-                foreach (Projectile proj in pathProjectiles)
-                {
-                    bezierPoints.Add(proj.Center);
-                }
-                //bezierPoints.Add(endPoint);
-                points = new BezierCurve(bezierPoints).GetPoints(pathProjectiles.Count * 2);
-                endPoint = points[^1];
-
-                //points.Add(endPoint);
-
+                connectedPaths = GetAllConnectedPaths(pathProjectiles);
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -103,7 +86,7 @@ namespace WiitaMod.Projectiles.Ranger
                     dustS.alpha = Main.rand.Next(100, 245);
                 }
 
-                if (Time % 40 == 0 || Time == 0)
+                if (Time % 10 == 0 || Time == 0)
                 {
                     SoundEngine.PlaySound(SoundID.Item13.WithPitchOffset(Main.rand.NextFloat(0.25f, 0.35f)), player.Center);
                 }
@@ -112,6 +95,59 @@ namespace WiitaMod.Projectiles.Ranger
 
             Time++;
             Projectile.localAI[0] = Time;
+        }
+
+        List<List<Projectile>> GetAllConnectedPaths(List<Projectile> projectiles)
+        {
+            // Sort projectiles by ai[0] for easier grouping
+            List<Projectile> sorted = projectiles.OrderBy(p => p.ai[0]).ToList();
+            List<List<Projectile>> connectedPaths = new List<List<Projectile>>();
+            HashSet<Projectile> visited = new HashSet<Projectile>();
+
+            foreach (Projectile proj in sorted)
+            {
+                if (!visited.Contains(proj))
+                {
+                    List<Projectile> currentPath = new List<Projectile>();
+                    ExplorePath(proj, sorted, visited, currentPath);
+
+                    if (currentPath.Count >= 2)
+                    {
+                        connectedPaths.Add(currentPath);
+                    }
+                }
+            }
+
+            return connectedPaths;
+        }
+
+        void ExplorePath(Projectile current, List<Projectile> sorted, HashSet<Projectile> visited, List<Projectile> path)
+        {
+            visited.Add(current);
+            path.Add(current);
+
+            // Find neighbors (previous and next in ai[0] sequence)
+            int currentIndex = sorted.IndexOf(current);
+
+            // Check previous projectile
+            if (currentIndex > 0)
+            {
+                Projectile prev = sorted[currentIndex - 1];
+                if (!visited.Contains(prev) && Math.Abs(prev.ai[0] - current.ai[0]) == 1)
+                {
+                    ExplorePath(prev, sorted, visited, path);
+                }
+            }
+
+            // Check next projectile
+            if (currentIndex < sorted.Count - 1)
+            {
+                Projectile next = sorted[currentIndex + 1];
+                if (!visited.Contains(next) && Math.Abs(next.ai[0] - current.ai[0]) == 1)
+                {
+                    ExplorePath(next, sorted, visited, path);
+                }
+            }
         }
 
         private void UpdatePlayer(Player player)
@@ -124,7 +160,7 @@ namespace WiitaMod.Projectiles.Ranger
                     aim = -Vector2.UnitY;
                 }
 
-                aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(Projectile.velocity), aim, 0.15f)); // last variable is the turn speed
+                aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(Projectile.velocity), aim, 0.3f)); // last variable is the turn speed
                 aim *= 1f;
 
                 if (aim != Projectile.velocity)
@@ -143,149 +179,94 @@ namespace WiitaMod.Projectiles.Ranger
             player.itemRotation = (float)Math.Atan2(Projectile.velocity.Y * dir, Projectile.velocity.X * dir); // Set the item rotation to where we are shooting
         }
 
-        private void FindEndpoint()
-        {
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Player player = Main.player[Projectile.owner];
-
-                int samplePointCount = 5;
-                float[] laserLengthSamplePoints = new float[samplePointCount];
-                Collision.LaserScan(Projectile.Center, Projectile.velocity, Projectile.scale, MaxDistance, laserLengthSamplePoints);
-                float tileDistance = laserLengthSamplePoints.Average();
-
-                float closestDistance = tileDistance;
-                float point = 10;
-                for (int k = 0; k < Main.maxNPCs; k++)
-                {
-                    NPC target = Main.npc[k];
-                    if (target.active)
-                    {
-                        if (Collision.CheckAABBvLineCollision(target.position, target.Hitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance, 10, ref point))
-                        {
-                            float distance = Vector2.Distance(Projectile.Center, target.Center);
-                            if (distance < closestDistance)
-                            {
-                                closestDistance = distance;
-                            }
-                        }
-                    }
-                }
-
-                if (Distance >= closestDistance) Distance = closestDistance;
-                else
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (Distance >= closestDistance)
-                        {
-                            Distance = closestDistance;
-                            break;
-                        }
-                        Distance += 1f;
-                    }
-                }
-
-                if (Distance > MaxDistance) Distance = MaxDistance;
-                Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
-
-                endPoint = end;
-            }
-        }
-
-        /*public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            Rectangle hitbox = new Rectangle((int)Projectile.Center.X - 5, (int)Projectile.Center.Y - 5, 10, 10);
-
-            if (Time > 2)
-            {
-                Rectangle endpointHitbox = new Rectangle((int)endPoint.X - 5, (int)endPoint.Y - 5, 10, 10);
-                for (int i = 0; i < points.Count - 1; i++)
-                {
-                    Vector2 center = Vector2.Lerp(points[i], points[i + 1], 0.5f);
-                    hitbox.Location = (center - hitbox.Size() * 0.5f).ToPoint();
-
-                    if (targetHitbox.Intersects(hitbox) || targetHitbox.Intersects(endpointHitbox))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }*/
-
         public override bool PreDraw(ref Color lightColor)
         {
             if (Time > 1)
             {
-                Player player = Main.player[Projectile.owner];
-
-                Texture2D texture = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Trail_1", AssetRequestMode.ImmediateLoad).Value;
-                Texture2D noise = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/PerlinNoise", AssetRequestMode.ImmediateLoad).Value;
-                Texture2D glow = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Glow", AssetRequestMode.ImmediateLoad).Value;
-                VertexStrip strip = new VertexStrip();
-
-                Color color = Color.CadetBlue.MultiplyRGBA(lightColor);
-                color.A = 125;
-                Color endpointColor = Color.CadetBlue.MultiplyRGBA(new Color(Lighting.GetSubLight(endPoint)));
-                endpointColor.A = 125;
-
-
-                Color StripColor(float progress) => Color.Lerp(color, endpointColor, progress * 2) * Math.Clamp(0.5f - (Distance / MaxDistance / 2) + (0.5f - progress), 0.1f, 0.5f); // good luck trying to understand this :(
-
-                float StripWidth(float progress) => (2f + progress * pathProjectiles[^1].ai[0]) * 6f;
-
-                Vector2[] position = new Vector2[points.Count];
-                float[] rotation = new float[points.Count];
-
-                for (int i = 0; i < position.Length; i++)
+                foreach (List<Projectile> projectiles in connectedPaths)
                 {
-                    //if (i <= 1 || points[i].Distance(player.MountedCenter) > points[i - 1].Distance(player.MountedCenter))
-                        position[i] = points[i];
-                }
+                    if (projectiles.Count < 2) continue;
 
-                for (int i = 0; i < position.Length; i++)
-                    rotation[i] = Projectile.AngleTo(endPoint);
+                    Player player = Main.player[Projectile.owner];
 
-                rotation[position.Length - 1] = Projectile.AngleTo(endPoint);
+                    Texture2D texture = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Trail_1", AssetRequestMode.ImmediateLoad).Value;
+                    Texture2D noise = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/PerlinNoise", AssetRequestMode.ImmediateLoad).Value;
+                    Texture2D tip = ModContent.Request<Texture2D>("WiitaMod/Particles/Mist", AssetRequestMode.ImmediateLoad).Value;
+                    VertexStrip strip = new VertexStrip();
 
-                strip.PrepareStrip(position, rotation, StripColor, StripWidth, -Main.screenPosition, position.Length * 2, true);
+                    Color color = Color.CadetBlue.MultiplyRGBA(lightColor);
+                    color.A = 125;
+                    Color endpointColor = Color.CadetBlue.MultiplyRGBA(new Color(Lighting.GetSubLight(projectiles[^1].Center)));
+                    endpointColor.A = 125;
 
-                Effect effect = ModContent.Request<Effect>("WiitaMod/Effects/WaterStreamEffect", AssetRequestMode.ImmediateLoad).Value;
-                effect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-                effect.Parameters["uTexture"].SetValue(texture);
-                effect.Parameters["uNoise"].SetValue(noise);
-                effect.Parameters["uFlowSpeed"].SetValue(new Vector2(-4, 0f));
-                effect.Parameters["uDistortionStrength"].SetValue(0.0f);
-                effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects / 60f);
-                effect.CurrentTechnique.Passes[0].Apply();
 
-                strip.DrawTrail();
+                    Color StripColor(float progress) => Color.Lerp(color, endpointColor, progress * 2) * Math.Clamp(0.5f - (projectiles[(int)(progress * 2 * projectiles.Count)].ai[0] / 18 / 2), 0.0f, 0.5f); // good luck trying to understand this :(
 
-                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+                    float StripWidth(float progress) => (2f + projectiles[(int)(progress * 2 * projectiles.Count)].ai[0]) * 4f;
 
-                //Main.EntitySpriteDraw(glow, endPoint - Main.screenPosition, glow.Frame(), endpointColor, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 0.4f, 0, 0);
+                    Vector2[] position = new Vector2[projectiles.Count];
 
-                foreach (Vector2 point in points) 
-                {
-                    if (Main.rand.NextBool(21))
+                    for (int i = 0; i < position.Length; i++)
                     {
-                        Color pointColor = new Color(Lighting.GetSubLight(point));
-                        MistParticle particle = new MistParticle(point + Main.rand.NextVector2Square(-10, 11), Main.rand.NextVector2Circular(4f, 4f), pointColor, pointColor, Main.rand.NextFloat(0.15f, 0.35f), 255 - Main.rand.Next(50, 125), MathHelper.ToRadians(2));
-                        ParticleManager.SpawnParticle(particle);
+                        position[i] = projectiles[i].Center;
+                    }
+                    position = new BezierCurve(position.ToList()).GetPoints(30).ToArray();
+
+                    float[] rotation = new float[position.Length];
+                    for (int i = 0; i < position.Length; i++)
+                    {
+                        if (i == 0 || i == 1)
+                        {
+                            rotation[i] = (position[2 + i] - position[0 + i]).ToRotation();
+                        }
+                        else
+                        {
+                            rotation[i] = (position[i] - position[i - 2]).ToRotation();
+                        }
                     }
 
-                    if(point == points[^1]) 
+                    strip.PrepareStrip(position, rotation, StripColor, StripWidth, -Main.screenPosition, position.Length * 2, true);
+
+                    Effect effect = ModContent.Request<Effect>("WiitaMod/Effects/WaterStreamEffect", AssetRequestMode.ImmediateLoad).Value;
+                    effect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+                    effect.Parameters["uTexture"].SetValue(texture);
+                    effect.Parameters["uNoise"].SetValue(noise);
+                    effect.Parameters["uFlowSpeed"].SetValue(new Vector2(-4, 0f));
+                    effect.Parameters["uDistortionStrength"].SetValue(0.0f);
+                    effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects / 60f);
+                    effect.CurrentTechnique.Passes[0].Apply();
+
+                    strip.DrawTrail();
+
+                    Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+                    endpointColor.A = 0;
+                    Main.EntitySpriteDraw(tip, position[^1] - Main.screenPosition, tip.Frame(verticalFrames: 3, frameY: 1), endpointColor * (1 - (projectiles[^2].ai[0] / 18)), MathHelper.ToRadians(Main.rand.Next(0, 361)), new Vector2(tip.Width / 2, tip.Height / 2 / 3), projectiles[^1].ai[0] * 0.1f + Main.rand.NextFloat(0f, 0.2f), 0, 0);
+
+                    foreach (Vector2 point in position)
                     {
-                        Color pointColor = new Color(Lighting.GetSubLight(point));
-                        MistParticle particle = new MistParticle(point + Main.rand.NextVector2Square(-10, 11), Main.rand.NextVector2Circular(5f, 5f), pointColor, pointColor, Main.rand.NextFloat(0.15f, 0.35f), 255 - Main.rand.Next(50, 125), MathHelper.ToRadians(2));
-                        ParticleManager.SpawnParticle(particle);
+                        float age = 0;
+                        float closest = -1;
+                        for (int i = 0; i < projectiles.Count - 1; i++)
+                        {
+                            if (projectiles[i].Distance(point) < closest || closest == -1)
+                            {
+                                closest = projectiles[i].Distance(point);
+                                age = projectiles[i].ai[0];
+                            }
+                        }
+
+                        if (Main.rand.NextBool(20 - (int)age))
+                        {
+                            Color pointColor = new Color(Lighting.GetSubLight(point));
+                            MistParticle particle = new MistParticle(point + Main.rand.NextVector2Circular(10 + age, 10 + age), Main.rand.NextVector2Circular(4f + age / 10, 4f + age / 10), pointColor, pointColor, Main.rand.NextFloat(0.15f, 0.35f) + age * 0.02f, 255 - Main.rand.Next(75, 125) - age * 2, MathHelper.ToRadians(2));
+                            ParticleManager.SpawnParticle(particle);
+                        }
                     }
+
+
+                    SpriteEffects spriteEffects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 }
-
-
-                SpriteEffects spriteEffects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             }
             return false;
@@ -302,7 +283,7 @@ namespace WiitaMod.Projectiles.Ranger
     {
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
 
-        public const float maxTimeleft = 18;
+        public const float maxTimeleft = 18 * (1 + 1); // multiplied by 1 + extraUpdates
 
         public ref float Time => ref Projectile.ai[0];
 
@@ -311,36 +292,26 @@ namespace WiitaMod.Projectiles.Ranger
             Projectile.width = 10;
             Projectile.height = 10;
             Projectile.friendly = true;
-            Projectile.extraUpdates = 0;
-            Projectile.timeLeft = 18;
+            Projectile.extraUpdates = 1;
+            Projectile.timeLeft = (int)maxTimeleft;
             Projectile.penetrate = 2;
-            Projectile.tileCollide = false;
-            Projectile.manualDirectionChange = true;
+            Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Ranged;
         }
 
-        public override bool ShouldUpdatePosition()
+        public override void OnSpawn(IEntitySource source)
         {
-            if(Projectile.timeLeft == maxTimeleft)
-                return true;
-            else
-                return true;
-        }
-
-        public override void ModifyDamageHitbox(ref Rectangle hitbox)
-        {
-            float multiplier = 1.5f + maxTimeleft / 10 - Projectile.timeLeft * 0.1f;
-            hitbox = new Rectangle((int)(hitbox.X - (hitbox.Width / 2)), (int)(hitbox.Y - (hitbox.Height / 2)), (int)(hitbox.Width * multiplier), (int)(hitbox.Height * multiplier));
+            Projectile.velocity /= 1 + Projectile.extraUpdates;
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             modifiers.ArmorPenetration += target.defense * 0.75f;
-            if(Projectile.timeLeft >= maxTimeleft - 1) 
+            if (Time <= 1.5f)
             {
                 modifiers.FinalDamage *= 2f;
             }
-            else 
+            else
             {
                 modifiers.FinalDamage *= Projectile.timeLeft / maxTimeleft + 0.1f;
             }
@@ -348,18 +319,20 @@ namespace WiitaMod.Projectiles.Ranger
 
         public override void AI()
         {
-            if (Projectile.timeLeft == maxTimeleft - 1)
-            {
 
+            if (Time < 0.5f)
+            {
+                Projectile.friendly = false;
             }
             else
             {
-                Projectile.tileCollide = true;
-            }
-
-            if (Main.player[Projectile.owner].channel == false)
-            {
-                Projectile.Kill();
+                if (Projectile.owner == Main.myPlayer)
+                {
+                    CheckLavaCollision();
+                }
+                if (Time % 1 == 0)
+                    Projectile.Resize(10 + (int)Time, 10 + (int)Time);
+                Projectile.friendly = true;
             }
 
             for (int k = 0; k < Main.maxNPCs; k++)
@@ -367,11 +340,10 @@ namespace WiitaMod.Projectiles.Ranger
                 NPC target = Main.npc[k];
                 if (target.active)
                 {
-                    float multiplier = 1.4f + maxTimeleft / 10 - Projectile.timeLeft * 0.1f;
-                    Rectangle hitbox = new Rectangle((int)(Projectile.Hitbox.X - multiplier), (int)(Projectile.Hitbox.Y - multiplier), (int)(Projectile.Hitbox.Width * multiplier), (int)(Projectile.Hitbox.Height * multiplier));
-                    if (Projectile.Colliding(hitbox, target.Hitbox) && Projectile.timeLeft <= maxTimeleft)
+                    float multiplier = 1.4f + maxTimeleft / 20 - Projectile.timeLeft / 20f;
+                    if (Projectile.Colliding(Projectile.Hitbox, target.Hitbox) && Time > 0.5f)
                     {
-                        if(Projectile.timeLeft > 2)
+                        if (Projectile.timeLeft > 2 && Projectile.timeLeft < maxTimeleft)
                             Projectile.timeLeft = 2;
                     }
                 }
@@ -385,7 +357,25 @@ namespace WiitaMod.Projectiles.Ranger
                 Projectile.tileCollide = false;
             }
 
-            Time++;
+
+            Time += 0.5f;
+        }
+
+        private void CheckLavaCollision()
+        {
+            for (int i = (int)(Projectile.Left.X / 16f); i <= (int)(Projectile.Right.X / 16f); i++)
+            {
+                for (int j = (int)(Projectile.Top.Y / 16f); j <= (int)(Projectile.Bottom.Y / 16f); j++)
+                {
+                    Tile tile = Main.tile[i, j];
+                    if (tile != null && tile.LiquidType == LiquidID.Lava && tile.LiquidAmount > 128)
+                    {
+                        if (Projectile.timeLeft > 2)
+                            Projectile.timeLeft = 2;
+                        return;
+                    }
+                }
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -393,20 +383,9 @@ namespace WiitaMod.Projectiles.Ranger
             if (Projectile.timeLeft > 2)
                 Projectile.timeLeft = 2;
 
+            Projectile.position += Projectile.velocity;
             Projectile.velocity = Vector2.Zero;
-            Projectile.position += oldVelocity;
             return false;
         }
-
-        public override bool PreDraw(ref Color lightColor)
-        {
-            if (Projectile.ai[0] == 1)
-            {
-                //MistParticle particle = new MistParticle(Projectile.position + Main.rand.NextVector2Square(-10, 11), Main.rand.NextVector2Circular(4f, 4f), lightColor, lightColor, Main.rand.NextFloat(0.15f, 0.35f) + (24 - Projectile.timeLeft) * 0.05f, 255 - Main.rand.Next(25, 125 - Projectile.timeLeft), MathHelper.ToRadians(2));
-                //ParticleManager.SpawnParticle(particle);
-            }
-            return true;
-        }
-
     }
 }

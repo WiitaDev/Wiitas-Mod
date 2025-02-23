@@ -1,14 +1,14 @@
-using Microsoft.Xna.Framework;
 using System;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Particles;
-using WiitaMod.Systems;
 using WiitaMod.Particles.ParticleSystems;
+using WiitaMod.Systems;
 
 namespace WiitaMod.Projectiles.Magic
 {
@@ -49,8 +49,9 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.hostile = false;
         }
 
-        public override void SendExtraAI(BinaryWriter writer) { 
-            writer.Write(HeldProjIndex); 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(HeldProjIndex);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -90,17 +91,22 @@ namespace WiitaMod.Projectiles.Magic
                 Main.dust[dustHit].noGravity = true;
             }
 
-            if(maxCharge)
+            if (maxCharge)
                 ProjectileHelper.Explode(Projectile.whoAmI, 100, 100, false);
 
             SoundEngine.PlaySound(SoundID.Item20.WithPitchOffset(-0.5f), Projectile.Center);
         }
 
-        public override void AI() 
+        public override void AI()
         {
             if (!player.channel)
             {
                 Channeling = false;
+            }
+
+            if (Projectile.owner == Main.myPlayer)
+            {
+                CheckWaterCollision();
             }
 
             float maxDetectRadius = 250f; // The maximum radius at which a projectile can detect a target
@@ -116,7 +122,7 @@ namespace WiitaMod.Projectiles.Magic
                     {
                         maxCharge = true;
                     }
-                }              
+                }
 
                 Projectile.rotation = 0;
                 Projectile.friendly = false;
@@ -182,6 +188,28 @@ namespace WiitaMod.Projectiles.Magic
             }
 
             Projectile.netUpdate = true;
+        }
+
+        private void CheckWaterCollision()
+        {
+            Tile tile = Main.tile[(int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16];
+            if (tile != null && tile.LiquidType == LiquidID.Water && tile.LiquidAmount > 128)
+            {
+                Projectile.Kill();
+                return;
+            }
+        }
+
+        public override bool PreKill(int timeLeft)
+        {
+            if (player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles.ToString().Contains(ProjectileNum.ToString()))
+            {
+                int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
+                string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
+                player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newAmount);
+            }
+
+            return true;
         }
 
         private void CircleAround(Player player)

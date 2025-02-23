@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Projectiles.Ranger;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Projectiles.Magic
@@ -55,6 +56,8 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void OnSpawn(IEntitySource source)
         {
+            Player player = Main.player[Projectile.owner];
+            player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = 0;
         }
 
         public override void AI()
@@ -65,6 +68,16 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.scale = 0.75f;
             Projectile.spriteDirection = Projectile.direction;
             Projectile.Center = new Vector2(player.MountedCenter.X + MOVE_DISTANCE * Projectile.direction, player.MountedCenter.Y);
+
+            ProjectileAmount = 0;
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile proj = Main.projectile[i];
+                if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<InfernalAlmanacProj>())
+                {
+                    ProjectileAmount++;
+                }
+            }
 
             if (!player.channel)
             {             
@@ -98,7 +111,6 @@ namespace WiitaMod.Projectiles.Magic
                 }
                 
                 Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai0: projID);
-                ProjectileAmount++;
             }
         }
 
