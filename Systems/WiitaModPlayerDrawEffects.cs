@@ -9,7 +9,7 @@ using WiitaMod.Items.Weapons.Ranger;
 
 namespace WiitaMod.Systems
 {
-    public class WiitaModServerPlayerDrawEffects : ModPlayer // Inspired by Calamity Mod public repository
+    public class WiitaModPlayerDrawEffects : ModPlayer // Inspired by Calamity Mod public repository
     {
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {

@@ -73,7 +73,7 @@ namespace WiitaMod.Projectiles.Magic
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile proj = Main.projectile[i];
-                if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<InfernalAlmanacProj>())
+                if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<InfernalAlmanacProj>() && proj.ai[2] == 0)
                 {
                     ProjectileAmount++;
                 }

@@ -18,6 +18,11 @@ namespace WiitaMod.Systems
         [Header("Content")]
         [DefaultValue(false)]
         [ReloadRequired]
-        public bool OnlyHamis; 
+        public bool OnlyHamis;
+
+        [Header("Gameplay")]
+        [DefaultValue(true)]
+        [ReloadRequired]
+        public bool FastRespawn;
     }
 }

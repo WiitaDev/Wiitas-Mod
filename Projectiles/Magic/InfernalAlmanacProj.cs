@@ -14,10 +14,13 @@ namespace WiitaMod.Projectiles.Magic
 {
     public class InfernalAlmanacProj : ModProjectile
     {
-        public ref float Timer => ref Projectile.ai[1];
         public ref float ProjectileNum => ref Projectile.ai[0];
+        public ref float Timer => ref Projectile.ai[1];
+        public ref float Shot => ref Projectile.ai[2];
 
         public ref Player player => ref Main.player[Projectile.owner];
+
+
 
         bool flag = false;
         bool maxCharge = false;
@@ -132,6 +135,7 @@ namespace WiitaMod.Projectiles.Magic
             }
             else
             {
+                Shot = 1;
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * Projectile.direction, Projectile.velocity.X * Projectile.direction) - 1.57f * Projectile.direction;
                 if (!flag)
                 {
@@ -141,9 +145,12 @@ namespace WiitaMod.Projectiles.Magic
                     }
                     Projectile.friendly = true;
 
-                    int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
-                    string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
-                    player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newAmount);
+                    if (player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles.ToString().Contains(ProjectileNum.ToString()))
+                    {
+                        int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
+                        string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
+                        player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newAmount);
+                    }
 
 
                     flag = true;

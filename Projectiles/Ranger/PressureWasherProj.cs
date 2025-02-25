@@ -69,7 +69,7 @@ namespace WiitaMod.Projectiles.Ranger
                 for (int i = 0; i < Main.maxProjectiles; i++)
                 {
                     Projectile proj = Main.projectile[i];
-                    if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<PressureWasherPathProj>())
+                    if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<PressureWasherPathProj>() && proj.ai[0] != 18 * proj.extraUpdates)
                     {
                         pathProjectiles.Add(proj);
                     }
@@ -306,15 +306,9 @@ namespace WiitaMod.Projectiles.Ranger
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            modifiers.ArmorPenetration += target.defense * 0.75f;
-            if (Time <= 1.5f)
-            {
-                modifiers.FinalDamage *= 2f;
-            }
-            else
-            {
-                modifiers.FinalDamage *= Projectile.timeLeft / maxTimeleft + 0.1f;
-            }
+            modifiers.ArmorPenetration += target.defense * 0.30f;
+
+            modifiers.FinalDamage *= Projectile.timeLeft / maxTimeleft * 1.5f;
         }
 
         public override void AI()
@@ -338,7 +332,7 @@ namespace WiitaMod.Projectiles.Ranger
             for (int k = 0; k < Main.maxNPCs; k++)
             {
                 NPC target = Main.npc[k];
-                if (target.active)
+                if (target.active && !target.friendly)
                 {
                     float multiplier = 1.4f + maxTimeleft / 20 - Projectile.timeLeft / 20f;
                     if (Projectile.Colliding(Projectile.Hitbox, target.Hitbox) && Time > 0.5f)

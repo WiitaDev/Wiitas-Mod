@@ -72,6 +72,26 @@ namespace WiitaMod.Systems
                 flamesShot = 0;
             }
         }
+        public override void UpdateDead()
+        {
+            if (ModContent.GetInstance<WiitaModServerConfig>().FastRespawn)
+            {
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC npc = Main.npc[i];
+
+                    if (npc.active && npc.boss)
+                    {
+                        return;
+                    }
+                }
+
+                int respawnTimerSet = 180; // 3 seconds
+                if (Player.respawnTimer > respawnTimerSet)
+                    Player.respawnTimer = respawnTimerSet;
+            }
+        }
+
         public override void OnHurt(Player.HurtInfo info)
         {
             if (Player.statLife <= Player.statLifeMax2 / 2 && HealthFlowerEquipped && Player.HasBuff(BuffID.PotionSickness) == false)

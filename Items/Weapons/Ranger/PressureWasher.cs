@@ -35,11 +35,11 @@ namespace WiitaMod.Items.Weapons.Ranger
             Item.knockBack = 4f;
             Item.width = 78;
             Item.height = 42;
-                Item.damage = 20;
+                Item.damage = 15;
             //Item.UseSound = SoundID.Item100;
             Item.shoot = ProjectileID.WaterGun;
             Item.rare = ItemRarityID.Blue;
-            Item.value = Item.sellPrice(0, 20);
+            Item.value = Item.sellPrice(0, 5);
             Item.noMelee = true;
             Item.channel = true;
 

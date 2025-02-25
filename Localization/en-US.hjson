@@ -249,7 +249,11 @@ Mods: {
 		Configs: {
 			WiitaModServerConfig: {
 				DisplayName: Wiita's Mod Server Config
-				Headers.Content: Content
+
+				Headers: {
+					Content: Content
+					Gameplay: Gameplay Header
+				}
 
 				OnlyHamis: {
 					Label: Only Hamis
@@ -259,6 +263,11 @@ Mods: {
 				Screenshake: {
 					Label: Screenshake
 					Tooltip: Disables/Enables all screenshake effects
+				}
+
+				FastRespawn: {
+					Label: Fast Respawn
+					Tooltip: ""
 				}
 			}
 
