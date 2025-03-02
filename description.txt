@@ -1,19 +1,19 @@
-!! This Mod Is Very VERY Early Access !! 
+This Mod Is Very VERY Early Access!
 
 <!> Multiplayer Supported <!>
+
+<!!!> If you only want Hamis/Noita related content check the config <!!!>
 
 Wiita's Mod is a mediocre content mod that adds random stuff
 
 < Current stuff in the mod >
-- Hamis (enemy) and a pet for it from Noita :) 
-- HamHat (Alternate version of Magic Hat)
+- Hamis and a pet for it from Noita :) 
+- HamHat (Alternative for Magic Hat)
 - Fried Seagull
-- 8 new ranged weapons
+- 10 new ranged weapons
 - 1 new mage weapon
 - 1 new summoner weapon
 - 3 new accessories
-
-<!!!> If you only want Hamis/Noita related content check the config <!!!>
 
 < Developers >
 - Wiita (Main dev, programming, some art & everything else)
@@ -23,4 +23,4 @@ Contact me on Discord if you have any questions or suggestions
 - Wiita.
 
 Changelog:
-- Changelog can be found from the workshop changes
+- Changelog can be found from the mods steam workshop page changes

@@ -208,6 +208,11 @@ Mods: {
 					'Wash your enemies with 3000 PSI water!'
 					'''
 			}
+
+			ThundercorePressureWasher: {
+				Tooltip: ""
+				DisplayName: Thundercore Pressure Washer
+			}
 		}
 
 		NPCs: {
@@ -238,6 +243,8 @@ Mods: {
 			PressureWasherHold.DisplayName: Pressure Washer Hold
 			PressureWasherProj.DisplayName: Pressure Washer Proj
 			PressureWasherPathProj.DisplayName: Pressure Washer Path Proj
+			ThundercoreThundercorePressureWasherPathProj.DisplayName: Thundercore Thundercore Pressure Washer Path Proj
+			ThundercorePressureWasherProj.DisplayName: Thundercore Pressure Washer Proj
 		}
 
 		Tiles: {

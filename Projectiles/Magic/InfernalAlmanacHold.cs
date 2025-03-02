@@ -46,6 +46,7 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
+            Projectile.timeLeft = 69420;
             Projectile.DamageType = DamageClass.Magic;
         }
 
@@ -57,12 +58,10 @@ namespace WiitaMod.Projectiles.Magic
         public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
-            player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = 0;
         }
 
         public override void AI()
         {
-            Projectile.timeLeft = 2;
             Timer++;
             Player player = Main.player[Projectile.owner];
             Projectile.scale = 0.75f;
@@ -81,7 +80,8 @@ namespace WiitaMod.Projectiles.Magic
 
             if (!player.channel)
             {             
-                Projectile.Kill();
+                if(Projectile.timeLeft > 3)
+                    Projectile.timeLeft = 3;
             }
 
             UpdatePlayer(player);
@@ -98,19 +98,20 @@ namespace WiitaMod.Projectiles.Magic
         {
             if (Main.myPlayer == player.whoAmI && ProjectileAmount != MAX_PROJECTILES && player.CheckMana(player.GetManaCost(player.HeldItem), true, false))
             {                
-                int SpawnedProjectiles = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
-                int projID = 0;
+                int SpawnedProjectiles = (int)Projectile.ai[2];
+                int projID = 1;
                 for (int i = 1; i < MAX_PROJECTILES + 1; i++) {
                     if (!SpawnedProjectiles.ToString().Contains(i.ToString()))
                     {
                         string newNumbers = SpawnedProjectiles.ToString().Insert(i - 1, i.ToString());
-                        player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newNumbers);
+                        Projectile.ai[2] = int.Parse(newNumbers);
                         projID = i;
                         break;
                     }
                 }
                 
-                Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai0: projID);
+                if(!SpawnedProjectiles.ToString().Contains(projID.ToString()))
+                    Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai0: projID);
             }
         }
 

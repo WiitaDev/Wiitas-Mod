@@ -26,7 +26,8 @@ namespace WiitaMod.Systems
                 // Create dictionary of weapons and their backpack textures
                 var weaponBackpacks = new Dictionary<int, string>
                 {
-                    [ModContent.ItemType<PressureWasher>()] = "WiitaMod/Assets/Textures/DrawLayers/PressureWasher_Backpack"
+                    [ModContent.ItemType<PressureWasher>()] = "WiitaMod/Assets/Textures/DrawLayers/PressureWasher_Backpack",
+                    [ModContent.ItemType<ThundercorePressureWasher>()] = "WiitaMod/Assets/Textures/DrawLayers/ThundercorePressureWasher_Backpack"
                 };
 
                 // Check if held weapon has a backpack

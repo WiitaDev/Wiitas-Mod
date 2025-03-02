@@ -1,4 +1,5 @@
 0.2.4:
 - Added Bass Bucket (buff station)
-- Added new Pressure Washer weapon
+- Added 2 new Pressure Washer weapons
 - A few sprite changes
+- 

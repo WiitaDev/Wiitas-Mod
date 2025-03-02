@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
+using System.Collections.Generic;
 using WiitaMod.Tiles;
 using WiitaMod.Buffs;
 
@@ -21,7 +22,6 @@ namespace WiitaMod.Systems
 
         //Weapons
         public int flamesShot = 0;
-        public int InfernalAlmanacProjectiles;
 
         //Screenshake
         public int screenShakeTimerGlobal = -1000;

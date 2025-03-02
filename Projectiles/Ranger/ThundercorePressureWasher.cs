@@ -15,7 +15,7 @@ using WiitaMod.Particles.ParticleSystems;
 
 namespace WiitaMod.Projectiles.Ranger
 {
-    public class PressureWasherProj : ModProjectile
+    public class ThundercorePressureWasherProj : ModProjectile
     {
         public ref float Time => ref Projectile.ai[0];
         public ref float Owner => ref Projectile.ai[1];
@@ -50,7 +50,7 @@ namespace WiitaMod.Projectiles.Ranger
         {
             Player player = Main.player[Projectile.owner];
             UpdatePlayer(player);
-            Projectile.Center = player.MountedCenter + Projectile.velocity * 76.5f;
+            Projectile.Center = player.MountedCenter + Projectile.velocity * 130f + new Vector2(0, -9); // the vector offset is the itemholdout offset
 
             if (!player.channel)
             {
@@ -59,7 +59,7 @@ namespace WiitaMod.Projectiles.Ranger
             }
 
             if (Main.myPlayer == Projectile.owner && player.channel)
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 35, Projectile.velocity * 35, ModContent.ProjectileType<PressureWasherPathProj>(), Projectile.damage, 0, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 45, Projectile.velocity * 45, ModContent.ProjectileType<ThundercoreThundercorePressureWasherPathProj>(), Projectile.damage, 0, Projectile.owner);
 
             if (Time > 0)
             {
@@ -69,7 +69,7 @@ namespace WiitaMod.Projectiles.Ranger
                 for (int i = 0; i < Main.maxProjectiles; i++)
                 {
                     Projectile proj = Main.projectile[i];
-                    if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<PressureWasherPathProj>() && proj.ai[0] != 18 * proj.extraUpdates)
+                    if (proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<ThundercoreThundercorePressureWasherPathProj>() && proj.ai[0] != 18 * proj.extraUpdates)
                     {
                         pathProjectiles.Add(proj);
                     }
@@ -279,7 +279,7 @@ namespace WiitaMod.Projectiles.Ranger
         }
     }
 
-    public class PressureWasherPathProj : ModProjectile
+    public class ThundercoreThundercorePressureWasherPathProj : ModProjectile
     {
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
 

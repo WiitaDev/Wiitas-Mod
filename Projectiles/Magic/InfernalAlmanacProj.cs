@@ -19,13 +19,14 @@ namespace WiitaMod.Projectiles.Magic
         public ref float Shot => ref Projectile.ai[2];
 
         public ref Player player => ref Main.player[Projectile.owner];
+        public ref Projectile heldProjectile => ref Main.projectile[Main.player[Projectile.owner].heldProj];
 
 
 
         bool flag = false;
         bool maxCharge = false;
         public bool Channeling = true;
-        public Projectile HeldProj;
+        //public Projectile HeldProj;
         int HeldProjIndex;
 
         public override void SetStaticDefaults()
@@ -52,20 +53,11 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.hostile = false;
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(HeldProjIndex);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            HeldProjIndex = reader.ReadInt32();
-        }
 
         public override void OnSpawn(IEntitySource source)
         {
-            HeldProj = Main.projectile[player.heldProj];
-            Timer = HeldProj.ai[0];
+            //HeldProj = Main.projectile[player.heldProj];
+            Timer = heldProjectile.ai[0];
 
             CircleAround(player); // set position into orbit before spawning dust
 
@@ -74,7 +66,6 @@ namespace WiitaMod.Projectiles.Magic
             for (int i = 0; i < 7; i++)
             {
                 SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Color.Orange, 90, 0.25f, 0.75f, MathHelper.ToRadians(2), true);
-
                 ParticleManager.SpawnParticle(smokeParticle);
             }
         }
@@ -89,7 +80,7 @@ namespace WiitaMod.Projectiles.Magic
             for (int i = 0; i < 15; i++)
             {
                 Vector2 circle = Main.rand.NextVector2Circular(2f, 2f);
-                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Torch, circle.X + Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), 1f);
+                int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Torch, circle.X + Projectile.velocity.X, circle.Y + Projectile.velocity.Y, 0, default(Color), 1f);
                 Main.dust[dustHit].scale = (float)Main.rand.Next(135, 190) * 0.013f;
                 Main.dust[dustHit].noGravity = true;
             }
@@ -118,14 +109,11 @@ namespace WiitaMod.Projectiles.Magic
 
             if (Channeling == true)
             {
-                if (player == Main.LocalPlayer)
-                {
-                    Timer = HeldProj.ai[0];
-                    if (HeldProj.ai[1] == 6)
+                    Timer = heldProjectile.ai[0];
+                    if (heldProjectile.ai[1] == 6)
                     {
                         maxCharge = true;
                     }
-                }
 
                 Projectile.rotation = 0;
                 Projectile.friendly = false;
@@ -144,14 +132,6 @@ namespace WiitaMod.Projectiles.Magic
                         Projectile.velocity = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * speed;
                     }
                     Projectile.friendly = true;
-
-                    if (player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles.ToString().Contains(ProjectileNum.ToString()))
-                    {
-                        int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
-                        string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
-                        player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newAmount);
-                    }
-
 
                     flag = true;
                 }
@@ -202,21 +182,14 @@ namespace WiitaMod.Projectiles.Magic
             Tile tile = Main.tile[(int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16];
             if (tile != null && tile.LiquidType == LiquidID.Water && tile.LiquidAmount > 128)
             {
+                if (Shot == 0 && heldProjectile.ai[2].ToString().Contains(ProjectileNum.ToString()) )
+                {
+                    int s = (int)heldProjectile.ai[2];
+                    string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
+                    heldProjectile.ai[2] = int.Parse(newAmount);
+                }
                 Projectile.Kill();
-                return;
             }
-        }
-
-        public override bool PreKill(int timeLeft)
-        {
-            if (player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles.ToString().Contains(ProjectileNum.ToString()))
-            {
-                int s = player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles;
-                string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
-                player.GetModPlayer<ModGlobalPlayer>().InfernalAlmanacProjectiles = int.Parse(newAmount);
-            }
-
-            return true;
         }
 
         private void CircleAround(Player player)
