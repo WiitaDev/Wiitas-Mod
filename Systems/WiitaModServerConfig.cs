@@ -22,7 +22,6 @@ namespace WiitaMod.Systems
 
         [Header("Gameplay")]
         [DefaultValue(true)]
-        [ReloadRequired]
         public bool FastRespawn;
     }
 }

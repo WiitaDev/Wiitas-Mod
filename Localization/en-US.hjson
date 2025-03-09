@@ -245,6 +245,7 @@ Mods: {
 			PressureWasherPathProj.DisplayName: Pressure Washer Path Proj
 			ThundercoreThundercorePressureWasherPathProj.DisplayName: Thundercore Thundercore Pressure Washer Path Proj
 			ThundercorePressureWasherProj.DisplayName: Thundercore Pressure Washer Proj
+			ThundercorePressureWasherPathProj.DisplayName: Thundercore Pressure Washer Path Proj
 		}
 
 		Tiles: {

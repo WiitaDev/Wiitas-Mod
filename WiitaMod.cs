@@ -5,7 +5,9 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Effects;
 using WiitaMod.Particles.ParticleSystems;
+using WiitaMod.Systems.Primitives;
 
 namespace WiitaMod
 {
@@ -20,6 +22,7 @@ namespace WiitaMod
                 Filters.Scene["Shockwave"].Load();
 
                 ParticleManager.RegisterParticles();
+                PrimitiveRenderer.Initialize();
             }
         }
 
@@ -27,6 +30,7 @@ namespace WiitaMod
         {
             ParticleManager.Unload();
         }
+
 
     }
 }
