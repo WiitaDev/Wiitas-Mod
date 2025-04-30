@@ -209,9 +209,14 @@ Mods: {
 					'''
 			}
 
-			ThundercorePressureWasher: {
+			DeepcoreFlareItem: {
+				DisplayName: Deepcore Flare Item
 				Tooltip: ""
-				DisplayName: Thundercore Pressure Washer
+			}
+
+			DeepcoreFlareGun: {
+				DisplayName: Deepcore Flare Gun
+				Tooltip: ""
 			}
 		}
 
@@ -241,17 +246,17 @@ Mods: {
 			InfernalAlmanacHold.DisplayName: Infernal Almanac
 			InfernalAlmanacProj.DisplayName: Infernal Fireball
 			PressureWasherHold.DisplayName: Pressure Washer Hold
-			PressureWasherProj.DisplayName: Pressure Washer Proj
+			PressureWasherProj.DisplayName: Pressurized Water
 			PressureWasherPathProj.DisplayName: Pressure Washer Path Proj
-			ThundercoreThundercorePressureWasherPathProj.DisplayName: Thundercore Thundercore Pressure Washer Path Proj
-			ThundercorePressureWasherProj.DisplayName: Thundercore Pressure Washer Proj
-			ThundercorePressureWasherPathProj.DisplayName: Thundercore Pressure Washer Path Proj
+			DeepcoreFlareGunProj.DisplayName: Deepcore Flare Gun Proj
+			DeepcoreFlareProj.DisplayName: Deepcore Flare Proj
 		}
 
 		Tiles: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
 			BassBucket.MapEntry: Bass Bucket
+			DeepcoreFlareTile.MapEntry: Deepcore Flare Tile
 		}
 
 		Configs: {

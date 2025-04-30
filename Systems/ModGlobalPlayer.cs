@@ -20,6 +20,9 @@ namespace WiitaMod.Systems
         //Pets
         public bool HamisPetEquipped;
 
+        //Tools
+        public int deepcoreFlareTimer = 0;
+
         //Weapons
         public int flamesShot = 0;
 
@@ -71,6 +74,8 @@ namespace WiitaMod.Systems
             {
                 flamesShot = 0;
             }
+
+            deepcoreFlareTimer--;
         }
         public override void UpdateDead()
         {

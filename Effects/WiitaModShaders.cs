@@ -11,7 +11,6 @@ namespace WiitaMod.Effects
     {
         public const string ShaderPrefix = "WiitaMod:";
 
-        // Store shaders as assets instead of raw effects
         internal static Asset<Effect> WaterStreamEffect;
         internal static Asset<Effect> StandardPrimitiveShader;
 

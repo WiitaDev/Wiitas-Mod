@@ -1,5 +1,5 @@
 0.2.4:
 - Added Bass Bucket (buff station)
-- Added 2 new Pressure Washer weapons
+- Added Pressure Washer weapon
+- Added Deepcore Flare Gun (flare gun upgrade)
 - A few sprite changes
-- 

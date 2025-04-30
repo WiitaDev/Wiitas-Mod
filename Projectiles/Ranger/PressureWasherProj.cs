@@ -195,9 +195,9 @@ namespace WiitaMod.Projectiles.Ranger
                     Player player = Main.player[Projectile.owner];
 
 
-                    Color color = Color.CadetBlue;
+                    Color color = Color.CadetBlue.MultiplyRGBA(lightColor);
                     color.A = 125;
-                    Color endpointColor = Color.CadetBlue;
+                    Color endpointColor = Color.CadetBlue.MultiplyRGBA(new Color(Lighting.GetSubLight(projectiles[^1].Center)));
                     endpointColor.A = 125;
 
 
@@ -221,7 +221,7 @@ namespace WiitaMod.Projectiles.Ranger
 
                     Texture2D tip = ModContent.Request<Texture2D>("WiitaMod/Particles/Mist", AssetRequestMode.ImmediateLoad).Value;
                     endpointColor.A = 0;
-                    Main.EntitySpriteDraw(tip, position[^1] - Main.screenPosition, tip.Frame(verticalFrames: 3, frameY: 1), endpointColor * (1 - (projectiles[^2].ai[0] / 18)), MathHelper.ToRadians(Main.rand.Next(0, 361)), new Vector2(tip.Width / 2, tip.Height / 2 / 3), projectiles[^1].ai[0] * 0.1f + Main.rand.NextFloat(0f, 0.2f), 0, 0);
+                    Main.EntitySpriteDraw(tip, position[^1] - Main.screenPosition, tip.Frame(verticalFrames: 3, frameY: 1), endpointColor * (1 - (projectiles[^2].ai[0] / 18)) * 2, MathHelper.ToRadians(Main.rand.Next(0, 361)), new Vector2(tip.Width / 2, tip.Height / 2 / 3), projectiles[^1].ai[0] * 0.1f + Main.rand.NextFloat(0f, 0.2f), 0, 0);
 
                     foreach (Vector2 point in position)
                     {
