@@ -100,7 +100,6 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void AI()
         {
-            Main.NewText(player.heldProj);
             if (player.heldProj >= 0 && player.heldProj < Main.maxProjectiles)
             {
                 Projectile heldProj = Main.projectile[player.heldProj];
