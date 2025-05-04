@@ -55,11 +55,6 @@ namespace WiitaMod.Projectiles.Magic
             return true;
         }
 
-        public override void OnSpawn(IEntitySource source)
-        {
-            Player player = Main.player[Projectile.owner];
-        }
-
         public override void AI()
         {
             Timer++;
@@ -67,6 +62,8 @@ namespace WiitaMod.Projectiles.Magic
             Projectile.scale = 0.75f;
             Projectile.spriteDirection = Projectile.direction;
             Projectile.Center = new Vector2(player.MountedCenter.X + MOVE_DISTANCE * Projectile.direction, player.MountedCenter.Y);
+
+            UpdatePlayer(player);
 
             ProjectileAmount = 0;
             for (int i = 0; i < Main.maxProjectiles; i++)
@@ -79,12 +76,11 @@ namespace WiitaMod.Projectiles.Magic
             }
 
             if (!player.channel)
-            {             
-                if(Projectile.timeLeft > 3)
-                    Projectile.timeLeft = 3;
+            {
+                Projectile.Kill();
+                return;
             }
 
-            UpdatePlayer(player);
             ChargeWeapon(player);
             if (IsAtMaxCharge) 
             {
@@ -96,22 +92,28 @@ namespace WiitaMod.Projectiles.Magic
 
         private void SpawnProjectile(Player player)
         {
-            if (Main.myPlayer == player.whoAmI && ProjectileAmount != MAX_PROJECTILES && player.CheckMana(player.GetManaCost(player.HeldItem), true, false))
-            {                
+            if (Projectile.owner == player.whoAmI && player.heldProj == Projectile.whoAmI && ProjectileAmount != MAX_PROJECTILES && player.CheckMana(player.GetManaCost(player.HeldItem), true, false))
+            {
                 int SpawnedProjectiles = (int)Projectile.ai[2];
-                int projID = 1;
-                for (int i = 1; i < MAX_PROJECTILES + 1; i++) {
-                    if (!SpawnedProjectiles.ToString().Contains(i.ToString()))
+                int projID = -1;
+
+                // Find the first available ID using a bitmask
+                for (int i = 0; i < MAX_PROJECTILES; i++)
+                {
+                    if ((SpawnedProjectiles & (1 << i)) == 0)
                     {
-                        string newNumbers = SpawnedProjectiles.ToString().Insert(i - 1, i.ToString());
-                        Projectile.ai[2] = int.Parse(newNumbers);
-                        projID = i;
+                        projID = i + 1; // IDs start at 1 for consistency
+                        Projectile.ai[2] = (float)(SpawnedProjectiles | (1 << i));
                         break;
                     }
                 }
-                
-                if(!SpawnedProjectiles.ToString().Contains(projID.ToString()))
-                    Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai0: projID);
+
+                if (projID != -1)
+                {
+                    player.heldProj = Projectile.whoAmI;
+                    Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<InfernalAlmanacProj>(), Projectile.damage, player.HeldItem.knockBack, Projectile.owner, ai0: projID);
+                    Projectile.netUpdate = true;
+                }
             }
         }
 
@@ -124,7 +126,7 @@ namespace WiitaMod.Projectiles.Magic
 
             for (int i = 1; i < ProjectileAmount + 1; i++)
             {
-                double deg = Timer * 2 + i * 60; //The degrees, you can multiply projectile.ai[1] to make it orbit faster, may be choppy depending on the value
+                double deg = Timer * 2 + i * 60;
                 double rad = deg * (Math.PI / 180); //Convert degrees to radians
                 double dist = 10; //Distance away from the target
 
@@ -160,6 +162,7 @@ namespace WiitaMod.Projectiles.Magic
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
+            player.heldProj = -1;
             player.channel = false;
         }
     }

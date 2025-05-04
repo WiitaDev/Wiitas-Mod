@@ -25,12 +25,7 @@ public static class ProjectileHelper
 
         Main.projectileIdentity[projectile.owner, projectile.identity] = -1;
 
-        projectile.position.X += projectile.width / 2;
-        projectile.position.Y += projectile.height / 2;
-        projectile.width = (int)(Width / 5.8f);
-        projectile.height = (int)(Height / 5.8f);
-        projectile.position.X -= projectile.width / 2;
-        projectile.position.Y -= projectile.height / 2;
+
 
         if (dust)
         {
@@ -57,7 +52,7 @@ public static class ProjectileHelper
                 if (k > 3)
                     scaleFactor = 0.8f;
 
-                Gore smoke = Main.gore[Gore.NewGore(projectile.GetSource_Death("Explosion"), projectile.position, default, Main.rand.Next(61, 64), 1f)];
+                Gore smoke = Main.gore[Gore.NewGore(projectile.GetSource_Death("Explosion"), projectile.position + Main.rand.NextVector2Square(0, projectile.width), default, Main.rand.Next(61, 64), 1f)];
                 smoke.velocity *= scaleFactor;
 
                 float negateX = k > 3 ? -1 : 1;

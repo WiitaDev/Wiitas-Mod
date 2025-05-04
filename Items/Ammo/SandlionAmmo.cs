@@ -17,11 +17,7 @@ namespace WiitaMod.Items.Ammo
 
         public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Sandlion");
-			// Tooltip.SetDefault("'I wonder if i can shoot this...'");
-
 			Item.ResearchUnlockCount = 99;
-
 		}
 
 		public override void SetDefaults()
@@ -34,7 +30,7 @@ namespace WiitaMod.Items.Ammo
             Item.consumable = true; // This marks the item as consumable, making it automatically be consumed when it's used as ammunition, or something else, if possible.
             Item.knockBack = 2f;
             Item.value = Item.buyPrice(0, 0, 1, 0);
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.White;
             Item.shoot = ModContent.ProjectileType<SandlionProjectile>(); // The projectile that weapons fire when using this item as ammunition.
             Item.shootSpeed = 16f; // The speed of the projectile.
             Item.ammo = Item.type; // The ammo class this ammo belongs to.

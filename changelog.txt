@@ -2,4 +2,5 @@
 - Added Bass Bucket (buff station)
 - Added Pressure Washer weapon
 - Added Deepcore Flare Gun (flare gun upgrade)
+- Added a new drone summon (EX-8 Guard Hound)
 - A few sprite changes

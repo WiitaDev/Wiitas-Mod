@@ -17,9 +17,6 @@ namespace WiitaMod.Items.CraftingMaterials
 
         public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Illegal Rocket Launcher Parts");
-			// Tooltip.SetDefault("'Banned everywhere'");
-
 			Item.ResearchUnlockCount = 25;
 		}
 
@@ -29,7 +26,7 @@ namespace WiitaMod.Items.CraftingMaterials
             Item.height = 64;
             Item.maxStack = 9999;
             Item.value = Item.buyPrice(0, 0, 25, 0);
-            Item.rare = ItemRarityID.White;
+            Item.rare = ItemRarityID.LightRed;
         }
 
         public override void AddRecipes()

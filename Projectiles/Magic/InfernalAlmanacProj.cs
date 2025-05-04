@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -8,7 +7,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Particles;
 using WiitaMod.Particles.ParticleSystems;
-using WiitaMod.Systems;
 
 namespace WiitaMod.Projectiles.Magic
 {
@@ -85,15 +83,38 @@ namespace WiitaMod.Projectiles.Magic
                 Main.dust[dustHit].noGravity = true;
             }
 
+            if (Shot == 0 && Main.myPlayer == Projectile.owner && heldProjectile.active && heldProjectile.type == ModContent.ProjectileType<InfernalAlmanacHold>())
+            {
+                int bitIndex = (int)ProjectileNum - 1; // Convert to 0-based index
+                heldProjectile.ai[2] = (float)((int)heldProjectile.ai[2] & ~(1 << bitIndex));
+                heldProjectile.netUpdate = true;
+            }
+
             if (maxCharge)
                 ProjectileHelper.Explode(Projectile.whoAmI, 100, 100, false);
 
             SoundEngine.PlaySound(SoundID.Item20.WithPitchOffset(-0.5f), Projectile.Center);
+
+            Projectile.netUpdate = true;
         }
 
         public override void AI()
         {
-            if (!player.channel)
+            Main.NewText(player.heldProj);
+            if (player.heldProj >= 0 && player.heldProj < Main.maxProjectiles)
+            {
+                Projectile heldProj = Main.projectile[player.heldProj];
+                if (heldProj.active && heldProj.type == ModContent.ProjectileType<InfernalAlmanacHold>())
+                {
+                    // Safe to use heldProj here
+                    Timer = heldProj.ai[0];
+                    if (heldProj.ai[1] == 6)
+                    {
+                        maxCharge = true;
+                    }
+                }
+            }
+            else
             {
                 Channeling = false;
             }
@@ -109,11 +130,11 @@ namespace WiitaMod.Projectiles.Magic
 
             if (Channeling == true)
             {
-                    Timer = heldProjectile.ai[0];
-                    if (heldProjectile.ai[1] == 6)
-                    {
-                        maxCharge = true;
-                    }
+                Timer = heldProjectile.ai[0];
+                if (heldProjectile.ai[1] == 6)
+                {
+                    maxCharge = true;
+                }
 
                 Projectile.rotation = 0;
                 Projectile.friendly = false;
@@ -182,12 +203,6 @@ namespace WiitaMod.Projectiles.Magic
             Tile tile = Main.tile[(int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16];
             if (tile != null && tile.LiquidType == LiquidID.Water && tile.LiquidAmount > 128)
             {
-                if (Shot == 0 && heldProjectile.ai[2].ToString().Contains(ProjectileNum.ToString()) )
-                {
-                    int s = (int)heldProjectile.ai[2];
-                    string newAmount = s.ToString().Replace(ProjectileNum.ToString(), string.Empty);
-                    heldProjectile.ai[2] = int.Parse(newAmount);
-                }
                 Projectile.Kill();
             }
         }

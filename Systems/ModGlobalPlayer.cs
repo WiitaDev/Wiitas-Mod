@@ -2,12 +2,9 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Graphics.Effects;
-using System.Collections.Generic;
-using WiitaMod.Tiles;
-using WiitaMod.Buffs;
 
 namespace WiitaMod.Systems
 {
@@ -25,58 +22,29 @@ namespace WiitaMod.Systems
 
         //Weapons
         public int flamesShot = 0;
+        public bool GunDroneAlt;
 
         //Screenshake
         public int screenShakeTimerGlobal = -1000;
         public int screenShakeVelocity = 1000;
-
-        //Shockwave
-        public bool ActivateShockwave;
-        private int rippleCount = 2;
-        private int rippleSize = 15;
-        private int rippleSpeed = 35;
-        private float distortStrength = 80f;
-
-        int shockwaveProgress = 400;
 
         public override void ResetEffects()
         {
             HealthFlowerEquipped = false;
             PhilosophersNecklaceEquipped = false;
             HamisPetEquipped = false;
-            ActivateShockwave = false;
         }
 
         public override void PreUpdate()
         {
-            if (ActivateShockwave)
-            {
-                ActivateShockwave = false;
-                if (Main.netMode != NetmodeID.Server && !Filters.Scene["Shockwave"].IsActive())
-                {
-                    Filters.Scene.Activate("Shockwave", Player.Center).GetShader().UseColor(rippleCount, rippleSize, rippleSpeed).UseTargetPosition(Player.Center);
-                }
-                shockwaveProgress = 0;
-            }
-            if (Main.netMode != NetmodeID.Server && Filters.Scene["Shockwave"].IsActive())
-            {
-                float progress = (shockwaveProgress) / 140f;
-                Filters.Scene["Shockwave"].GetShader().UseProgress(progress).UseOpacity(distortStrength * (1 - progress / 3f));
-            }
-            if (shockwaveProgress >= 480)
-            {
-                Filters.Scene.Deactivate("Shockwave");
-
-            }
-            shockwaveProgress++;
-
-            if(Player.channel == false) 
+            if (Player.channel == false)
             {
                 flamesShot = 0;
             }
 
             deepcoreFlareTimer--;
         }
+
         public override void UpdateDead()
         {
             if (ModContent.GetInstance<WiitaModServerConfig>().FastRespawn)

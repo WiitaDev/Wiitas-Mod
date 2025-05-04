@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Build.Evaluation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -51,12 +48,22 @@ namespace WiitaMod.Projectiles.Ranger
         {
             Player player = Main.player[Projectile.owner];
             UpdatePlayer(player);
-            Projectile.Center = player.MountedCenter + new Vector2(0,-6) + Projectile.velocity * 76.5f; // the vector offset is the itemholdout y offset
+            Projectile.Center = player.MountedCenter + new Vector2(0, -6) + Projectile.velocity * 76.5f; // the vector offset is the itemholdout y offset
 
             if (!player.channel)
             {
                 if (Projectile.timeLeft > 19)
+                {
                     Projectile.timeLeft = 19;
+
+                    SoundStyle soundStyle = SoundID.Item13 with
+                    {
+                        MaxInstances = 0
+                    };
+                    SoundEngine.PlaySound(soundStyle.WithPitchOffset(Main.rand.NextFloat(0.25f, 0.35f)).WithVolumeScale(0.8f), player.Center);
+                }
+
+                return;
             }
 
             if (Main.myPlayer == Projectile.owner && player.channel)

@@ -11,8 +11,9 @@ namespace WiitaMod.Effects
     {
         public const string ShaderPrefix = "WiitaMod:";
 
-        internal static Asset<Effect> WaterStreamEffect;
         internal static Asset<Effect> StandardPrimitiveShader;
+        internal static Asset<Effect> WaterStreamEffect;
+        internal static Asset<Effect> GoldEffect;
 
         public override void Load()
         {
@@ -25,12 +26,14 @@ namespace WiitaMod.Effects
         private void LoadShaders()
         {
             // Load shaders as assets
-            WaterStreamEffect = Mod.Assets.Request<Effect>("Effects/WaterStreamEffect");
             StandardPrimitiveShader = Mod.Assets.Request<Effect>("Effects/StandardPrimitiveShader");
+            WaterStreamEffect = Mod.Assets.Request<Effect>("Effects/WaterStreamEffect");
+            GoldEffect = Mod.Assets.Request<Effect>("Effects/GoldEffect");
 
             // Register shaders using the asset references
-            RegisterMiscShader(WaterStreamEffect, "TrailPass", "WaterStream");
             RegisterMiscShader(StandardPrimitiveShader, "PrimitivePass", "StandardPrimitiveShader");
+            RegisterMiscShader(WaterStreamEffect, "TrailPass", "WaterStream");
+            RegisterMiscShader(GoldEffect, "GoldShaderPass", "GoldShader");
         }
 
         private void RegisterMiscShader(Asset<Effect> effectAsset, string passName, string registrationName)
@@ -51,8 +54,9 @@ namespace WiitaMod.Effects
             StandardPrimitiveShader = null;
 
             // Unregister shaders
-            GameShaders.Misc.Remove($"{ShaderPrefix}WaterStream");
             GameShaders.Misc.Remove($"{ShaderPrefix}StandardPrimitiveShader");
+            GameShaders.Misc.Remove($"{ShaderPrefix}WaterStream");
+            GameShaders.Misc.Remove($"{ShaderPrefix}GoldShader");
         }
     }
 }

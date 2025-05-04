@@ -8,6 +8,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
@@ -117,7 +118,7 @@ namespace WiitaMod.NPCs
         private bool resetBatchInPost;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Effect GoldEffect = ModContent.Request<Effect>("WiitaMod/Effects/GoldEffect", AssetRequestMode.ImmediateLoad).Value;
+            Effect GoldEffect = GameShaders.Misc["WiitaMod:GoldShader"].Shader;
 
             if (isGolden && Main.netMode != NetmodeID.Server) // The netmode check might be redundant but I can't verify whether or not it is.
             {
@@ -556,6 +557,18 @@ namespace WiitaMod.NPCs
     {
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
 
+        public override void SetStaticDefaults()
+        {
+            // Makes this NPC not count toward bestiary progress
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true // Hides the NPC from bestiary completely
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
+
+            NPCID.Sets.CantTakeLunchMoney[Type] = true;
+        }
+
         public override void SetDefaults()
         {
             NPC.width = 14;
@@ -564,8 +577,8 @@ namespace WiitaMod.NPCs
             NPC.defense = 0;
             NPC.lifeMax = 25;
             NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.value = 50f;
+            NPC.DeathSound = null;
+            NPC.value = 0f;
             NPC.knockBackResist = 0.5f;
             NPC.aiStyle = -1; // 3 = Fighter AI(zombie, etc.), -1 = custom AI
             NPC.scale = 1.5f;
@@ -587,16 +600,12 @@ namespace WiitaMod.NPCs
             
             NPC.life = 0;
         }
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            database.Entries.Remove(bestiaryEntry);
-        }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneNormalCaverns)
             {
-                return SpawnCondition.Cavern.Chance * 0.15f; // Spawn with 15% the chance of a regular zombie.
+                return SpawnCondition.Cavern.Chance * 0.25f; // Spawn with 15% the chance of a regular zombie.
             }
             return 0f;
         }

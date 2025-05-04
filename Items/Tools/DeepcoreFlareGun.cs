@@ -12,7 +12,7 @@ namespace WiitaMod.Items.Tools
 {
     public class DeepcoreFlareGun : ModItem
     {
-        private const int cooldown = 300;
+        private const int cooldown = 5 * 60;
 
         public override bool IsLoadingEnabled(Mod mod)
         {
@@ -33,14 +33,15 @@ namespace WiitaMod.Items.Tools
             Item.useAnimation = 20;
             Item.UseSound = SoundID.Item61;
             Item.useTime = 20;
+            Item.rare = ItemRarityID.Blue;
         }
 
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.FlareGun, 1);
-            recipe.AddRecipeGroup("PrehardTier3", 12);
-            recipe.AddIngredient(ItemID.Blinkroot, 2);
+            recipe.AddRecipeGroup("PrehardTier2", 12);
+            recipe.AddIngredient(ItemID.Glowstick, 5);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }
@@ -69,7 +70,7 @@ namespace WiitaMod.Items.Tools
             if (player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer <= 0)
                 return;
 
-            float remaining = (player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer) / 60f;
+            float remaining = player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer / 60f;
             if (remaining > 0)
             {
                 // Position the timer where the stack count would be
@@ -81,7 +82,7 @@ namespace WiitaMod.Items.Tools
                     FontAssets.ItemStack.Value,
                     text,
                     textPos,
-                    Color.Lerp(Color.Green, Color.Red, remaining / 10f), // Color gradient
+                    Color.Lerp(Color.White, Color.Red, remaining / 10f), // Color gradient
                     0f,
                     Vector2.Zero,
                     scale * 2f,

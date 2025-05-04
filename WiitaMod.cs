@@ -3,9 +3,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Effects;
 using WiitaMod.Particles.ParticleSystems;
 using WiitaMod.Systems.Primitives;
 
@@ -17,9 +15,9 @@ namespace WiitaMod
         {
             if (!Main.dedServ)
             {
-                Ref<Effect> screenRef = new Ref<Effect>(ModContent.Request<Effect>("WiitaMod/Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value); // The path to the compiled shader file.
+                /*Ref<Effect> screenRef = new Ref<Effect>(ModContent.Request<Effect>("WiitaMod/Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value); // The path to the compiled shader file.
                 Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave"), EffectPriority.High);
-                Filters.Scene["Shockwave"].Load();
+                Filters.Scene["Shockwave"].Load();*/
 
                 ParticleManager.RegisterParticles();
                 PrimitiveRenderer.Initialize();

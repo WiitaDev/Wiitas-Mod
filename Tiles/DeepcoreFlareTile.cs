@@ -18,10 +18,10 @@ namespace WiitaMod.Tiles
             Main.tileNoAttach[Type] = true;
             Main.tileMergeDirt[Type] = false;
 
-            AddMapEntry(Color.CadetBlue, CreateMapEntryName());
+            AddMapEntry(new Color(205, 220, 255), CreateMapEntryName());
 
             DustType = DustID.Stone;
-            HitSound = SoundID.Tink;
+            HitSound = SoundID.Dig;
         }
 
         // Emit light when "on"
@@ -30,7 +30,7 @@ namespace WiitaMod.Tiles
             Tile tile = Main.tile[i, j];
             if (tile.TileFrameY < 16) // "On" state (second frame)
             {
-                Color c = Color.CadetBlue * 0.02f;
+                Color c = Color.CadetBlue * 0.03f;
                 r = c.R;
                 g = c.G;
                 b = c.B;

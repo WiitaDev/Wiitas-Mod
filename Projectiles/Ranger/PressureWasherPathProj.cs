@@ -3,6 +3,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Particles.ParticleSystems;
+using WiitaMod.Particles;
 
 namespace WiitaMod.Projectiles.Ranger
 {
@@ -108,6 +110,11 @@ namespace WiitaMod.Projectiles.Ranger
 
             Projectile.position += Projectile.velocity;
             Projectile.velocity = Vector2.Zero;
+
+            Color pointColor = new Color(Lighting.GetSubLight(Projectile.Center));
+            MistParticle particle = new MistParticle(Projectile.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(4f, 4f), pointColor, pointColor, Main.rand.NextFloat(0.15f, 0.35f), 255, MathHelper.ToRadians(2));
+            ParticleManager.SpawnParticle(particle);
+
             return false;
         }
     }

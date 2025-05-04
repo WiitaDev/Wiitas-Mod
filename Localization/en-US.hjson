@@ -8,12 +8,17 @@ Mods: {
 
 			ShadowflameApparitionBuff: {
 				DisplayName: Shadowflame Apparition
-				Description: The Shadow Apparition will fight for you
+				Description: The Shadowflame Apparition will fight for you
 			}
 
 			BassBucketBuff: {
 				DisplayName: Bass Stench
 				Description: Bass Arrows deal 1% increased damage
+			}
+
+			GunDroneBuff: {
+				DisplayName: EX-8 Guard Hound
+				Description: The EX-8 Guard Hound will protect you
 			}
 		}
 
@@ -125,11 +130,7 @@ Mods: {
 
 			PalladinsShield: {
 				DisplayName: Palladin's shield
-				Tooltip:
-					'''
-					Make big palladin's shield that do damage :)
-					The palladin's shield deals 10% of the targets health
-					'''
+				Tooltip: Make big palladin's shield that do damage :)
 			}
 
 			HamisHat: {
@@ -204,19 +205,33 @@ Mods: {
 				DisplayName: Pressure Washer
 				Tooltip:
 					'''
-					Ignores 75% of enemy defense
+					Ignores 30% of enemy defense
 					'Wash your enemies with 3000 PSI water!'
 					'''
 			}
 
 			DeepcoreFlareItem: {
-				DisplayName: Deepcore Flare Item
+				DisplayName: Deepcore Flare
 				Tooltip: ""
 			}
 
 			DeepcoreFlareGun: {
 				DisplayName: Deepcore Flare Gun
-				Tooltip: ""
+				Tooltip:
+					'''
+					Shoots out Deepcore Flare
+					Has a 5 second cooldown
+					'''
+			}
+
+			GunDroneItem: {
+				DisplayName: EX-8 Guard Hound Controller
+				Tooltip:
+					'''
+					Summons an EX-8 Guard Hound drone to protect you
+					Right click to change between weapon modes
+					Requires 2 minion slots
+					'''
 			}
 		}
 
@@ -247,16 +262,17 @@ Mods: {
 			InfernalAlmanacProj.DisplayName: Infernal Fireball
 			PressureWasherHold.DisplayName: Pressure Washer Hold
 			PressureWasherProj.DisplayName: Pressurized Water
-			PressureWasherPathProj.DisplayName: Pressure Washer Path Proj
-			DeepcoreFlareGunProj.DisplayName: Deepcore Flare Gun Proj
-			DeepcoreFlareProj.DisplayName: Deepcore Flare Proj
+			PressureWasherPathProj.DisplayName: Pressurized Water
+			DeepcoreFlareProj.DisplayName: Deepcore Flare
+			GunDrone.DisplayName: EX-8 Guard Hound
+			GunDroneGrenade.DisplayName: EX-8 Grenade
 		}
 
 		Tiles: {
 			HamisBanner.MapEntry: Banner
 			HamisStatue.MapEntry: Hamis Statue
 			BassBucket.MapEntry: Bass Bucket
-			DeepcoreFlareTile.MapEntry: Deepcore Flare Tile
+			DeepcoreFlareTile.MapEntry: Deepcore Flare Block
 		}
 
 		Configs: {
@@ -265,7 +281,7 @@ Mods: {
 
 				Headers: {
 					Content: Content
-					Gameplay: Gameplay Header
+					Gameplay: Gameplay
 				}
 
 				OnlyHamis: {
@@ -273,14 +289,9 @@ Mods: {
 					Tooltip: Disables all content except Hamis/Noita related content
 				}
 
-				Screenshake: {
-					Label: Screenshake
-					Tooltip: Disables/Enables all screenshake effects
-				}
-
 				FastRespawn: {
 					Label: Fast Respawn
-					Tooltip: ""
+					Tooltip: When enabled respawning is faster when there are no active bosses
 				}
 			}
 

@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,7 +17,6 @@ namespace WiitaMod.Items.Placeable
 
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Hamis Statue");
             Item.ResearchUnlockCount = 1;
         }
 
@@ -35,5 +35,9 @@ namespace WiitaMod.Items.Placeable
             Item.value = 0;
         }
 
+        public override void PostUpdate()
+        {
+            Lighting.AddLight(Item.Center, Color.CadetBlue.ToVector3());
+        }
     }
 }
