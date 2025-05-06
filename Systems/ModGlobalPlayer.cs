@@ -22,7 +22,11 @@ namespace WiitaMod.Systems
 
         //Weapons
         public int flamesShot = 0;
+
         public bool GunDroneAlt;
+
+        public int SandAttackCounter;
+        public int SandAttackTimer = 0;
 
         //Screenshake
         public int screenShakeTimerGlobal = -1000;
@@ -33,6 +37,11 @@ namespace WiitaMod.Systems
             HealthFlowerEquipped = false;
             PhilosophersNecklaceEquipped = false;
             HamisPetEquipped = false;
+
+            if (SandAttackTimer > 0)
+                SandAttackTimer--;
+            else
+                SandAttackCounter = 0;
         }
 
         public override void PreUpdate()

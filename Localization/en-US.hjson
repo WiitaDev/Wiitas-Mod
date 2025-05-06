@@ -233,6 +233,11 @@ Mods: {
 					Requires 2 minion slots
 					'''
 			}
+
+			SandPouch: {
+				DisplayName: Sand Pouch
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -266,6 +271,10 @@ Mods: {
 			DeepcoreFlareProj.DisplayName: Deepcore Flare
 			GunDrone.DisplayName: EX-8 Guard Hound
 			GunDroneGrenade.DisplayName: EX-8 Grenade
+			SandPouchProj.DisplayName: Sand Pouch Proj
+			SandSlash.DisplayName: Sand Slash
+			SandSlashAlt.DisplayName: Sand Slash Alt
+			SandVortex.DisplayName: Sand Vortex
 		}
 
 		Tiles: {

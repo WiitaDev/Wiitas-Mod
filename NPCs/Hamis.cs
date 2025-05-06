@@ -66,8 +66,9 @@ namespace WiitaMod.NPCs
         // This is all to just make beautiful, manageable, and clean code.
         public ref float AI_State => ref NPC.ai[0];
         public ref float AI_Timer => ref NPC.ai[1];
+        public ref float WanderDirection => ref NPC.localAI[0];
 
-        public int confused = 1;
+        private int confused = 1;
 
         bool playerNoticed = false;
 
@@ -257,7 +258,7 @@ namespace WiitaMod.NPCs
 
                     if (NPC.velocity.X == 0)
                     {
-                        Move(target, true);
+                        Move(target.Center, true);
                     }
 
                     if (NPC.velocity.Y == 0)
@@ -294,33 +295,68 @@ namespace WiitaMod.NPCs
                     // npc.frame.Y is the goto way of changing animation frames. npc.frame starts from the top left corner in pixel coordinates, so keep that in mind.
                     NPC.frameCounter++;
 
-                    if (NPC.frameCounter < 10)
+                    if (NPC.velocity != Vector2.Zero)
                     {
-                        NPC.frame.Y = (int)Frame.Idle1 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 20)
-                    {
-                        NPC.frame.Y = (int)Frame.Idle2 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 30)
-                    {
-                        NPC.frame.Y = (int)Frame.Idle3 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 40)
-                    {
-                        NPC.frame.Y = (int)Frame.Idle4 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 50)
-                    {
-                        NPC.frame.Y = (int)Frame.Idle5 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 60)
-                    {
-                        NPC.frame.Y = (int)Frame.Idle6 * frameHeight;
+                        NPC.frameCounter += (double)(NPC.velocity.Length() / 4f);
+                        if (NPC.frameCounter < 5)
+                        {
+                            NPC.frame.Y = (int)Frame.Run1 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 10)
+                        {
+                            NPC.frame.Y = (int)Frame.Run2 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 15)
+                        {
+                            NPC.frame.Y = (int)Frame.Run3 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 20)
+                        {
+                            NPC.frame.Y = (int)Frame.Run4 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 25)
+                        {
+                            NPC.frame.Y = (int)Frame.Run5 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 30)
+                        {
+                            NPC.frame.Y = (int)Frame.Run6 * frameHeight;
+                        }
+                        else
+                        {
+                            NPC.frameCounter = 0;
+                        }
                     }
                     else
                     {
-                        NPC.frameCounter = 0;
+                        if (NPC.frameCounter < 10)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle1 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 20)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle2 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 30)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle3 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 40)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle4 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 50)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle5 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 60)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle6 * frameHeight;
+                        }
+                        else
+                        {
+                            NPC.frameCounter = 0;
+                        }
                     }
                     break;
                 case (float)ActionState.Notice:
@@ -367,34 +403,69 @@ namespace WiitaMod.NPCs
 
                 case (float)ActionState.Run:
                     AI_Timer++;
-                    NPC.frameCounter += (double)(NPC.velocity.Length() / 6f);
-                    if (NPC.frameCounter < 5)
+                    if (NPC.velocity == Vector2.Zero)
                     {
-                        NPC.frame.Y = (int)Frame.Run1 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 10)
-                    {
-                        NPC.frame.Y = (int)Frame.Run2 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 15)
-                    {
-                        NPC.frame.Y = (int)Frame.Run3 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 20)
-                    {
-                        NPC.frame.Y = (int)Frame.Run4 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 25)
-                    {
-                        NPC.frame.Y = (int)Frame.Run5 * frameHeight;
-                    }
-                    else if (NPC.frameCounter < 30)
-                    {
-                        NPC.frame.Y = (int)Frame.Run6 * frameHeight;
+                        NPC.frameCounter++;
+                        if (NPC.frameCounter < 10)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle1 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 20)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle2 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 30)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle3 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 40)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle4 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 50)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle5 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 60)
+                        {
+                            NPC.frame.Y = (int)Frame.Idle6 * frameHeight;
+                        }
+                        else
+                        {
+                            NPC.frameCounter = 0;
+                        }
                     }
                     else
                     {
-                        NPC.frameCounter = 0;
+                        NPC.frameCounter += (double)(NPC.velocity.Length() / 4f);
+                        if (NPC.frameCounter < 5)
+                        {
+                            NPC.frame.Y = (int)Frame.Run1 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 10)
+                        {
+                            NPC.frame.Y = (int)Frame.Run2 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 15)
+                        {
+                            NPC.frame.Y = (int)Frame.Run3 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 20)
+                        {
+                            NPC.frame.Y = (int)Frame.Run4 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 25)
+                        {
+                            NPC.frame.Y = (int)Frame.Run5 * frameHeight;
+                        }
+                        else if (NPC.frameCounter < 30)
+                        {
+                            NPC.frame.Y = (int)Frame.Run6 * frameHeight;
+                        }
+                        else
+                        {
+                            NPC.frameCounter = 0;
+                        }
                     }
 
                     break;
@@ -440,8 +511,36 @@ namespace WiitaMod.NPCs
             // The faceTarget parameter means that npc.direction will automatically be 1 or -1 if the targeted player is to the right or left.
             // This is also automatically flipped if npc.confused.
             NPC.TargetClosest(true);
-            if (Main.player[NPC.target].Distance(NPC.Center) > 1100f) { playerNoticed = false; }
 
+            AI_Timer++;
+
+            // Random wandering with pauses
+            if (Main.rand.NextBool(500))
+            {
+                // Set random wander direction and duration
+                WanderDirection = Main.rand.NextBool() ? 1f : -1f;
+                AI_Timer = Main.rand.Next(-60, -20); // Wander for 20-60 frames
+            }
+
+            if (AI_Timer < 0) // Wander duration
+            {
+                // Move in chosen direction
+                Move(NPC.Center + Vector2.UnitX * WanderDirection, true, 0.25f);
+            }
+            else // Standing still
+            {
+                NPC.velocity = Vector2.Zero;
+                // Occasional direction change
+                if (Main.rand.NextBool(300))
+                {
+                    WanderDirection *= -1;
+                }
+            }
+
+            NPC.direction = WanderDirection == -1 ? 1 : 0;
+            NPC.spriteDirection = WanderDirection == -1 ? 1 : 0;
+
+            if (Main.player[NPC.target].Distance(NPC.Center) > 1100f) { playerNoticed = false; }
             if (!Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, 20, 20) && playerNoticed == false) { playerNoticed = false; return; } else { playerNoticed = true; }
 
 
@@ -456,7 +555,9 @@ namespace WiitaMod.NPCs
             {
                 AI_State = (float)ActionState.Run;
             }
+
         }
+
         private void Jump()
         {
             AI_Timer++;
@@ -480,7 +581,7 @@ namespace WiitaMod.NPCs
             NPC.TargetClosest(true);
             Player target = Main.player[NPC.target];
 
-            Move(target, false);
+            Move(target.Center, false);
 
             if (!NPC.HasValidTarget)
             {
@@ -490,9 +591,9 @@ namespace WiitaMod.NPCs
             }
         }
 
-        private void Move(Player target, bool onlyMove) 
+        private void Move(Vector2 target, bool onlyMove, float maxSpeedMultiplier = 1) 
         {
-            if (Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 && !onlyMove)
+            if (!onlyMove && Main.player[NPC.target].Distance(NPC.Center) < 300f && AI_Timer >= 0 && Main.rand.Next(0, 40) == 0 )
             {
                 NPC.velocity = Vector2.Zero;
                 AI_State = (float)ActionState.Notice;
@@ -500,12 +601,12 @@ namespace WiitaMod.NPCs
                 return;
             }
 
-            if (target.position.X < NPC.position.X && NPC.velocity.X > -4 && NPC.HasValidTarget || (NPC.velocity.X < 4 && NPC.confused)) // AND I'm not at max "left" velocity
+            if (target.X < NPC.Center.X && NPC.velocity.X > -4 * maxSpeedMultiplier && NPC.HasValidTarget || (NPC.velocity.X < 4 * maxSpeedMultiplier && NPC.confused)) // AND I'm not at max "left" velocity
             {
                 NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
             }
 
-            if (target.position.X > NPC.position.X && NPC.velocity.X < 4 && NPC.HasValidTarget || (NPC.velocity.X > -4 && NPC.confused)) // AND I'm not at max "right" velocity
+            if (target.X > NPC.Center.X && NPC.velocity.X < 4 * maxSpeedMultiplier && NPC.HasValidTarget || (NPC.velocity.X > -4 * maxSpeedMultiplier && NPC.confused)) // AND I'm not at max "right" velocity
             {
                 NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the right
             }
