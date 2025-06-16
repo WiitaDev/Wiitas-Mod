@@ -23,11 +23,11 @@ namespace WiitaMod.Tiles
             Main.tileNoAttach[Type] = true;
             Main.tileLavaDeath[Type] = true;
             TileObjectData.newTile.Width = 1;
-            TileObjectData.newTile.Height = 2;
-            TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.Height = 1;
+            TileObjectData.newTile.Origin = new Point16(0, 0);
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.CoordinateHeights = new[] {16, 18};
+            TileObjectData.newTile.CoordinateHeights = new[] {16};
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<TropicalSand>()};

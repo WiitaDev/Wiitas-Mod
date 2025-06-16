@@ -145,10 +145,10 @@ namespace WiitaMod.World.TropicalOcean
             GenerateBeachLedge();
             SurfaceMounds();
 
-            CreateTrees();
-
             RemoveAloneAndSmoothBlocks();
             PreventSandFalling();
+
+            CreateTrees();
 
             GenVars.structures.AddProtectedStructure(new(GetActualX(2) - BiomeWidth / 2 - 10, YStart - BlockDepth / 2 - 10, BiomeWidth + 20, BlockDepth + 20));
         }
@@ -432,33 +432,39 @@ namespace WiitaMod.World.TropicalOcean
             }
         }
 
-        public void CreateTrees() 
+        public void CreateTrees()
         {
             for (int i = 1; i < BiomeWidth; i++)
             {
-                // Only sometimes generate trees.
-                if (!WorldGen.genRand.NextBool(4))
+                if (!WorldGen.genRand.NextBool(4)) // 1 in 4 chance
                     continue;
 
                 int x = GetActualX(i);
                 int y = YStart - 30;
 
-                // Search downward in hopes of finding a position to generate and grow an acorn.
-                // If no such downward tile exists, skip this tile.
-                if (!WorldUtils.Find(new(x, y), Searches.Chain(new Searches.Down(40), new Conditions.IsSolid()), out Point growPoint))
+                if (!WorldUtils.Find(
+                    new Point(x, y),
+                    Searches.Chain(
+                        new Searches.Down(40),
+                        new Conditions.IsTile((ushort)ModContent.TileType<TropicalSand>())),
+                    out Point groundPoint)
+                )
                     continue;
 
-                x = growPoint.X;
-                y = growPoint.Y - 1;
+                x = groundPoint.X;
+                y = groundPoint.Y - 1; // Position above sand
 
-                // Ignore tiles if there's water above.
                 if (SafeTile(x, y).LiquidAmount > 0)
                     continue;
 
-                Main.tile[x, y].TileType = TileID.Saplings;
-                Main.tile[x, y].Get<TileWallWireStateData>().HasTile = true;
-                if(!WorldGen.GrowPalmTree(x, y)) 
-                    WorldGen.KillTile(x, y);
+                WorldGen.PlaceTile(x, y, ModContent.TileType<TropicalPalmSapling>(), true);
+
+                // Attempt to grow IMMEDIATELY using MOD-SPECIFIC method
+                if (!WorldGen.GrowTree(x, y))
+                {
+                    // Fallback to palm growth if needed
+                    WorldGen.GrowPalmTree(x, y);
+                }
             }
         }
 
