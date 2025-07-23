@@ -54,8 +54,8 @@ namespace WiitaMod.Items.Weapons.Ranger
                 if (player.altFunctionUse == 0)
                 {
                     Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<ThundercoreRifleHold>(), damage, 0, player.whoAmI);
-                    Main.player[player.whoAmI].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
-                    Main.player[player.whoAmI].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 400;
+                    Main.player[player.whoAmI].GetModPlayer<WiitaModPlayer>().screenShakeTimerGlobal = -80;
+                    Main.player[player.whoAmI].GetModPlayer<WiitaModPlayer>().screenShakeVelocity = 400;
                 }
             }
 

@@ -23,7 +23,9 @@ namespace WiitaMod.Projectiles
             // Note that EbonsandBallGun has infinite penetration, unlike SandBallGun
             Projectile.CloneDefaults(ProjectileID.EbonsandBallGun);
             Projectile.damage = 0;
-            Projectile.friendly = false;
+            Projectile.friendly = true;
+            Projectile.width = 20;
+            Projectile.height = 20;
             //AIType = ProjectileID.EbonsandBallGun; // This is needed for some logic in the ProjAIStyleID.FallingTile code.
         }
 
@@ -42,5 +44,7 @@ namespace WiitaMod.Projectiles
             Projectile.rotation += MathHelper.ToRadians(5);
             Projectile.ai[1]++;
         }
+
+        public override bool? CanCutTiles() => true;
     }
 }

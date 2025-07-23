@@ -54,10 +54,10 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             player.channel = true;
-            if (player.GetModPlayer<ModGlobalPlayer>().flamesShot <= 20)
+            if (player.GetModPlayer<WiitaModPlayer>().flamesShot <= 20)
             {
                 Projectile.NewProjectile(Item.GetSource_FromThis(), position.X, position.Y, velocity.X, velocity.Y, ProjectileID.Flames, damage, knockback, Main.myPlayer); //Creates a new projectile with our new vector for spread.
-                player.GetModPlayer<ModGlobalPlayer>().flamesShot++;
+                player.GetModPlayer<WiitaModPlayer>().flamesShot++;
                 return false;
             }
             else
@@ -68,7 +68,7 @@ namespace WiitaMod.Items.Weapons.Ranger.Flamelasers
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            if (player.GetModPlayer<ModGlobalPlayer>().flamesShot >= 20)
+            if (player.GetModPlayer<WiitaModPlayer>().flamesShot >= 20)
             {
                 type = ModContent.ProjectileType<CrimsonFlameLaserlaser>();
             }

@@ -47,5 +47,10 @@ namespace WiitaMod.Items.Consumables.Food
                 .AddTile(TileID.CookingPots)
                 .Register();
         }
+
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = ContentSamples.CreativeHelper.ItemGroup.Food;
+        }
     }
 }

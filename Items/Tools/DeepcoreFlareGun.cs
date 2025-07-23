@@ -12,7 +12,7 @@ namespace WiitaMod.Items.Tools
 {
     public class DeepcoreFlareGun : ModItem
     {
-        private const int cooldown = 5 * 60;
+        private const int cooldown = 1 * 60;
 
         public override bool IsLoadingEnabled(Mod mod)
         {
@@ -53,24 +53,24 @@ namespace WiitaMod.Items.Tools
 
         public override bool CanUseItem(Player player)
         {
-            if (player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer > 0)
+            if (player.GetModPlayer<WiitaModPlayer>().deepcoreFlareTimer > 0)
                 return false;
             return true;
         }
 
         public override bool? UseItem(Player player)
         {
-            player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer = cooldown;
+            player.GetModPlayer<WiitaModPlayer>().deepcoreFlareTimer = cooldown;
             return true;
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Player player = Main.LocalPlayer;
-            if (player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer <= 0)
+            if (player.GetModPlayer<WiitaModPlayer>().deepcoreFlareTimer <= 0)
                 return;
 
-            float remaining = player.GetModPlayer<ModGlobalPlayer>().deepcoreFlareTimer / 60f;
+            float remaining = player.GetModPlayer<WiitaModPlayer>().deepcoreFlareTimer / 60f;
             if (remaining > 0)
             {
                 // Position the timer where the stack count would be

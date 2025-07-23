@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace WiitaMod.Systems
 {
-    public class ModGlobalPlayer : ModPlayer
+    public partial class WiitaModPlayer : ModPlayer
     {
         //Accessories
         public bool HealthFlowerEquipped;
@@ -25,8 +25,8 @@ namespace WiitaMod.Systems
 
         public bool GunDroneAlt;
 
-        public int SandAttackCounter;
-        public int SandAttackTimer = 0;
+        //buffs
+        public bool ProstheticDebuff = false;
 
         //Screenshake
         public int screenShakeTimerGlobal = -1000;
@@ -37,11 +37,7 @@ namespace WiitaMod.Systems
             HealthFlowerEquipped = false;
             PhilosophersNecklaceEquipped = false;
             HamisPetEquipped = false;
-
-            if (SandAttackTimer > 0)
-                SandAttackTimer--;
-            else
-                SandAttackCounter = 0;
+            ProstheticDebuff = false;
         }
 
         public override void PreUpdate()
@@ -160,6 +156,5 @@ namespace WiitaMod.Systems
 
             return true;
         }
-
     }
 }

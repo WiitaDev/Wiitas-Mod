@@ -114,14 +114,14 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
                     Projectile.NewProjectile(player.GetSource_FromThis(), Projectile.position, perturbedSpeed * 30f, ModContent.ProjectileType<CosmicBassArrow>(), Projectile.damage, player.HeldItem.knockBack, Main.myPlayer, ai1: ProjAi); //Creates a new projectile with our new vector for spread.
                     ProjAi = 100;
                 }
-                Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
-                Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 100 + (int)Charge;
+                Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeTimerGlobal = -80;
+                Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeVelocity = 100 + (int)Charge;
             }
         }
 
         private void ShootBig(Player player)
         {
-            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -75;
+            Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeTimerGlobal = -75;
             SoundEngine.PlaySound(SoundID.Item74.WithPitchOffset(-0.33f), player.Center);
 
             Vector2 offset = Projectile.velocity;
@@ -171,8 +171,8 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
             if (!IsAtMaxCharge && (int)Charge % 10 == 0) // Charge sound and screeen shake
             {
                 SoundEngine.PlaySound(ChargeSound, player.Center);
-                Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
-                Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 100 + (int)Charge;
+                Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeTimerGlobal = -80;
+                Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeVelocity = 100 + (int)Charge;
             }
 
             float chargesoundFact = Charge / 60f; //Charge upgrade sound

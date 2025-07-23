@@ -42,9 +42,9 @@ namespace WiitaMod.Projectiles.Pets
             NukeTheFrogs();
             if (player.dead)
             {
-                player.GetModPlayer<ModGlobalPlayer>().HamisPetEquipped = false;
+                player.GetModPlayer<WiitaModPlayer>().HamisPetEquipped = false;
             }
-            if (player.GetModPlayer<ModGlobalPlayer>().HamisPetEquipped)
+            if (player.GetModPlayer<WiitaModPlayer>().HamisPetEquipped)
             {
                 Projectile.timeLeft = 2;
             }

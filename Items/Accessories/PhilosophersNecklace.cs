@@ -30,7 +30,7 @@ namespace WiitaMod.Items.Accessories
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetModPlayer<ModGlobalPlayer>().PhilosophersNecklaceEquipped = true;
+			player.GetModPlayer<WiitaModPlayer>().PhilosophersNecklaceEquipped = true;
 		}
 
 		public override void AddRecipes()

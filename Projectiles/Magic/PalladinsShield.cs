@@ -36,8 +36,8 @@ namespace WiitaMod.Projectiles.Magic
 
         public override void OnSpawn(IEntitySource source)
         {
-            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeTimerGlobal = -80;
-            Main.player[Projectile.owner].GetModPlayer<ModGlobalPlayer>().screenShakeVelocity = 400;
+            Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeTimerGlobal = -80;
+            Main.player[Projectile.owner].GetModPlayer<WiitaModPlayer>().screenShakeVelocity = 400;
         }
         public override void AI()
         {

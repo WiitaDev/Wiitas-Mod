@@ -1,2 +1,5 @@
-0.2.4.1:
-- Forgot to turn off a debug tool
+0.2.4.2:
+- Fixed the Gun Drone recipe
+- Fixed the Medieval Prosthetic crippling you when using it with calamity
+- Reduced Deepcore Flaregun cooldown to 1 second
+- Tweaked other stuff like recipes and localization

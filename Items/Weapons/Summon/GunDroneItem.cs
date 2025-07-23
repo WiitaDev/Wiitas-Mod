@@ -56,7 +56,7 @@ namespace WiitaMod.Items.Weapons.Summon
 
         public override bool? UseItem(Player player)
         {
-            ModGlobalPlayer modPlayer = player.GetModPlayer<ModGlobalPlayer>();
+            WiitaModPlayer modPlayer = player.GetModPlayer<WiitaModPlayer>();
 
             if (player.altFunctionUse == 2)
             {
@@ -75,7 +75,7 @@ namespace WiitaMod.Items.Weapons.Summon
             // Reset position to player center
             position = player.Center;
 
-            if (player.GetModPlayer<ModGlobalPlayer>().GunDroneAlt)
+            if (player.GetModPlayer<WiitaModPlayer>().GunDroneAlt)
             {
                 knockback = 5;
             }
@@ -90,7 +90,7 @@ namespace WiitaMod.Items.Weapons.Summon
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.HallowedBar, 12);
             recipe.AddIngredient(ItemID.SoulofSight, 10);
-            recipe.AddIngredient(ItemID.SoulofMight, 100);
+            recipe.AddIngredient(ItemID.SoulofMight, 10);
             recipe.AddIngredient(ItemID.Wire, 30);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();

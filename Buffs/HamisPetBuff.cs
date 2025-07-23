@@ -17,7 +17,7 @@ namespace WiitaMod.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<ModGlobalPlayer>().HamisPetEquipped = true;
+            player.GetModPlayer<WiitaModPlayer>().HamisPetEquipped = true;
             player.buffTime[buffIndex] = 18000;
             bool petProjectileNotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<HamisPet>()] <= 0;
             if (petProjectileNotSpawned && player.whoAmI == Main.myPlayer)

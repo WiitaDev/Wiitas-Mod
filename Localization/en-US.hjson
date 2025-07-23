@@ -20,6 +20,11 @@ Mods: {
 				DisplayName: EX-8 Guard Hound
 				Description: The EX-8 Guard Hound will protect you
 			}
+
+			ProstheticDebuff: {
+				DisplayName: Crippled
+				Description: Walking hurts :(
+			}
 		}
 
 		Items: {
@@ -162,7 +167,11 @@ Mods: {
 
 			FriedSeagull: {
 				DisplayName: Fried Seagull
-				Tooltip: "'Vermin with wings? Chicken of the sea? Or just an opportunity missed?'"
+				Tooltip:
+					'''
+					'Vermin with wings? Chicken of the sea? Or just an opportunity missed?'
+					{$CommonItemTooltip.MediumStats}
+					'''
 			}
 
 			AstralAlloy: {
@@ -181,8 +190,7 @@ Mods: {
 					'''
 					100% increased flight time
 					30% increased flight movement speed
-					5% reduced max health
-					'The prosthetic is so badly made that you take damage when walking'
+					'Walking with this hurts so much it makes you stay off the ground'
 					'''
 			}
 
@@ -219,8 +227,8 @@ Mods: {
 				DisplayName: Deepcore Flare Gun
 				Tooltip:
 					'''
-					Shoots out Deepcore Flare
-					Has a 5 second cooldown
+					Shoots out Deepcore Flares
+					Has a 1 second cooldown
 					'''
 			}
 
@@ -295,7 +303,7 @@ Mods: {
 
 				OnlyHamis: {
 					Label: Only Hamis
-					Tooltip: Disables all content except Hamis/Noita related content
+					Tooltip: Disables/Enables all content except Hamis/Noita related content
 				}
 
 				FastRespawn: {

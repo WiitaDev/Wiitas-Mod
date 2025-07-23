@@ -31,7 +31,7 @@ namespace WiitaMod.Items.Accessories
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetModPlayer<ModGlobalPlayer>().HealthFlowerEquipped = true;
+			player.GetModPlayer<WiitaModPlayer>().HealthFlowerEquipped = true;
 		}
 
 		public override void AddRecipes()
