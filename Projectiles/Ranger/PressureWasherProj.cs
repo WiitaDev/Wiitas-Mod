@@ -223,8 +223,7 @@ namespace WiitaMod.Projectiles.Ranger
 
                     // render the water
                     GameShaders.Misc["WiitaMod:WaterStream"].SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Trail_1", AssetRequestMode.ImmediateLoad));
-                    PrimitiveRenderer.RenderTrail(position, new PrimitiveSettings(WidthFunction, ColorFunction, smoothen: true, shader: GameShaders.Misc["WiitaMod:WaterStream"]), 24);
-
+                    PrimitiveRenderer.RenderTrail(position, new PrimitiveSettings(WidthFunction, ColorFunction, smoothen: true, shader: GameShaders.Misc["WiitaMod:WaterStream"]), 30);
 
                     Texture2D tip = ModContent.Request<Texture2D>("WiitaMod/Particles/Mist", AssetRequestMode.ImmediateLoad).Value;
                     endpointColor.A = 0;

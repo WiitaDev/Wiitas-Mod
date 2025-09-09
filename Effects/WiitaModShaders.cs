@@ -14,6 +14,7 @@ namespace WiitaMod.Effects
         internal static Asset<Effect> StandardPrimitiveShader;
         internal static Asset<Effect> WaterStreamEffect;
         internal static Asset<Effect> GoldEffect;
+        internal static Asset<Effect> FadeUV;
 
         public override void Load()
         {
@@ -29,11 +30,13 @@ namespace WiitaMod.Effects
             StandardPrimitiveShader = Mod.Assets.Request<Effect>("Effects/StandardPrimitiveShader");
             WaterStreamEffect = Mod.Assets.Request<Effect>("Effects/WaterStreamEffect");
             GoldEffect = Mod.Assets.Request<Effect>("Effects/GoldEffect");
+            FadeUV = Mod.Assets.Request<Effect>("Effects/FadedUVMapStreak");
 
             // Register shaders using the asset references
             RegisterMiscShader(StandardPrimitiveShader, "PrimitivePass", "StandardPrimitiveShader");
             RegisterMiscShader(WaterStreamEffect, "TrailPass", "WaterStream");
             RegisterMiscShader(GoldEffect, "GoldShaderPass", "GoldShader");
+            RegisterMiscShader(FadeUV, "TrailPass", "UVFade");
         }
 
         private void RegisterMiscShader(Asset<Effect> effectAsset, string passName, string registrationName)
@@ -52,11 +55,14 @@ namespace WiitaMod.Effects
         {
             WaterStreamEffect = null;
             StandardPrimitiveShader = null;
+            GoldEffect = null;
+            FadeUV = null;
 
             // Unregister shaders
             GameShaders.Misc.Remove($"{ShaderPrefix}StandardPrimitiveShader");
             GameShaders.Misc.Remove($"{ShaderPrefix}WaterStream");
             GameShaders.Misc.Remove($"{ShaderPrefix}GoldShader");
+            GameShaders.Misc.Remove($"{ShaderPrefix}UVFade");
         }
     }
 }

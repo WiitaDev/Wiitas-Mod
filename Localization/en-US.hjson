@@ -246,6 +246,11 @@ Mods: {
 				DisplayName: Sand Pouch
 				Tooltip: ""
 			}
+
+			TestWeapon: {
+				DisplayName: Test Weapon
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -283,6 +288,8 @@ Mods: {
 			SandSlash.DisplayName: Sand Slash
 			SandSlashAlt.DisplayName: Sand Slash Alt
 			SandVortex.DisplayName: Sand Vortex
+			TestWeaponHold.DisplayName: Test Weapon Hold
+			TestWeaponProj.DisplayName: Test Weapon Proj
 		}
 
 		Tiles: {
