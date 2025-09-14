@@ -191,7 +191,7 @@ namespace WiitaMod.Projectiles.Ranger
         {
             if (Time > 1)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/GlowTrail", AssetRequestMode.ImmediateLoad).Value;
+                Texture2D texture = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Trail_1", AssetRequestMode.ImmediateLoad).Value;
                 Texture2D bloom = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/CircleGradient", AssetRequestMode.ImmediateLoad).Value;
                 Texture2D glow = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Glow", AssetRequestMode.ImmediateLoad).Value;
                 VertexStrip strip = new VertexStrip();

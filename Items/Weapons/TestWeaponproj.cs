@@ -84,25 +84,7 @@ namespace WiitaMod.Projectiles.Ranger
                 }
             }
 
-            if (Time > 1)
-            {
-                for (int i = 0; i < points.Count; i++)
-                {
-                    float prog = Utils.GetLerpValue(1, points.Count, i, true) * Utils.GetLerpValue(points.Count - 1, 0, i, true) * 3f;
-                }
 
-                for (int i = 1; i < points.Count; i++)
-                {
-                    if (Main.rand.NextBool(2))
-                    {
-                        Vector2 vel = (Projectile.DirectionTo(endPoint).SafeNormalize(Vector2.Zero).RotatedByRandom(0.5f) * 0.05f) * Main.rand.NextFloat(2f);
-                        Color color = Main.hslToRgb((Projectile.localAI[0] * 0.03f + i / (float)points.Count * 0.5f) % 1f, 0.5f, 0.5f, 0);
-                        Dust sparkle = Dust.NewDustPerfect(points[i], 226, vel, 0, color, Main.rand.NextFloat(1.3f));
-                        sparkle.noGravity = true;
-                        sparkle.noLightEmittence = true;
-                    }
-                }
-            }
             if (Time > 80)
                 Projectile.Kill();
 
@@ -187,19 +169,30 @@ namespace WiitaMod.Projectiles.Ranger
                 //Color StripColor(float progress) => Main.hslToRgb((Projectile.localAI[0] * 0.03f + progress) % 1f, 0.5f, 0.6f) * Utils.GetLerpValue(40, 10, Time, true);
                 Color StripColor(float progress)
                 {
-                    Color color = Color.White;
-                    return color;
+                    Color trailColor = Color.White;
+                    trailColor.A = 255;
+                    return trailColor;
                 }
-                float StripWidth(float progress) => 50f;
+
+                float StripWidth(float progress) 
+                {
+                    float expansionCompletion = 1f - MathF.Pow(1f - Utils.GetLerpValue(0f, 0.3f, progress, true), 2f);
+                    float undulation = MathF.Cos(MathHelper.Pi * progress * 5f - Main.GlobalTimeWrappedHourly * 23f) * 2.4f;
+                    float maxWidth = undulation + 50f;
+
+                    return MathHelper.Lerp(0f, Projectile.scale * maxWidth, expansionCompletion);
+                }
 
                 Vector2[] position = new Vector2[points.Count];
 
                 for (int i = 0; i < position.Length; i++)
                     position[i] = points[i];
 
-
-                MiscShaderData shader = GameShaders.Misc["WiitaMod:WaterStream"].SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/shitass_laser", AssetRequestMode.ImmediateLoad));
+                MiscShaderData shader = GameShaders.Misc["WiitaMod:WaterStream"];
+                shader.SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/FuzzyLaser"));
+                shader.Apply();
                 PrimitiveRenderer.RenderTrail(position, new PrimitiveSettings(StripWidth, StripColor, smoothen: true, shader: shader), 30);
+
             }
             return false;
         }

@@ -38,7 +38,7 @@ namespace WiitaMod.Items.Weapons
             Item.knockBack = 8;
             Item.value = Item.sellPrice(0, 22, 0, 0);
             Item.rare = ItemRarityID.Yellow;
-            Item.UseSound = SoundID.Thunder;
+            Item.UseSound = SoundID.AbigailAttack;
             Item.autoReuse = false;
             Item.shoot = ModContent.ProjectileType<TestWeaponHold>();
             Item.shootSpeed = 6f;

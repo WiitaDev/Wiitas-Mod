@@ -203,14 +203,14 @@ namespace WiitaMod.Projectiles.Ranger
 
 
                     Color color = Color.CadetBlue.MultiplyRGBA(lightColor);
-                    color.A = 125;
+                    color.A = 0;
                     Color endpointColor = Color.CadetBlue.MultiplyRGBA(new Color(Lighting.GetSubLight(projectiles[^1].Center)));
-                    endpointColor.A = 125;
+                    endpointColor.A = 0;
 
 
                     Color ColorFunction(float progress) => Color.Lerp(color, endpointColor, progress) * Math.Clamp(0.5f - (projectiles[(int)(progress * projectiles.Count)].ai[0] / 16 / 2), 0.0f, 0.5f);
 
-                    float WidthFunction(float progress) => (2f + projectiles[(int)(progress * projectiles.Count)].ai[0]) * 4.5f;
+                    float WidthFunction(float progress) => (2f + projectiles[(int)(progress * projectiles.Count)].ai[0]) * 6.5f;
 
                     Vector2[] position = new Vector2[projectiles.Count];
 
@@ -222,7 +222,7 @@ namespace WiitaMod.Projectiles.Ranger
                     position = new BezierCurve(position.ToList()).GetPoints(projectiles.Count * 2).ToArray();
 
                     // render the water
-                    GameShaders.Misc["WiitaMod:WaterStream"].SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Trail_1", AssetRequestMode.ImmediateLoad));
+                    GameShaders.Misc["WiitaMod:WaterStream"].SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/FuzzyLaser", AssetRequestMode.ImmediateLoad));
                     PrimitiveRenderer.RenderTrail(position, new PrimitiveSettings(WidthFunction, ColorFunction, smoothen: true, shader: GameShaders.Misc["WiitaMod:WaterStream"]), 30);
 
                     Texture2D tip = ModContent.Request<Texture2D>("WiitaMod/Particles/Mist", AssetRequestMode.ImmediateLoad).Value;

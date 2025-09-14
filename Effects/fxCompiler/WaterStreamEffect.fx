@@ -41,11 +41,6 @@ VertexShaderOutput VertexShaderFunction(in VertexShaderInput input)
     return output;
 }
 
-float InverseLerp(float from, float to, float x)
-{
-    return saturate((x - from) / (to - from));
-}
-
 // The X coordinate is the trail completion, the Y coordinate is the same as any other.
 // This is simply how the primitive TextCoord is layed out in the C# code.
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
@@ -56,13 +51,11 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     // Account for texture distortion artifacts.
     coords.y = (coords.y - 0.5) / input.TextureCoordinates.z + 0.5;
     
-    float bloomOpacity = pow(sin(coords.y * 3.141), 5.6);
-    float noise = tex2D(uImage1, coords * 3 - float2(uTime * 2.44, 0));
-    float brightnessStreak = tex2D(uImage0, coords * float2(2, 1) - float2(uTime * 1.61, 0)) + noise * bloomOpacity;
-    float4 energyColor = float4(lerp(uColor, uSecondaryColor, noise), 1);
-    float widthOpacity = pow(sin(coords.y * 3.141), InverseLerp(0.1, 0, coords.x) * 20);
-    
-    return (energyColor * bloomOpacity + brightnessStreak * bloomOpacity) * color.a * pow(1 - coords.x, 1.6) * widthOpacity;
+    // Read the fade map as a streak.
+    float4 fadeMapColor = tex2D(uImage1, float2(frac(coords.x - uTime * 2.5), coords.y));
+    float opacity = fadeMapColor.r;
+      
+    return color * opacity;
 }
 
 technique Technique1

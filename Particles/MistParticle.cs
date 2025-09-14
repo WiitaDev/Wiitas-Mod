@@ -10,9 +10,9 @@ namespace WiitaMod.Particles
 {
     public class MistParticle : Particle //this is lifted from the public calamity mod repository
     {
-        public override string Texture => "WiitaMod/Particles/Mist";
+        public override string Texture => "WiitaMod/Particles/mist1";
         public override int FrameVariants => 3;
-        public override bool UseAdditiveBlend => true;
+        public override bool UseAdditiveBlend => false;
 
 
         private float Opacity;
