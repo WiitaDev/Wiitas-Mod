@@ -251,6 +251,11 @@ Mods: {
 				DisplayName: Test Weapon
 				Tooltip: ""
 			}
+
+			FlameBlaster: {
+				DisplayName: Flame Blaster
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -290,6 +295,7 @@ Mods: {
 			SandVortex.DisplayName: Sand Vortex
 			TestWeaponHold.DisplayName: Test Weapon Hold
 			TestWeaponProj.DisplayName: Test Weapon Proj
+			PiercingPegshot.DisplayName: Piercing Pegshot
 		}
 
 		Tiles: {

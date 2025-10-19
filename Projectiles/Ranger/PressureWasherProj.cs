@@ -202,9 +202,9 @@ namespace WiitaMod.Projectiles.Ranger
                     Player player = Main.player[Projectile.owner];
 
 
-                    Color color = Color.CadetBlue.MultiplyRGBA(lightColor);
+                    Color color = Color.CadetBlue.MultiplyRGB(new Color(Lighting.GetSubLight(projectiles[0].Center)));
                     color.A = 0;
-                    Color endpointColor = Color.CadetBlue.MultiplyRGBA(new Color(Lighting.GetSubLight(projectiles[^1].Center)));
+                    Color endpointColor = Color.CadetBlue.MultiplyRGB(new Color(Lighting.GetSubLight(projectiles[^1].Center)));
                     endpointColor.A = 0;
 
 

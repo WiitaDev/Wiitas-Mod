@@ -24,6 +24,7 @@ namespace WiitaMod.Systems
         public int flamesShot = 0;
 
         public bool GunDroneAlt;
+        public bool FlameBlasterAlt;
 
         //buffs
         public bool ProstheticDebuff = false;
@@ -143,7 +144,7 @@ namespace WiitaMod.Systems
             {
                 Player.QuickHeal();
                 SoundEngine.PlaySound(SoundID.Item4.WithVolumeScale(1f).WithPitchOffset(0.1f), Player.Center);
-                if (Player.HasBuff(BuffID.PotionSickness) == false)
+                if (Player.HasBuff(BuffID.PotionSickness) == true)
                 {
                     return true;
                 }

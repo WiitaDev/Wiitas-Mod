@@ -10,9 +10,9 @@ namespace WiitaMod.Particles
 {
     public class MistParticle : Particle //this is lifted from the public calamity mod repository
     {
-        public override string Texture => "WiitaMod/Particles/mist1";
+        public override string Texture => "WiitaMod/Particles/Mist";
         public override int FrameVariants => 3;
-        public override bool UseAdditiveBlend => false;
+        public override bool UseAdditiveBlend => true;
 
 
         private float Opacity;
@@ -54,7 +54,6 @@ namespace WiitaMod.Particles
                 Kill();
 
             Color = Color.Lerp(ColorFire, ColorFade, MathHelper.Clamp((float)((255 - Opacity) - 100) / 80, 0f, 1f)) * (Opacity / 255f);
-
         }
     }
 }
