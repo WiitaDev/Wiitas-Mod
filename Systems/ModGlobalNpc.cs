@@ -16,7 +16,7 @@ namespace WiitaMod.Systems
         {
             if (projectile.type == ModContent.ProjectileType<HamisNuke>())
             {
-                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == 687)
+                if (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == NPCID.BoundTownSlimeYellow)
                 {
                     modifiers.FinalDamage += npc.lifeMax - 1;
                 }

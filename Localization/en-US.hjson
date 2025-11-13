@@ -247,11 +247,6 @@ Mods: {
 				Tooltip: ""
 			}
 
-			TestWeapon: {
-				DisplayName: Test Weapon
-				Tooltip: ""
-			}
-
 			FlameBlaster: {
 				DisplayName: Flame Blaster
 				Tooltip: ""
@@ -289,12 +284,6 @@ Mods: {
 			DeepcoreFlareProj.DisplayName: Deepcore Flare
 			GunDrone.DisplayName: EX-8 Guard Hound
 			GunDroneGrenade.DisplayName: EX-8 Grenade
-			SandPouchProj.DisplayName: Sand Pouch Proj
-			SandSlash.DisplayName: Sand Slash
-			SandSlashAlt.DisplayName: Sand Slash Alt
-			SandVortex.DisplayName: Sand Vortex
-			TestWeaponHold.DisplayName: Test Weapon Hold
-			TestWeaponProj.DisplayName: Test Weapon Proj
 			PiercingPegshot.DisplayName: Piercing Pegshot
 		}
 

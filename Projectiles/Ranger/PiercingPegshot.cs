@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Systems.Primitives;
 
@@ -16,86 +15,82 @@ namespace WiitaMod.Projectiles.Ranger
     {
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
 
-        public Vector2 endPoint;
+        public Vector2 startPoint;
+
         public List<Vector2> points;
+        public List<Vector2> velocities;
 
-
-        private const float maxDistance = 1000f;
-
-        public float Distance
-        {
-            get => Projectile.ai[0];
-            set => Projectile.ai[0] = value;
-        }
-
-        public float Hits
-        {
-            get => Projectile.ai[1];
-            set => Projectile.ai[1] = value;
-        }
-
-        public override bool ShouldUpdatePosition() => false;
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 5;
+            Projectile.height = 5;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.penetrate = 9999;
-            Projectile.timeLeft = 20;
+            Projectile.extraUpdates = 150;
+            Projectile.timeLeft = 30 * Projectile.extraUpdates;
+            Projectile.ignoreWater = true;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = player.MountedCenter + new Vector2(0, -10) + Projectile.velocity * 6f; // the vector offset is the itemholdout y offset
+            Projectile.Center = player.MountedCenter + new Vector2(0, -10) + Projectile.velocity * 9.5f; // the vector offset is the itemholdout y offset
+            startPoint = Projectile.Center;
+
+            velocities = new List<Vector2>();
         }
 
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
-            FindEndpoint();
-
-            points = new BezierCurve([Projectile.Center, endPoint]).GetPoints(10);
-        }
-
-        private void FindEndpoint()
-        {
-            if (Main.netMode != NetmodeID.Server)
+            if (Projectile.timeLeft > 29 * Projectile.extraUpdates)
             {
-                Player player = Main.player[Projectile.owner];
-
-                for (Distance = 0; Distance <= maxDistance; Distance += 5f)
+                if (Projectile.penetrate <= Projectile.maxPenetrate - 2)
                 {
-                    var end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
-                    if (!Collision.CanHitLine(Projectile.Center, 1, 1, end, 1, 1))
+                    Projectile.position += Projectile.velocity;
+                    Projectile.velocity = Vector2.Zero;
+                    Projectile.friendly = false;
+                }
+                points = new BezierCurve([startPoint, Projectile.Center]).GetPoints(10);
+                points.Add(Projectile.Center);
+            }
+            else
+            {
+                Projectile.position += Projectile.velocity;
+                Projectile.velocity = Vector2.Zero;
+
+
+                Projectile.friendly = false;
+
+                if (Projectile.timeLeft % Projectile.extraUpdates == 0)
+                {
+                    if (velocities.Count == 0)
                     {
-                        Distance -= 5f;
-                        break;
+                        for (int i = 0; i < points.Count; i++)
+                        {
+                            velocities.Add(startPoint.DirectionTo(Projectile.Center).RotatedByRandom(1.5f) * Main.rand.NextFloat(0.0005f, 0.001f) * Vector2.Distance(startPoint, Projectile.Center));
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i < points.Count; i++)
+                        {
+                            velocities[i] *= Main.rand.NextFloat(0.98f, 1f);
+                            points[i] += velocities[i];
+                        }
                     }
                 }
 
-                Vector2 mouse = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
-                endPoint = mouse;
+
             }
         }
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Player player = Main.player[Projectile.owner];
-            Vector2 unit = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
-            float point = 0f;
-            // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
-            // It will look for collisions on the given line using AABB
-
-            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, unit, Projectile.height, ref point)
-                && Hits < 2)
-            {
-                Hits += 1;
-                return true;
-            }
-
+            Projectile.position += Projectile.velocity;
+            Projectile.velocity = Vector2.Zero;
+            Projectile.friendly = false;
             return false;
         }
 
@@ -104,13 +99,12 @@ namespace WiitaMod.Projectiles.Ranger
 
             Color ColorFunction(float progress)
             {
-                Color color = Color.Lerp(Color.Firebrick, Color.Orange, progress);
-                color.A = (byte)(Projectile.timeLeft / 20f * Byte.MaxValue);
-
+                Color color = Color.Lerp(Color.Orange, Color.Firebrick, progress);
+                color.A = 150;
                 return color;
             }
 
-            float WidthFunction(float progress) => MathHelper.Lerp(30f, 5f, 1 - Projectile.timeLeft / 20f);
+            float WidthFunction(float progress) => 30f;
 
             GameShaders.Misc["WiitaMod:WaterStream"].SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/FuzzyLaser", AssetRequestMode.ImmediateLoad));
             PrimitiveRenderer.RenderTrail(points, new PrimitiveSettings(WidthFunction, ColorFunction, smoothen: true, shader: GameShaders.Misc["WiitaMod:WaterStream"]), 30);

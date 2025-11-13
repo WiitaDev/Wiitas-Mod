@@ -14,18 +14,14 @@ namespace WiitaMod.Projectiles.Magic
     {
         public ref float ProjectileNum => ref Projectile.ai[0];
         public ref float Timer => ref Projectile.ai[1];
-        public ref float Shot => ref Projectile.ai[2];
 
         public ref Player player => ref Main.player[Projectile.owner];
         public ref Projectile heldProjectile => ref Main.projectile[Main.player[Projectile.owner].heldProj];
 
 
 
-        bool flag = false;
         bool maxCharge = false;
         public bool Channeling = true;
-        //public Projectile HeldProj;
-        int HeldProjIndex;
 
         public override void SetStaticDefaults()
         {
@@ -83,9 +79,9 @@ namespace WiitaMod.Projectiles.Magic
                 Main.dust[dustHit].noGravity = true;
             }
 
-            if (Shot == 0 && Main.myPlayer == Projectile.owner && heldProjectile.active && heldProjectile.type == ModContent.ProjectileType<InfernalAlmanacHold>())
+            if (Channeling == true && player.heldProj != -1 && Main.projectile[player.heldProj] == heldProjectile && Main.myPlayer == Projectile.owner && heldProjectile.type == ModContent.ProjectileType<InfernalAlmanacHold>())
             {
-                int bitIndex = (int)ProjectileNum - 1; // Convert to 0-based index
+                int bitIndex = (int)ProjectileNum - 1;
                 heldProjectile.ai[2] = (float)((int)heldProjectile.ai[2] & ~(1 << bitIndex));
                 heldProjectile.netUpdate = true;
             }
@@ -94,28 +90,21 @@ namespace WiitaMod.Projectiles.Magic
                 ProjectileHelper.Explode(Projectile.whoAmI, 100, 100, false);
 
             SoundEngine.PlaySound(SoundID.Item20.WithPitchOffset(-0.5f), Projectile.Center);
-
-            Projectile.netUpdate = true;
         }
 
         public override void AI()
         {
-            if (player.heldProj >= 0 && player.heldProj < Main.maxProjectiles)
+
+            if (player.heldProj != -1 && Channeling && heldProjectile.active && heldProjectile.type == ModContent.ProjectileType<InfernalAlmanacHold>())
             {
-                Projectile heldProj = Main.projectile[player.heldProj];
-                if (heldProj.active && heldProj.type == ModContent.ProjectileType<InfernalAlmanacHold>())
-                {
-                    // Safe to use heldProj here
-                    Timer = heldProj.ai[0];
-                    if (heldProj.ai[1] == 6)
-                    {
-                        maxCharge = true;
-                    }
-                }
+                Timer = heldProjectile.ai[0];
+                maxCharge = heldProjectile.ai[1] == 6;
             }
-            else
+
+            if (player.channel == false)
             {
                 Channeling = false;
+                Projectile.ai[2] = 1;
             }
 
             if (Projectile.owner == Main.myPlayer)
@@ -130,10 +119,7 @@ namespace WiitaMod.Projectiles.Magic
             if (Channeling == true)
             {
                 Timer = heldProjectile.ai[0];
-                if (heldProjectile.ai[1] == 6)
-                {
-                    maxCharge = true;
-                }
+
 
                 Projectile.rotation = 0;
                 Projectile.friendly = false;
@@ -143,17 +129,14 @@ namespace WiitaMod.Projectiles.Magic
             }
             else
             {
-                Shot = 1;
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y * Projectile.direction, Projectile.velocity.X * Projectile.direction) - 1.57f * Projectile.direction;
-                if (!flag)
+                if (!Projectile.friendly)
                 {
                     if (player == Main.LocalPlayer)
                     {
                         Projectile.velocity = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * speed;
                     }
                     Projectile.friendly = true;
-
-                    flag = true;
                 }
 
                 // Trying to find NPC closest to the projectile

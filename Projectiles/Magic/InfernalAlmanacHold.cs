@@ -1,12 +1,8 @@
-using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles.Ranger;
-using WiitaMod.Systems;
 
 namespace WiitaMod.Projectiles.Magic
 {
@@ -19,7 +15,6 @@ namespace WiitaMod.Projectiles.Magic
         //The distance charge particle from the player center
         private const float MOVE_DISTANCE = 15f;
 
-        // The actual charge value is stored in the localAI0 field
         public float Charge
         {
             get => Projectile.localAI[0];
@@ -29,7 +24,7 @@ namespace WiitaMod.Projectiles.Magic
         {
             get => Projectile.ai[1];
             set => Projectile.ai[1] = value;
-        } 
+        }
         public float Timer
         {
             get => Projectile.ai[0];
@@ -82,7 +77,7 @@ namespace WiitaMod.Projectiles.Magic
             }
 
             ChargeWeapon(player);
-            if (IsAtMaxCharge) 
+            if (IsAtMaxCharge)
             {
                 SpawnProjectile(player);
                 Charge = 0;
@@ -102,7 +97,7 @@ namespace WiitaMod.Projectiles.Magic
                 {
                     if ((SpawnedProjectiles & (1 << i)) == 0)
                     {
-                        projID = i + 1; // IDs start at 1 for consistency
+                        projID = i + 1;
                         Projectile.ai[2] = (float)(SpawnedProjectiles | (1 << i));
                         break;
                     }
