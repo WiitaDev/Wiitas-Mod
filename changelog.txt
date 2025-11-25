@@ -1,2 +1,4 @@
-0.2.4.3:
-- 123456789
+0.2.5:
+- Added Flame Blaster
+- Added Holy Bass Bow
+- Fixed Infernal Almanac in multiplayer

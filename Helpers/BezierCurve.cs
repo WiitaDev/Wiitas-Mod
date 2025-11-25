@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace WiitaMod;
+namespace WiitaMod.Helpers;
 
 public readonly struct BezierCurve
 {

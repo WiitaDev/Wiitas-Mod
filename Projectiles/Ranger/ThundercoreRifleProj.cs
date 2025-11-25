@@ -10,6 +10,7 @@ using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Dusts;
+using WiitaMod.Helpers;
 
 namespace WiitaMod.Projectiles.Ranger
 {

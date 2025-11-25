@@ -1,10 +1,11 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Items.CraftingMaterials;
-using WiitaMod.Projectiles.Ranger;
+using WiitaMod.Projectiles.Ranger.FlameBlaster;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger
@@ -20,23 +21,24 @@ namespace WiitaMod.Items.Weapons.Ranger
         {
             Item.ResearchUnlockCount = 1;
             ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Type] = true;
         }
 
         public override void SetDefaults()
         {
-            Item.damage = 30;
+            Item.damage = 55;
             Item.crit = 4;
             Item.noMelee = true;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 66;
             Item.height = 50;
-            Item.useTime = 30;
-            Item.useAnimation = 30;
+            Item.useTime = 35;
+            Item.useAnimation = 35;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 5;
             Item.value = Item.sellPrice(0, 2, 0, 0);
             Item.rare = ItemRarityID.Yellow;
-            Item.UseSound = SoundID.Item112;
+            Item.UseSound = new SoundStyle("WiitaMod/Assets/SFX/PegShot") { MaxInstances = 0 , PitchVariance = 0.2f};
             Item.shoot = ModContent.ProjectileType<PiercingPegshot>();
             Item.useAmmo = AmmoID.Bullet;
             Item.shootSpeed = 1f;
@@ -55,7 +57,7 @@ namespace WiitaMod.Items.Weapons.Ranger
 
             if (modPlayer.FlameBlasterAlt == true)
             {
-                type = ProjectileID.BeeArrow;
+                type = ModContent.ProjectileType<FlameBlast>();
             }
             else
             {
@@ -71,8 +73,7 @@ namespace WiitaMod.Items.Weapons.Ranger
             {
                 modPlayer.FlameBlasterAlt = modPlayer.FlameBlasterAlt != true;
 
-                CombatText.NewText(player.getRect(), modPlayer.FlameBlasterAlt ? Color.OrangeRed : Color.Firebrick, modPlayer.FlameBlasterAlt ? "Piercing Pegshot" : "Flame Blast");
-                return true;
+                CombatText.NewText(player.getRect(), modPlayer.FlameBlasterAlt ? Color.OrangeRed : Color.Firebrick, modPlayer.FlameBlasterAlt ? "Flame Blast" : "Piercing Pegshot");
             }
 
             return true;

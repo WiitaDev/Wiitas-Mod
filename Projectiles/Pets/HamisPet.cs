@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Helpers;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Projectiles.Pets
@@ -62,7 +63,7 @@ namespace WiitaMod.Projectiles.Pets
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
-                    if (npc.active && (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == 687))
+                    if (npc.active && (npc.type == NPCID.Frog || npc.type == NPCID.GoldFrog || npc.type == NPCID.BoundTownSlimeYellow))
                     {
                         float between = Vector2.Distance(npc.Center, Projectile.Center);
                         bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;

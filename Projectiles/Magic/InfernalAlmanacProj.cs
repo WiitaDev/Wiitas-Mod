@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WiitaMod.Helpers;
 using WiitaMod.Particles;
 using WiitaMod.Particles.ParticleSystems;
 

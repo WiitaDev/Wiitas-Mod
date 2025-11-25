@@ -251,11 +251,17 @@ Mods: {
 				DisplayName: Flame Blaster
 				Tooltip: ""
 			}
+
+			HolyBassBow: {
+				DisplayName: Holy Bass Bow
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
 			Hamis.DisplayName: Hamis
 			HamisGroup.DisplayName: Hamis Group
+			InsuranceFish.DisplayName: Insurance Fish
 		}
 
 		Projectiles: {
@@ -285,6 +291,8 @@ Mods: {
 			GunDrone.DisplayName: EX-8 Guard Hound
 			GunDroneGrenade.DisplayName: EX-8 Grenade
 			PiercingPegshot.DisplayName: Piercing Pegshot
+			FlameBlast.DisplayName: Flame Blast
+			HolyBassLaser.DisplayName: Holy Bass Laser
 		}
 
 		Tiles: {

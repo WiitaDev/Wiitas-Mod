@@ -5,10 +5,9 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.Graphics.Shaders;
 
-namespace WiitaMod
+namespace WiitaMod.Helpers
 {
-
-    public static partial class CalamityUtils
+    public static partial class WiitaUtils
     {
 
         // Cached for efficiency purposes.

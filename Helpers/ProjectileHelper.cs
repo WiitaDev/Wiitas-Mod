@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
-namespace WiitaMod;
+namespace WiitaMod.Helpers;
 
 public static class ProjectileHelper
 {
