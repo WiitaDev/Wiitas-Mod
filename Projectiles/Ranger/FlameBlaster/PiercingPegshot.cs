@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
@@ -26,6 +27,17 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
         public List<Vector2> points;
         public List<Vector2> velocities;
 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.WriteVector2(startPoint);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            startPoint = reader.ReadVector2();
+        }
+
+
         public override void SetDefaults()
         {
             Projectile.width = 12;
@@ -45,8 +57,6 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
             Projectile.Center = player.MountedCenter + new Vector2(0, -10) + Projectile.velocity * 9.5f; // the vector offset is the itemholdout y offset
             startPoint = Projectile.Center;
 
-            velocities = new List<Vector2>();
-
             for (int i = 0; i < 8; i++)
             {
                 MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity * 0.5f + Main.rand.NextVector2Circular(4f, 4f), Color.Orange, Color.WhiteSmoke, 0.33f, 255, MathHelper.ToRadians(2f));
@@ -59,6 +69,11 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
 
         public override void AI()
         {
+            if (Projectile.timeLeft == maxTimeLeft * Projectile.extraUpdates) 
+            {
+                velocities = new List<Vector2>();
+            }
+
             if (Projectile.timeLeft > (maxTimeLeft - 1f) * Projectile.extraUpdates)
             {
 

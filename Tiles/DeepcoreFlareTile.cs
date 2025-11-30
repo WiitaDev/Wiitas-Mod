@@ -15,14 +15,13 @@ namespace WiitaMod.Tiles
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[Type] = true;
 
-            Main.tileNoAttach[Type] = true;
-            Main.tileMergeDirt[Type] = false;
 
             AddMapEntry(new Color(205, 220, 255), CreateMapEntryName());
 
             DustType = DustID.Stone;
             HitSound = SoundID.Dig;
         }
+
 
         // Emit light when "on"
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)

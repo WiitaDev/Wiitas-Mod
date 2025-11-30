@@ -79,18 +79,6 @@ namespace WiitaMod.Items.Weapons.Ranger
             return true;
         }
 
-        public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ModContent.ItemType<AstralAlloy>(), 8);
-            recipe.AddRecipeGroup("HardmodeTier3", 3);
-            recipe.AddIngredient(ItemID.SoulofSight, 10);
-            recipe.AddIngredient(ItemID.SoulofFright, 5);
-            recipe.AddIngredient(ItemID.Ectoplasm, 3);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
-        }
-
         public override Vector2? HoldoutOffset()
         {
             return new Vector2(-14, -10);

@@ -93,6 +93,7 @@ namespace WiitaMod.Projectiles.Pets
                     {
                         Vector2 direction = targetCenter - Projectile.Center;
                         direction.Normalize();
+                        SoundEngine.PlaySound(new SoundStyle("WiitaMod/Assets/SFX/Blast4") { MaxInstances = 0, PitchVariance = 0.2f });
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, direction * 10, ModContent.ProjectileType<HamisNuke>(), 1, 0f, Projectile.owner);
                         Projectile.ai[2] = 0;
                     }
@@ -142,6 +143,7 @@ namespace WiitaMod.Projectiles.Pets
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+            Projectile.tileCollide = false;
             ProjectileHelper.Explode(Projectile.whoAmI, 250, 250, true, true);
         }
     }

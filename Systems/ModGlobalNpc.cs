@@ -5,6 +5,9 @@ using Terraria.ModLoader;
 using WiitaMod.Items.Weapons.Summon;
 using WiitaMod.Items.CraftingMaterials;
 using WiitaMod.Projectiles.Pets;
+using WiitaMod.Items.Weapons.Ranger;
+using WiitaMod.Items.Placeable;
+using WiitaMod.Items.Tools;
 
 namespace WiitaMod.Systems
 {
@@ -45,6 +48,21 @@ namespace WiitaMod.Systems
                 });*/
             }
 
+            if (shop.NpcType == NPCID.Pirate)
+            {
+                shop.Add(new Item(ModContent.ItemType<FlameBlaster>())
+                {
+                    shopCustomPrice = Item.buyPrice(0,30)
+                });
+            }
+
+            if (shop.NpcType == NPCID.Demolitionist)
+            {
+                shop.Add(new Item(ModContent.ItemType<DeepcoreFlareItem>())
+                {
+                    shopCustomPrice = Item.buyPrice(0,0, 5)
+                });
+            }
         }
 
 

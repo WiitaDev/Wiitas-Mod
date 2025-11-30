@@ -30,21 +30,23 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
         {
             Player player = Main.player[Projectile.owner];
             Projectile.Center = player.MountedCenter + new Vector2(0, -10) + Projectile.velocity * 9.5f; // the vector offset is the itemholdout y offset
-
-
-            for (int i = 0; i < 60; i++)
-            {
-                MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.33f, 255, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)));
-                ParticleManager.SpawnParticle(mistParticle);
-                SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.Yellow, 90, 0.2f, 1f, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)), true);
-                ParticleManager.SpawnParticle(smokeParticle);
-            }
         }
 
 
         public override void AI()
         {
             Projectile.Resize(Projectile.width + 1, Projectile.height + 1);
+
+            if (Projectile.timeLeft == 20) 
+            {
+                for (int i = 0; i < 60; i++)
+                {
+                    MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.33f, 255, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)));
+                    ParticleManager.SpawnParticle(mistParticle);
+                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.Yellow, 90, 0.2f, 1f, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)), true);
+                    ParticleManager.SpawnParticle(smokeParticle);
+                }
+            }
         }
 
 

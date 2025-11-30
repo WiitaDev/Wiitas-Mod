@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles.Ranger.BassArrows;
+using WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Ranger.BassBows
@@ -17,9 +18,6 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 
         public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Molten Bass Bow");
-			// Tooltip.SetDefault("Arrows turn into Molten Bass that explode spreading fire\nThe Molten Bass gets extinguished when touching water");
-
 			Item.ResearchUnlockCount = 1;
             ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
         }
@@ -32,22 +30,21 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			Item.width = 36;
 			Item.height = 56;
 			Item.scale = 1f;
-			Item.useTime = 30;
-			Item.useAnimation = 30;
+			Item.useTime = 40;
+			Item.useAnimation = 40;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 3;
 			Item.value = Item.sellPrice(0, 3, 0, 0);
 			Item.rare = ItemRarityID.Orange;
-			Item.UseSound = SoundID.Item5;
-			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<HolyBassLaser>();
+            Item.autoReuse = true;
+			Item.shoot = ModContent.ProjectileType<HolyBassHold>();
 			Item.useAmmo = AmmoID.Arrow;
 			Item.shootSpeed = 1f;
 		}
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
-            type = ModContent.ProjectileType<HolyBassLaser>();
+            type = ModContent.ProjectileType<HolyBassHold>();
         }
 
 		public override void AddRecipes()

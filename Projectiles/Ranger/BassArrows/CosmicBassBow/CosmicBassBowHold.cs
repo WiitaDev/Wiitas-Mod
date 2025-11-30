@@ -54,7 +54,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.CosmicBassBow
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.position = player.Center + Projectile.velocity * MOVE_DISTANCE;
+            Projectile.position = player.MountedCenter + Projectile.velocity * MOVE_DISTANCE;
 
             UpdatePlayer(player);
             ChargeBow(player);

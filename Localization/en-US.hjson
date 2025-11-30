@@ -293,6 +293,7 @@ Mods: {
 			PiercingPegshot.DisplayName: Piercing Pegshot
 			FlameBlast.DisplayName: Flame Blast
 			HolyBassLaser.DisplayName: Holy Bass Laser
+			HolyBassHold.DisplayName: Holy Bass Hold
 		}
 
 		Tiles: {
