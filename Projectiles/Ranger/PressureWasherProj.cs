@@ -68,7 +68,7 @@ namespace WiitaMod.Projectiles.Ranger
             }
 
             if (Main.myPlayer == Projectile.owner && player.channel)
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 35, Projectile.velocity * 35, ModContent.ProjectileType<PressureWasherPathProj>(), Projectile.damage, 0, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 35, Projectile.velocity * 35, ModContent.ProjectileType<PressureWasherPathProj>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 
             if (Time > 0)
             {

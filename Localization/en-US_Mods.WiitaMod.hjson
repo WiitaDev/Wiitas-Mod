@@ -76,6 +76,11 @@ Items: {
 
 	BassBucketItem: {
 	}
+
+	BassBlade: {
+		DisplayName: Bass Blade
+		Tooltip: ""
+	}
 }
 
 Buffs: {

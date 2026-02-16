@@ -4,15 +4,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WiitaMod.Buffs;
 using WiitaMod.Items.Weapons.Ranger.BassBows;
+using WiitaMod.NPCs;
 
 namespace WiitaMod.Systems
 {
     public class ModGlobalItem : GlobalItem
     {
-        public override bool AppliesToEntity(Item entity, bool lateInstantiation)
+        public override void SetDefaults(Item item)
         {
-            // Apply to weapons
-            return lateInstantiation && entity.damage > 0;
+            if (item.type == ItemID.Bass)
+            {
+                item.DefaultToCapturedCritter(ModContent.NPCType<BassCritter>());
+            }
         }
 
         public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)

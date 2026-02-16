@@ -66,6 +66,13 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
             }
         }
 
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            int paddingX = 6, paddingY = 6;
+            hitbox.Width = Projectile.width + paddingX;
+            hitbox.Height = Projectile.height + paddingY;
+            hitbox.Offset(-paddingX / 2, -paddingY / 2);
+        }
 
         public override void AI()
         {

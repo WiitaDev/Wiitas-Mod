@@ -37,7 +37,7 @@ namespace WiitaMod.Items.Weapons.Summon
             Item.knockBack = 4;
             Item.UseSound = SoundID.Item44;
             Item.rare = ItemRarityID.Pink;
-            Item.value = Item.sellPrice(0, 2, 0, 0);
+            Item.value = Item.sellPrice(0, 5, 0, 0);
             Item.buffType = ModContent.BuffType<GunDroneBuff>();
             Item.shoot = ModContent.ProjectileType<GunDrone>();
         }

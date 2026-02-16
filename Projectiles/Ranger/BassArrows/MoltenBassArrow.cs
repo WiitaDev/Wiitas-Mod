@@ -21,7 +21,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             Projectile.width = 18;
             Projectile.height = 16;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = ProjAIStyleID.Arrow;
             Projectile.knockBack = 2f;
             Projectile.tileCollide = true;
             Projectile.penetrate = 1;
@@ -55,7 +55,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
                     Main.dust[dustHit].scale = (float)Main.rand.Next(135, 160) * 0.013f;
                     Main.dust[dustHit].noGravity = true;
                 }
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<RockyMoltenBassArrow>(), 20, 0, Main.myPlayer);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<RockyMoltenBassArrow>(), (int)(Projectile.damage * 0.75f), 2f, Main.myPlayer);
 
             }
         }
@@ -77,9 +77,11 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             Player Owner = Main.player[Projectile.owner];
             if (Main.myPlayer == Owner.whoAmI)
             {
-                for (int i = 0; i < Main.rand.Next(3, 7); i++)
+                for (int i = 0; i < Main.rand.Next(3, 5); i++)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(3, 5) * -1) + Projectile.velocity * 0.3f, Main.rand.Next(400, 403), Projectile.damage / 2, 0, Main.myPlayer);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Main.rand.NextFloat(-5.0f, 5.0f), Main.rand.NextFloat(3.0f, 5.0f) * -1) + Projectile.velocity * 0.3f, Main.rand.Next(400, 403), Projectile.damage / 3, 0, Main.myPlayer);
+                    Main.projectile[proj].penetrate = 2;
+
                 }
             }
 

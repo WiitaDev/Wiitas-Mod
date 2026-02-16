@@ -256,12 +256,19 @@ Mods: {
 				DisplayName: Holy Bass Bow
 				Tooltip: ""
 			}
+
+			HallucigeniaItem: {
+				DisplayName: Hallucigenia Item
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
 			Hamis.DisplayName: Hamis
 			HamisGroup.DisplayName: Hamis Group
 			InsuranceFish.DisplayName: Insurance Fish
+			BassCritter.DisplayName: Bass
+			Hallucigenia.DisplayName: Hallucigenia
 		}
 
 		Projectiles: {

@@ -40,6 +40,13 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
             Projectile.ignoreWater = true;
         }
 
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            int paddingX = 6, paddingY = 6;
+            hitbox.Width = Projectile.width + paddingX;
+            hitbox.Height = Projectile.height + paddingY;
+            hitbox.Offset(-paddingX / 2, -paddingY / 2);
+        }
 
         public override void AI()
         {
@@ -79,7 +86,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
         {
             if (Hits >= 3) 
             {
-                Projectile.damage = (int)(Projectile.damage * 0.8f);
+                Projectile.damage = (int)(Projectile.damage * 0.85f);
             }
             Hits++;
         }
@@ -116,7 +123,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
 
 
             GameShaders.Misc["WiitaMod:WaterStream"].SetShaderTexture(ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/FuzzyLaser", AssetRequestMode.ImmediateLoad));
-            PrimitiveRenderer.RenderTrail(points, new PrimitiveSettings(WidthFunction, ColorFunction, smoothen: true, shader: GameShaders.Misc["WiitaMod:WaterStream"]), 20);
+            PrimitiveRenderer.RenderTrail(points, new PrimitiveSettings(WidthFunction, ColorFunction, smoothen: true, shader: GameShaders.Misc["WiitaMod:WaterStream"]), 30);
 
             return false;
         }
