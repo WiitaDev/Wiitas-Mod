@@ -24,7 +24,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 
 		public override void SetDefaults()
 		{
-			Item.damage = 55;
+			Item.damage = 65;
 			Item.noMelee = true;
 			Item.DamageType = DamageClass.Ranged;
 			Item.width = 36;

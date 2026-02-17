@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,6 +22,8 @@ namespace WiitaMod.NPCs
         {
             Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
+            Main.npcCatchable[Type] = true;
+            NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.TakesDamageFromHostilesWithoutBeingFriendly[NPC.type] = true;
         }
 
@@ -35,15 +38,29 @@ namespace WiitaMod.NPCs
             NPC.damage = 0;
             NPC.lifeMax = 5;
             NPC.catchItem = ItemID.Bass;
+            NPC.noGravity = true;
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                int dustHit = Dust.NewDust(NPC.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
-                Main.dust[dustHit].scale = (float)Main.rand.Next(100, 135) * 0.013f;
-            }
+            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				// Sets the spawning conditions of this NPC that is listed in the bestiary.
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+
+				// Sets the description of this NPC that is listed in the bestiary.
+				new FlavorTextBestiaryInfoElement("Bass my beloved."),
+            });
+        }
+
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life <= 0)
+                for (int i = 0; i < 10; i++)
+                {
+                    int dustHit = Dust.NewDust(NPC.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
+                    Main.dust[dustHit].scale = (float)Main.rand.Next(100, 135) * 0.013f;
+                }
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

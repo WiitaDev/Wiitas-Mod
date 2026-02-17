@@ -2,14 +2,13 @@ Wiita's Mod is a mediocre content mod that adds random stuff
 
 < Current stuff in the mod >
 - Hamis and a pet for it from Noita :) 
-- HamHat (Alternative for Magic Hat)
 - Fried Seagull
+- HamHat (Alternative for Magic Hat)
 - 11 new ranged weapons
-- 1 new mage weapon
+- 2 new mage weapons
+- 1 new melee weapon
 - 2 new summoner weapons
 - 3 new accessories
-
-This Mod Is Very VERY Early Access!
 
 <!!!> If you only want Hamis/Noita related content check the config <!!!>
 

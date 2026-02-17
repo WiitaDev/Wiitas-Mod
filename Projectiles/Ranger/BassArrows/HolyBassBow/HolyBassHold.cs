@@ -60,7 +60,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
             {
                 SoundEngine.PlaySound(SoundID.Item68, Projectile.Center);
 
-                if (Main.myPlayer == player.whoAmI)
+                if (Main.myPlayer == Projectile.owner)
                 {
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Normalize(Projectile.velocity) * 5f, ModContent.ProjectileType<HolyBassLaser>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                 }
@@ -93,7 +93,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
                 Projectile.velocity = aim;
                 Projectile.direction = Main.MouseWorld.X > player.position.X ? 1 : -1;
                 Projectile.netUpdate = true;
-                Projectile.rotation = player.itemRotation;
             }
             int dir = Projectile.direction;
             player.ChangeDir(dir); // Set player direction to where we are shooting
@@ -101,6 +100,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
             player.itemTime = 2; // Set item time to 2 frames while we are used
             player.itemAnimation = 2; // Set item animation time to 2 frames while we are used
             player.itemRotation = (float)Math.Atan2(Projectile.velocity.Y * dir, Projectile.velocity.X * dir); // Set the item rotation to where we are shooting
+            Projectile.rotation = player.itemRotation;
         }
 
         public override bool PreDraw(ref Color lightColor)

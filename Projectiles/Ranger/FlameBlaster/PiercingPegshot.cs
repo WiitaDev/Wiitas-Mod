@@ -26,6 +26,7 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
 
         public List<Vector2> points;
         public List<Vector2> velocities;
+        private Vector2 direction;
 
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -37,7 +38,10 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
             startPoint = reader.ReadVector2();
         }
 
-
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 2000; // extra padding for drawing so that laser doesn't disappear if slightly off-screen
+        }
         public override void SetDefaults()
         {
             Projectile.width = 12;
@@ -56,6 +60,11 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
             Player player = Main.player[Projectile.owner];
             Projectile.Center = player.MountedCenter + new Vector2(0, -10) + Projectile.velocity * 9.5f; // the vector offset is the itemholdout y offset
             startPoint = Projectile.Center;
+
+            float speed = Projectile.velocity.Length();
+            Vector2 direction = Main.MouseWorld - Projectile.Center;
+            direction.Normalize();
+            Projectile.velocity = direction * speed;
 
             for (int i = 0; i < 8; i++)
             {
@@ -79,6 +88,8 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
             if (Projectile.timeLeft == maxTimeLeft * Projectile.extraUpdates) 
             {
                 velocities = new List<Vector2>();
+                direction = Projectile.velocity;
+
             }
 
             if (Projectile.timeLeft > (maxTimeLeft - 1f) * Projectile.extraUpdates)
@@ -86,7 +97,7 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
 
                 points = new BezierCurve([startPoint, Projectile.Center]).GetPoints(10);
 
-                if (Projectile.penetrate <= Projectile.maxPenetrate - 2)
+                if (Projectile.penetrate <= Projectile.maxPenetrate - 2) 
                 {
                     if (Projectile.velocity != Vector2.Zero)
                     {
@@ -104,7 +115,8 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
                     Projectile.friendly = false;
                 }
                 points.Add(Projectile.Center); // Add the precise end point
-
+                // A bandaid fix to offset the last point a bit further because for some reason the laser doesn't render properly
+                points[^1] += direction.SafeNormalize(Vector2.Zero) * Vector2.Distance(Projectile.Center, startPoint) * 0.04f;
             }
             else
             {
@@ -112,9 +124,9 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
                 {
                     for (int i = 0; i < 7; i++)
                     {
-                        MistParticle mistParticle = new MistParticle(points[^1], Projectile.velocity * 0.5f + Main.rand.NextVector2Circular(4f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.25f, 255, MathHelper.ToRadians(2f));
+                        MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity * 0.5f + Main.rand.NextVector2Circular(4f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.25f, 255, MathHelper.ToRadians(2f));
                         ParticleManager.SpawnParticle(mistParticle);
-                        SmokeParticle smokeParticle = new SmokeParticle(points[^1], Main.rand.NextVector2Circular(3f, 3f), Color.Orange, 90, 0.2f, 0.70f, MathHelper.ToRadians(2), true);
+                        SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Main.rand.NextVector2Circular(3f, 3f), Color.Orange, 90, 0.2f, 0.70f, MathHelper.ToRadians(2), true);
                         ParticleManager.SpawnParticle(smokeParticle);
                     }
                 }
@@ -145,7 +157,11 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
                     }
                 }
 
+            }
 
+            for (int i = 0; i < points.Count; i++)
+            {
+                Lighting.AddLight(points[i], Color.Orange.ToVector3() * Projectile.timeLeft / (maxTimeLeft * Projectile.extraUpdates));
             }
         }
 
@@ -157,9 +173,9 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
 
             for (int i = 0; i < 7; i++)
             {
-                MistParticle mistParticle = new MistParticle(points[^1], Projectile.velocity * 0.5f + Main.rand.NextVector2Circular(4f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.25f, 255, MathHelper.ToRadians(2f));
+                MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity * 0.5f + Main.rand.NextVector2Circular(4f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.25f, 255, MathHelper.ToRadians(2f));
                 ParticleManager.SpawnParticle(mistParticle);
-                SmokeParticle smokeParticle = new SmokeParticle(points[^1], Main.rand.NextVector2Circular(3f, 3f), Color.Orange, 90, 0.2f, 0.70f, MathHelper.ToRadians(2), true);
+                SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Main.rand.NextVector2Circular(3f, 3f), Color.Orange, 90, 0.2f, 0.70f, MathHelper.ToRadians(2), true);
                 ParticleManager.SpawnParticle(smokeParticle);
             }
 
@@ -168,10 +184,8 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
 
         public override bool PreDraw(ref Color lightColor)
         {
-            for (int i = 0; i < points.Count; i++)
-            {
-                Lighting.AddLight(points[i], Color.Orange.ToVector3() * Projectile.timeLeft / (maxTimeLeft * Projectile.extraUpdates));
-            }
+            if (points == null || points.Count < 2)
+                return false;
 
 
             Color OuterColorFunction(float progress)

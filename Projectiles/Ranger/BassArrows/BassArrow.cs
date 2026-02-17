@@ -20,7 +20,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 			Projectile.height = 18;
 			Projectile.DamageType = DamageClass.Ranged;
 			Projectile.damage = 8;
-			Projectile.aiStyle = 1;
+			Projectile.aiStyle = ProjAIStyleID.Arrow;
 			Projectile.knockBack = 2f;
 			Projectile.tileCollide = true;
 			Projectile.ignoreWater = true;
@@ -36,9 +36,9 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 		{
 			if (Projectile.velocity.X >= 0) Projectile.spriteDirection = 1;
 			else Projectile.spriteDirection = -1;
-			int dust = Dust.NewDust(Projectile.Center, 1, 1, 101, 0f, 0f, 0, default(Color), 1f);
+			int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Water_Snow, 0f, 0f, 0, default(Color), 1f);
 			Main.dust[dust].scale = (float)Main.rand.Next(100, 135) * 0.013f;
-			int dust2 = Dust.NewDust(Projectile.Center, 1, 1, 34, 0f, 0f, 0, default(Color), 1f);
+			int dust2 = Dust.NewDust(Projectile.Center, 1, 1, DustID.BreatheBubble, 0f, 0f, 0, default(Color), 1f);
 			Main.dust[dust2].scale = (float)Main.rand.Next(100, 135) * 0.013f;
 
 		}
@@ -47,7 +47,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				int dustHit = Dust.NewDust(Projectile.Center, 1, 1, 5, (float)Main.rand.Next(-5, 5), (float)Main.rand.Next(5, 10), 0, default(Color), 1f);
+				int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-5, 5), (float)Main.rand.Next(5, 10), 0, default(Color), 1f);
 				Main.dust[dustHit].scale = (float)Main.rand.Next(135, 160) * 0.013f;
 				Main.dust[dustHit].noGravity = true;
 			}
@@ -59,7 +59,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				int dustHit = Dust.NewDust(Projectile.Center, 1, 1, 5, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
+				int dustHit = Dust.NewDust(Projectile.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
 				Main.dust[dustHit].scale = (float)Main.rand.Next(100, 135) * 0.013f;
 			}
 			SoundEngine.PlaySound(SoundID.NPCDeath1.WithVolumeScale(0.75f).WithPitchOffset(0.1f), Projectile.Center);

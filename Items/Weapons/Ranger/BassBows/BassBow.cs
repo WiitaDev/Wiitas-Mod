@@ -59,7 +59,6 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			recipe.AddIngredient(ItemID.Bass, 5);
 			recipe.AddIngredient(ItemID.WoodenBow, 1);
 			recipe.AddTile(TileID.WorkBenches);
-			recipe.AddCondition(Condition.NearWater);
 			recipe.Register();
 		}
 

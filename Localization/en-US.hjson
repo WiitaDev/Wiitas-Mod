@@ -237,7 +237,7 @@ Mods: {
 				Tooltip:
 					'''
 					Summons an EX-8 Guard Hound drone to protect you
-					Right click to change between weapon modes
+					Right click to switch between weapon modes
 					Requires 2 minion slots
 					'''
 			}
@@ -249,17 +249,32 @@ Mods: {
 
 			FlameBlaster: {
 				DisplayName: Flame Blaster
-				Tooltip: ""
+				Tooltip:
+					'''
+					Right click to switch between weapon modes
+					Piercing pegshot fires a laser that pierces two enemies
+					Flame blast blasts enemies with fire in a short range
+					'''
 			}
 
 			HolyBassBow: {
 				DisplayName: Holy Bass Bow
-				Tooltip: ""
+				Tooltip: Arrows turn into Holy Bass Laser
 			}
 
 			HallucigeniaItem: {
-				DisplayName: Hallucigenia Item
+				DisplayName: Hallucigenia
 				Tooltip: ""
+			}
+
+			BassBlade: {
+				DisplayName: Bass Blade
+				Tooltip: Flings Bass at enemies
+			}
+
+			WandOfBassing: {
+				DisplayName: Wand Of Bassing
+				Tooltip: Shoots a bouncing Bass Ball
 			}
 		}
 
@@ -301,6 +316,9 @@ Mods: {
 			FlameBlast.DisplayName: Flame Blast
 			HolyBassLaser.DisplayName: Holy Bass Laser
 			HolyBassHold.DisplayName: Holy Bass Hold
+			BassProjectile.DisplayName: Bass
+			BassBall.DisplayName: Bass Ball
+			HolyBassBit.DisplayName: Holy Bass Bit
 		}
 
 		Tiles: {

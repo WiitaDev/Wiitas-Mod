@@ -23,8 +23,6 @@ namespace WiitaMod.Items.Consumables.Critters
         {
             Item.DefaultToCapturedCritter(ModContent.NPCType<Hallucigenia>());
 
-            Item.width = 50;
-            Item.height = 26;
             Item.value = Item.sellPrice(0, 0, 2, 0);
             Item.rare = ItemRarityID.Blue;
         }

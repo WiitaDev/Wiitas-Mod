@@ -1,6 +1,8 @@
 0.2.5:
 - Added Flame Blaster
 - Added Holy Bass Bow
+- Added Bass Blade
+- Added Wand of Bassing
 - Added Bass Critter
 - Added Hallucigenia
-- Fixed Infernal Almanac in multiplayer
+- Hopefully fixed Infernal Almanac in multiplayer

@@ -20,9 +20,11 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.tileCollide = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 20;
+            Projectile.timeLeft = 30;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 10;
         }
 
 
@@ -35,17 +37,24 @@ namespace WiitaMod.Projectiles.Ranger.FlameBlaster
 
         public override void AI()
         {
-            Projectile.Resize(Projectile.width + 1, Projectile.height + 1);
-
-            if (Projectile.timeLeft == 20) 
+            if (Projectile.timeLeft > 10) 
             {
-                for (int i = 0; i < 60; i++)
+                Projectile.Resize(Projectile.width + 1, Projectile.height + 1);
+
+                if (Projectile.timeLeft == 30) 
                 {
-                    MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.33f, 255, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)));
-                    ParticleManager.SpawnParticle(mistParticle);
-                    SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.Yellow, 90, 0.2f, 1f, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)), true);
-                    ParticleManager.SpawnParticle(smokeParticle);
+                    for (int i = 0; i < 60; i++)
+                    {
+                        MistParticle mistParticle = new MistParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.OrangeRed, Color.WhiteSmoke, 0.33f, 255, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)));
+                        ParticleManager.SpawnParticle(mistParticle);
+                        SmokeParticle smokeParticle = new SmokeParticle(Projectile.Center, Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(40)) * Main.rand.NextFloat(0.2f, 4f), Color.Yellow, 90, 0.2f, 1f, MathHelper.ToRadians(Main.rand.NextFloat(1f, 3f)), true);
+                        ParticleManager.SpawnParticle(smokeParticle);
+                    }
                 }
+            }
+            else 
+            {
+                Projectile.velocity = Vector2.Zero;
             }
         }
 

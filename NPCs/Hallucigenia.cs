@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
@@ -20,6 +21,8 @@ namespace WiitaMod.NPCs
         {
             Main.npcFrameCount[NPC.type] = 5;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
+            Main.npcCatchable[Type] = true;
+            NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.TakesDamageFromHostilesWithoutBeingFriendly[NPC.type] = true;
         }
 
@@ -36,13 +39,26 @@ namespace WiitaMod.NPCs
             NPC.catchItem = ModContent.ItemType<HallucigeniaItem>();
         }
 
-        public override void OnKill()
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                int dustHit = Dust.NewDust(NPC.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
-                Main.dust[dustHit].scale = (float)Main.rand.Next(100, 135) * 0.013f;
-            }
+            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				// Sets the spawning conditions of this NPC that is listed in the bestiary.
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
+
+				// Sets the description of this NPC that is listed in the bestiary.
+				new FlavorTextBestiaryInfoElement("Hallucigenia on kanadalaisesta Burgess Shalen fossiiliesiintymasta tunnettu muinainen elioryhma ja Hallucigeniidae-heimon ainoa suku. Se lienee Burgess Shalen esiintyman tunnetuin fossiili. Suvussa tunnetaan toistaiseksi kolme lajia. Laji H. hongmeia kuvattiin vuonna 2012."),
+            });
+        }
+
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life <= 0)
+                for (int i = 0; i < 10; i++)
+                {
+                    int dustHit = Dust.NewDust(NPC.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
+                    Main.dust[dustHit].scale = (float)Main.rand.Next(100, 135) * 0.013f;
+                }
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -79,9 +95,9 @@ namespace WiitaMod.NPCs
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D glow = ModContent.Request<Texture2D>("WiitaMod/NPCs/Hallucigenia_Glow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            spriteBatch.Draw(glow, NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY - 2f), NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
+            Texture2D glow = ModContent.Request<Texture2D>($"{Texture}_Glow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+         
+            Main.EntitySpriteDraw(glow, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY - 4),NPC.frame, Color.White * 0.75f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
         }
     }
 }

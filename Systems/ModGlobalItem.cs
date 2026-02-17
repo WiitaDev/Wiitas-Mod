@@ -12,7 +12,7 @@ namespace WiitaMod.Systems
     {
         public override void SetDefaults(Item item)
         {
-            if (item.type == ItemID.Bass)
+            if (item.type == ItemID.Bass && !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis)
             {
                 item.DefaultToCapturedCritter(ModContent.NPCType<BassCritter>());
             }
