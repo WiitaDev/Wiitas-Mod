@@ -5,5 +5,5 @@
 - Added Wand of Bassing
 - Added Bass Staff
 - Added Bass Critter
-- Added Hallucigenia
-- Hopefully fixed Infernal Almanac in multiplayer
+- Added Hallucigenia and Hallucigenia noodles
+- Some fixes for something idk

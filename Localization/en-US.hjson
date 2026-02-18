@@ -286,6 +286,15 @@ Mods: {
 				DisplayName: Bass Staff
 				Tooltip: Summons a Bass to fight for you
 			}
+
+			HallucigeniaNoodles: {
+				DisplayName: Hallucigenia Noodles
+				Tooltip:
+					'''
+					{$CommonItemTooltip.MajorStats}
+					'Prehistoric delicacy'
+					'''
+			}
 		}
 
 		NPCs: {

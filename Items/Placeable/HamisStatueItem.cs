@@ -10,11 +10,6 @@ namespace WiitaMod.Items.Placeable
 {
     public class HamisStatueItem : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod)
-        {
-            return !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis;
-        }
-
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Hamis Statue");

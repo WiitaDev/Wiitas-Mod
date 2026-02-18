@@ -25,6 +25,7 @@ namespace WiitaMod.Items.Consumables.Critters
 
             Item.value = Item.sellPrice(0, 0, 2, 0);
             Item.rare = ItemRarityID.Blue;
+            Item.bait = 40;
         }
     }
 }
