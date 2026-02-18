@@ -7,7 +7,7 @@ Wiita's Mod is a mediocre content mod that adds random stuff
 - 11 new ranged weapons
 - 2 new mage weapons
 - 1 new melee weapon
-- 2 new summoner weapons
+- 3 new summoning weapons
 - 3 new accessories
 
 <!!!> If you only want Hamis/Noita related content check the config <!!!>

@@ -25,6 +25,11 @@ Mods: {
 				DisplayName: Crippled
 				Description: Walking hurts :(
 			}
+
+			BassSummonBuff: {
+				DisplayName: Bass
+				Description: The Bass will (try to) fight for you
+			}
 		}
 
 		Items: {
@@ -276,6 +281,11 @@ Mods: {
 				DisplayName: Wand Of Bassing
 				Tooltip: Shoots a bouncing Bass Ball
 			}
+
+			BassStaff: {
+				DisplayName: Bass Staff
+				Tooltip: Summons a Bass to fight for you
+			}
 		}
 
 		NPCs: {
@@ -319,6 +329,7 @@ Mods: {
 			BassProjectile.DisplayName: Bass
 			BassBall.DisplayName: Bass Ball
 			HolyBassBit.DisplayName: Holy Bass Bit
+			BassSummon.DisplayName: Bass
 		}
 
 		Tiles: {

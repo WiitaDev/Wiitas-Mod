@@ -58,7 +58,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.Bass, 5);
-            recipe.AddIngredient(ItemID.Hellstone, 12);
+            recipe.AddIngredient(ItemID.HellstoneBar, 12);
             recipe.AddTile(TileID.Hellforge);
 			recipe.Register();
 		}

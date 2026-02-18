@@ -3,6 +3,7 @@
 - Added Holy Bass Bow
 - Added Bass Blade
 - Added Wand of Bassing
+- Added Bass Staff
 - Added Bass Critter
 - Added Hallucigenia
 - Hopefully fixed Infernal Almanac in multiplayer

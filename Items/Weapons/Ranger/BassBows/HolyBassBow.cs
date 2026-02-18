@@ -36,7 +36,7 @@ namespace WiitaMod.Items.Weapons.Ranger.BassBows
 			Item.knockBack = 3;
 			Item.value = Item.sellPrice(0, 3, 0, 0);
 			Item.rare = ItemRarityID.Orange;
-            Item.autoReuse = true;
+            Item.autoReuse = false;
 			Item.shoot = ModContent.ProjectileType<HolyBassHold>();
 			Item.useAmmo = AmmoID.Arrow;
 			Item.shootSpeed = 1f;

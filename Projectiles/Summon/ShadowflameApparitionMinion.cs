@@ -34,7 +34,7 @@ namespace WiitaMod.Projectiles.Summon
             Projectile.penetrate = -1;
 
             Projectile.CloneDefaults(ProjectileID.Spazmamini);
-            Projectile.aiStyle = 66;
+            Projectile.aiStyle = ProjAIStyleID.MiniTwins;
             Projectile.friendly = true;
             Projectile.minion = true;
             Projectile.minionSlots = 1f;

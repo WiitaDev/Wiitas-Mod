@@ -112,7 +112,6 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
             }
         }
 
-
         public override bool PreDraw(ref Color lightColor)
         {
             if (points == null || points.Count < 2)

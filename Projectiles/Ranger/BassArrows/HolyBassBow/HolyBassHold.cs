@@ -25,7 +25,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows.HolyBassBow
 
         public const float maxTimeLeft = 40f;
 
-        public const float ChargeTime = 20f;
+        public float ChargeTime = 20f;
 
 
         public override void SetDefaults()

@@ -56,7 +56,8 @@ namespace WiitaMod.Items.Weapons.Ranger
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.WaterGun);
+            recipe.AddIngredient(ItemID.SlimeGun);
+            recipe.AddIngredient(ItemID.PurificationPowder, 5);
 			recipe.AddRecipeGroup("PrehardTier2", 12);
 			recipe.AddTile(TileID.Anvils);
 			recipe.Register();

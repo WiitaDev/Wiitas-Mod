@@ -222,7 +222,7 @@ namespace WiitaMod.Projectiles.Summon.GunDrone
                     shootPosition,
                     shootDirection * (IsSecondary ? 17.5f : 15f),
                     projectileType,
-                    IsSecondary ? Projectile.damage : Projectile.damage * 3,
+                    IsSecondary ? Projectile.damage : Projectile.damage * 2,
                     Projectile.knockBack,
                     Projectile.owner
                 )];
