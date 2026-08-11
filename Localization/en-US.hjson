@@ -295,14 +295,19 @@ Mods: {
 					'Prehistoric delicacy'
 					'''
 			}
+
+			CrystalRockItem: {
+				DisplayName: Crystal Rock Block
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
 			Hamis.DisplayName: Hamis
 			HamisGroup.DisplayName: Hamis Group
-			InsuranceFish.DisplayName: Insurance Fish
 			BassCritter.DisplayName: Bass
 			Hallucigenia.DisplayName: Hallucigenia
+			CrystalBoss.DisplayName: Kapitalismi
 		}
 
 		Projectiles: {
@@ -339,6 +344,7 @@ Mods: {
 			BassBall.DisplayName: Bass Ball
 			HolyBassBit.DisplayName: Holy Bass Bit
 			BassSummon.DisplayName: Bass
+			CrystalShot.DisplayName: Crystal Shot
 		}
 
 		Tiles: {
@@ -376,6 +382,13 @@ Mods: {
 					Label: Screenshake
 					Tooltip: Disables/Enables all screenshake effects
 				}
+			}
+		}
+
+		Biomes: {
+			CrystalCavernsBiome: {
+				DisplayName: Crystal Caverns Biome
+				TownNPCDialogueName: the Crystal Caverns Biome
 			}
 		}
 	}

@@ -18,7 +18,7 @@ using WiitaMod.Items.Placeable;
 
 namespace WiitaMod.NPCs
 {
-    public class Hamis : ModNPC
+    public class Hamis : ModNPC // BEHOLD THE WORST AI CODE THAT YOU HAVE EVER SEEN!
     {
         public override void SetStaticDefaults()
         {
@@ -601,12 +601,12 @@ namespace WiitaMod.NPCs
                 return;
             }
 
-            if (target.X < NPC.Center.X && NPC.velocity.X > -4 * maxSpeedMultiplier && NPC.HasValidTarget || (NPC.velocity.X < 4 * maxSpeedMultiplier && NPC.confused)) // AND I'm not at max "left" velocity
+            if (target.X < NPC.Center.X && NPC.velocity.X > -3 * maxSpeedMultiplier && NPC.HasValidTarget || (NPC.velocity.X < 3 * maxSpeedMultiplier && NPC.confused)) // AND I'm not at max "left" velocity
             {
                 NPC.velocity.X -= Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the left
             }
 
-            if (target.X > NPC.Center.X && NPC.velocity.X < 4 * maxSpeedMultiplier && NPC.HasValidTarget || (NPC.velocity.X > -4 * maxSpeedMultiplier && NPC.confused)) // AND I'm not at max "right" velocity
+            if (target.X > NPC.Center.X && NPC.velocity.X < 3 * maxSpeedMultiplier && NPC.HasValidTarget || (NPC.velocity.X > -3 * maxSpeedMultiplier && NPC.confused)) // AND I'm not at max "right" velocity
             {
                 NPC.velocity.X += Main.rand.NextFloat(0.26f, 0.46f) * confused; // accelerate to the right
             }

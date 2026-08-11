@@ -155,8 +155,7 @@ namespace WiitaMod.Systems.Primitives // Yoinked from the public calamity reposi
                 return true;
             }
 
-            // Due to the first point being manually added, points should be added starting at the second position instead of the first.
-            PositionsIndex = 1;
+            PositionsIndex = 0;
 
             // Create the control points for the spline.
             List<Vector2> controlPoints = new();
@@ -211,8 +210,6 @@ namespace WiitaMod.Systems.Primitives // Yoinked from the public calamity reposi
                 PositionsIndex++;
             }
 
-            // Manually insert the front and end points.
-            MainPositions[0] = controlPoints.First();
             MainPositions[PositionsIndex] = controlPoints.Last();
             PositionsIndex++;
             return true;

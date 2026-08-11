@@ -1,9 +1,3 @@
-0.2.5:
-- Added Flame Blaster
-- Added Holy Bass Bow
-- Added Bass Blade
-- Added Wand of Bassing
-- Added Bass Staff
-- Added Bass Critter
-- Added Hallucigenia and Hallucigenia noodles
-- Some fixes for something idk
+0.3.0:
+- Added Crystal Caverns biome
+- Added Kapitalismi boss
