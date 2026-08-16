@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
+using WiitaMod.Systems;
 using WiitaMod.Tiles;
 using WiitaMod.World.CrystalCaverns;
 
@@ -40,7 +41,7 @@ namespace WiitaMod.World
             }
 
             int index = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
-            if (index != -1)
+            if (index != -1 && !ModContent.GetInstance<WiitaModServerConfig>().OnlyHamis)
             {
                 tasks.Insert(index + 1, new CrystalCavernsGenPass("Crystal Caverns", 1.0));
             }

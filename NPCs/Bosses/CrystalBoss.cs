@@ -1,13 +1,15 @@
-using System;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles;
+using WiitaMod.Particles;
+using WiitaMod.Particles.ParticleSystems;
 using WiitaMod.Systems;
+using WiitaMod.Systems.BossSystems;
 
 namespace WiitaMod.NPCs.Bosses
 {
@@ -20,6 +22,7 @@ namespace WiitaMod.NPCs.Bosses
         }
 
         public ref float AttackType => ref NPC.ai[0];
+        public ref float AttackTimer => ref NPC.localAI[1];
 
 
         public override void SetStaticDefaults()
@@ -52,11 +55,16 @@ namespace WiitaMod.NPCs.Bosses
             NPC.SpawnWithHigherTime(30);
             NPC.boss = true;
             NPC.npcSlots = 10f;
-            
+
             if (!Main.dedServ)
             {
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/Amethyst");
             }
+        }
+
+        public override void OnKill()
+        {
+            NPC.SetEventFlagCleared(ref DownedBossSystem.downedKapitalismiBoss, -1);
         }
 
         public override void AI()
@@ -70,23 +78,11 @@ namespace WiitaMod.NPCs.Bosses
                 NPC.TargetClosest();
 
 
-
-            if (Main.rand.NextBool(40)) 
+            if(AttackType == 0) 
             {
-                Vector2 dir = player.Center - NPC.Center;
-                dir.Normalize();
-                dir *= 5f;
-
-                SoundEngine.PlaySound(SoundID.Item109.WithVolumeScale(0.75f).WithPitchOffset(0.1f), NPC.Center);
-
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, dir,ModContent.ProjectileType<CrystalShot>(), NPC.damage, 2f, ai1: NPC.whoAmI);
-                    Main.projectile[proj].friendly = false;
-                    Main.projectile[proj].hostile = true;
-                
-                }
+                ProjectileAttack(player);
             }
+
 
             if (player.dead || Math.Abs(NPC.Center.X - Main.player[NPC.target].Center.X) / 16f > 150) // Despawn if farther than 150 block or if player dead
             {
@@ -96,9 +92,8 @@ namespace WiitaMod.NPCs.Bosses
                 return;
             }
 
-           
 
-            if (Main.player[NPC.target] != null && AttackType == 0) 
+            if (Main.player[NPC.target] != null && AttackType == 0)
             {
                 float hoverHeight = -210f;
 
@@ -131,6 +126,24 @@ namespace WiitaMod.NPCs.Bosses
 
         }
 
+        private void ProjectileAttack(Player target)
+        {
+            if (Main.rand.NextBool(40))
+            {
+                Vector2 dir = target.Center - NPC.Center;
+                dir.Normalize();
+                dir *= 5f;
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, dir, ModContent.ProjectileType<CrystalShot>(), NPC.damage, 2f, ai1: NPC.whoAmI);
+                    Main.projectile[proj].friendly = false;
+                    Main.projectile[proj].hostile = true;
+
+                }
+            }
+        }
+
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
@@ -143,14 +156,21 @@ namespace WiitaMod.NPCs.Bosses
             });
         }
 
+        public override void BossLoot(ref int potionType)
+        {
+            potionType = ItemID.HealingPotion;
+        }
+
         public override void HitEffect(NPC.HitInfo hit)
         {
-            if (NPC.life <= 0)
-                for (int i = 0; i < 10; i++)
+            if (NPC.life <= 0) 
+            {
+                for (int i = 0; i < 50; i++)
                 {
-                    int dustHit = Dust.NewDust(NPC.Center, 1, 1, DustID.Blood, (float)Main.rand.Next(-3, 3), (float)Main.rand.Next(-3, 3), 0, default(Color), 1f);
-                    Main.dust[dustHit].scale = (float)Main.rand.Next(100, 135) * 0.013f;
+                    Particle particle = new GlowOrbParticle(NPC.Center, Main.rand.NextVector2Circular(12, 12), false, Main.rand.Next(40, 70), Main.rand.NextFloat(1f, 2.65f), new Vector2(0.75f, 1f), Color.AliceBlue, true);
+                    ParticleManager.SpawnParticle(particle);
                 }
+            }
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

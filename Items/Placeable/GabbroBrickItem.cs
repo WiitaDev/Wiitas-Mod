@@ -5,7 +5,7 @@ using WiitaMod.Tiles;
 
 namespace WiitaMod.Items.Placeable
 {
-    public class CrystalRockItem : ModItem
+    public class GabbroBrickItem : ModItem
     {
 
         public override bool IsLoadingEnabled(Mod mod)
@@ -20,7 +20,7 @@ namespace WiitaMod.Items.Placeable
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<CrystalRock>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<GabbroBrick>());
 
         }
     }

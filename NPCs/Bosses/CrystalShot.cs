@@ -16,9 +16,10 @@ namespace WiitaMod.NPCs.Bosses
 	{
         public override string Texture => $"WiitaMod/Assets/Textures/Empty";
 
-
         public ref float TargetId => ref Projectile.ai[0];
         public ref float BossId => ref Projectile.ai[1];
+
+        private const int maxTimeleft = 240;
 
 
 
@@ -31,7 +32,7 @@ namespace WiitaMod.NPCs.Bosses
 			Projectile.tileCollide = true;
 			Projectile.ignoreWater = true;
 			Projectile.penetrate = 1;
-            Projectile.timeLeft = 240;
+            Projectile.timeLeft = maxTimeleft;
 			Projectile.friendly = false;
 			Projectile.hostile = true;
 		}
@@ -51,23 +52,25 @@ namespace WiitaMod.NPCs.Bosses
             Player player = Main.player[(int)TargetId];
 
 
-            if (Projectile.timeLeft >= 239) offset = Main.rand.NextVector2Circular(48f, 48f);
+            if (Projectile.timeLeft >= maxTimeleft - 1) offset = Main.rand.NextVector2CircularEdge(48f, 48f);
 
-            if (Projectile.timeLeft >= 180) 
+            if (Projectile.timeLeft >= maxTimeleft - 60) 
             {
-                if (Projectile.timeLeft == 180) 
+                Projectile.Center = Main.npc[(int)BossId].Center + offset;
+
+                if (Projectile.timeLeft == maxTimeleft - 60) 
                 {
                     Vector2 dir = player.Center - Projectile.Center;
                     dir.Normalize();
                     dir *= 5f;
                     Projectile.velocity = dir;
+                    SoundEngine.PlaySound(SoundID.Item109.WithVolumeScale(0.75f).WithPitchOffset(0.1f), Projectile.Center);
                 }
 
-                Projectile.Center = Main.npc[(int)BossId].Center + offset;
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool((int)MathHelper.Clamp((float)(Projectile.timeLeft - 180) / (float)(maxTimeleft - 180) * 8f, 1, 10)))
                 {
-                    Vector2 dir = Main.rand.NextVector2Circular(1f, 1f);
-                    Particle particle = new GlowOrbParticle(Projectile.Center + dir * 16, -dir, false, 20, Main.rand.NextFloat(0.75f, 0.85f), new Vector2(1f, 1f), Color.AliceBlue, true);
+                    Vector2 dir = Main.rand.NextVector2CircularEdge(1f, 1f);
+                    Particle particle = new GlowOrbParticle(Projectile.Center + dir * 10, -dir, false, 10, Main.rand.NextFloat(0.55f, 0.65f), new Vector2(0.75f, 1f), Color.AliceBlue, true);
                     ParticleManager.SpawnParticle(particle);
                 }
 
@@ -104,7 +107,7 @@ namespace WiitaMod.NPCs.Bosses
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Projectile.timeLeft >= 180) return false;
+            if (Projectile.timeLeft >= maxTimeleft - 60) return false;
 
             Texture2D glow = ModContent.Request<Texture2D>("WiitaMod/Assets/Textures/Glow", AssetRequestMode.ImmediateLoad).Value;
             Color glowColor = Color.CadetBlue;

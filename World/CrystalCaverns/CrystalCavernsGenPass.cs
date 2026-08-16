@@ -1,11 +1,11 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using System;
-using System.Collections.Generic;
-using Terraria.IO;
 using WiitaMod.Tiles;
 
 namespace WiitaMod.World.CrystalCaverns
@@ -45,13 +45,13 @@ namespace WiitaMod.World.CrystalCaverns
                     {
                         if (WorldGen.genRand.NextBool())
                         {
-                            minPercent = 0.15f;
+                            minPercent = 0.20f;
                             maxPercent = 0.40f;
                         }
                         else
                         {
                             minPercent = 0.60f;
-                            maxPercent = 0.85f;
+                            maxPercent = 0.80f;
                         }
                     }
                     else if (stage == 1)
@@ -132,7 +132,7 @@ namespace WiitaMod.World.CrystalCaverns
 
                 Tile tile = Framing.GetTileSafely(x, y);
 
-                if (tile.TileType == TileID.BlueDungeonBrick || tile.TileType == TileID.GreenDungeonBrick || tile.TileType == TileID.PinkDungeonBrick 
+                if (tile.TileType == TileID.BlueDungeonBrick || tile.TileType == TileID.GreenDungeonBrick || tile.TileType == TileID.PinkDungeonBrick
                     || tile.TileType == TileID.Sand || tile.TileType == TileID.JungleGrass || tile.TileType == TileID.SnowBlock)
                     return true;
             }
@@ -168,6 +168,8 @@ namespace WiitaMod.World.CrystalCaverns
             AddOuterPatches(centerX, centerY, radius);
             ClearLongMoss(centerX, centerY, radius);
             GenerateShrine(centerX, centerY, radius);
+            PlaceGemstones(centerX, centerY, radius);
+
         }
 
         private void ConvertTerrain(int centerX, int centerY, int radius)
@@ -207,7 +209,7 @@ namespace WiitaMod.World.CrystalCaverns
                     if (!IsNormalCaveBlock(tile.TileType))
                         continue;
 
-                    tile.TileType = (ushort)ModContent.TileType<CrystalRock>();
+                    tile.TileType = (ushort)ModContent.TileType<Gabbro>();
                 }
             }
         }
@@ -274,9 +276,51 @@ namespace WiitaMod.World.CrystalCaverns
                     if (!IsNormalCaveBlock(tile.TileType))
                         continue;
 
-                    tile.TileType = (ushort)ModContent.TileType<CrystalRock>();
+                    tile.TileType = (ushort)ModContent.TileType<Gabbro>();
                 }
             }
+        }
+
+
+        private void PlaceGemstones(int centerX, int centerY, int radius)
+        {
+            for (int x = centerX - radius + 10; x <= centerX + radius - 10; x++)
+            {
+                for (int y = centerY - radius + 10; y <= centerY + radius - 10; y++)
+                {
+                    if (!WorldGen.InWorld(x, y, 20))
+                        continue;
+
+                    if (WorldGen.genRand.NextBool(18) == false)
+                        continue;
+
+                    Tile tile = Framing.GetTileSafely(x, y);
+
+                    if (tile.HasTile)
+                        continue;
+
+                    bool touchingCrystal =
+                        IsGabbro(x + 1, y) ||
+                        IsGabbro(x - 1, y) ||
+                        IsGabbro(x, y + 1) ||
+                        IsGabbro(x, y - 1);
+
+                    if (!touchingCrystal)
+                        continue;
+
+                    WorldGen.PlaceTile(x, y, TileID.ExposedGems, true, true, style: WorldGen.genRand.Next(0,7));
+                }
+            }
+        }
+
+        private bool IsGabbro(int x, int y)
+        {
+            if (!WorldGen.InWorld(x, y))
+                return false;
+
+            Tile tile = Framing.GetTileSafely(x, y);
+
+            return tile.HasTile && tile.TileType == ModContent.TileType<Gabbro>();
         }
 
         private void GenerateShrine(int centerX, int centerY, int radius)
@@ -296,11 +340,11 @@ namespace WiitaMod.World.CrystalCaverns
 
             Point moundPoint = new Point(shrineX, shrineY + chamberSize / 2);
 
-            WorldUtils.Gen(shrinePoint, new Shapes.Slime(outerSize, xScale, 1f), Actions.Chain(new Modifiers.Blotches(2, 0.4f), new Actions.SetTile((ushort)ModContent.TileType<CrystalRock>()), new Actions.SetFrames(frameNeighbors: true)));
+            WorldUtils.Gen(shrinePoint, new Shapes.Slime(outerSize, xScale, 1f), Actions.Chain(new Modifiers.Blotches(2, 0.4f), new Actions.SetTile((ushort)ModContent.TileType<Gabbro>()), new Actions.SetFrames(frameNeighbors: true)));
 
             WorldUtils.Gen(shrinePoint, new Shapes.Slime(chamberSize, xScale, 1f), Actions.Chain(new Modifiers.Blotches(2, 0.4f), new Actions.ClearTile(frameNeighbors: true).Output(slimeShapeData)));
 
-            WorldUtils.Gen(moundPoint, new Shapes.Mound((int)(chamberSize * 0.9f), (int)(chamberSize * 0.4f)), Actions.Chain(new Modifiers.Blotches(2, 1f), new Actions.SetTile((ushort)ModContent.TileType<CrystalRock>()), new Actions.SetFrames(frameNeighbors: true).Output(moundShapeData)));
+            WorldUtils.Gen(moundPoint, new Shapes.Mound((int)(chamberSize * 0.9f), (int)(chamberSize * 0.4f)), Actions.Chain(new Modifiers.Blotches(2, 1f), new Actions.SetTile((ushort)ModContent.TileType<Gabbro>()), new Actions.SetFrames(frameNeighbors: true).Output(moundShapeData)));
 
             slimeShapeData.Subtract(moundShapeData, shrinePoint, moundPoint);
         }

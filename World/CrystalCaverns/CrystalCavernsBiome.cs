@@ -36,7 +36,7 @@ namespace WiitaMod.World.CrystalCaverns
 
         public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
-            BlockCount = tileCounts[ModContent.TileType<CrystalRock>()];
+            BlockCount = tileCounts[ModContent.TileType<Gabbro>()];
         }
     }
 }

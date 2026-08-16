@@ -296,8 +296,13 @@ Mods: {
 					'''
 			}
 
-			CrystalRockItem: {
-				DisplayName: Crystal Rock Block
+			GabbroBrickItem: {
+				DisplayName: Gabbro Brick
+				Tooltip: ""
+			}
+
+			GabbroItem: {
+				DisplayName: Gabbro Block
 				Tooltip: ""
 			}
 		}
@@ -387,9 +392,14 @@ Mods: {
 
 		Biomes: {
 			CrystalCavernsBiome: {
-				DisplayName: Crystal Caverns Biome
-				TownNPCDialogueName: the Crystal Caverns Biome
+				DisplayName: Crystal Caverns
+				TownNPCDialogueName: the Crystal Caverns
 			}
+		}
+
+		Conditions: {
+			DownedKapitalismiBoss: After defeating {$NPCs.CrystalBoss.DisplayName}
+			InCrystalCaverns: In the Crystal Caverns
 		}
 	}
 }

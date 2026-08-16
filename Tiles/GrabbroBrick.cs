@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace WiitaMod.Tiles
 {
-	public class CrystalRock : ModTile
+	public class GabbroBrick : ModTile
 	{
 		public override void SetStaticDefaults() {
 			Main.tileSolid[Type] = true;

@@ -65,7 +65,7 @@ namespace WiitaMod.Projectiles.Ranger.BassArrows
             Projectile.ai[0]++;
             if (Projectile.ai[0] >= 90)
             {
-                float maxDetectRadius = 400f; // The maximum radius at which a projectile can detect a target
+                float maxDetectRadius = 200f; // The maximum radius at which a projectile can detect a target
                 float projSpeed = 5f + Projectile.ai[0] * 0.05f; // The speed at which the projectile moves towards the target
                 float turnSpeed = 75f + Projectile.ai[0] * 0.1f;
                 Projectile.friendly = true;
