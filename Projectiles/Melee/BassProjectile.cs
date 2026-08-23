@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WiitaMod.Projectiles
+namespace WiitaMod.Projectiles.Melee
 {
 	public class BassProjectile : ModProjectile
 	{

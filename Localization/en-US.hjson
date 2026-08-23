@@ -305,6 +305,21 @@ Mods: {
 				DisplayName: Gabbro Block
 				Tooltip: ""
 			}
+
+			CrystalWhip: {
+				DisplayName: Shatter Gem
+				Tooltip:
+					'''
+					{$CommonItemTooltip.Whips}
+					Sticks up to 4 shatter shards onto enemies
+					Shatter shards explode from enemies hit by summons
+					'''
+			}
+
+			ParacrystalliteYoyo: {
+				DisplayName: Paracrystallite
+				Tooltip: Breaks into homing shards after 10 hits
+			}
 		}
 
 		NPCs: {
@@ -350,6 +365,9 @@ Mods: {
 			HolyBassBit.DisplayName: Holy Bass Bit
 			BassSummon.DisplayName: Bass
 			CrystalShot.DisplayName: Crystal Shot
+			CrystalWhipProjectile.DisplayName: Shatter Gem
+			ParacrystalliteYoyoProjectile.DisplayName: Paracrystallite Yoyo Projectile
+			ParacrystalliteShardProjectile.DisplayName: Paracrystallite Shard Projectile
 		}
 
 		Tiles: {

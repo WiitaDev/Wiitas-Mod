@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WiitaMod.Projectiles;
+using WiitaMod.Projectiles.Melee;
 using WiitaMod.Systems;
 
 namespace WiitaMod.Items.Weapons.Melee

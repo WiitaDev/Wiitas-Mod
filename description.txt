@@ -1,14 +1,16 @@
-Wiita's Mod is a mediocre content mod that adds random stuff
+Wiita's Mod is a mediocre content mod that adds random stuff to the base game
 
 < Current stuff in the mod >
+- the Crystal Caverns biome
+- 1 boss
 - Hamis and a pet for it from Noita :) 
 - Fried Seagull
 - Hallucigenia
-- 11 new ranged weapons
-- 2 new mage weapons
-- 1 new melee weapon
-- 3 new summoning weapons
-- 3 new accessories
+- 11 ranged weapons
+- 2 mage weapons
+- 2 melee weapons
+- 4 summoning weapons
+- 3 accessories
 - Some other stuff not worth mentioning
 
 <!!!> If you only want Hamis/Noita related content check the config <!!!>

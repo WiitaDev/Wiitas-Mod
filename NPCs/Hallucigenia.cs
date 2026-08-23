@@ -73,7 +73,7 @@ namespace WiitaMod.NPCs
 
         public override void FindFrame(int frameHeight)
         {
-            NPC.spriteDirection = NPC.direction;
+            NPC.spriteDirection = -NPC.direction;
             if (NPC.velocity != Vector2.Zero) 
             {
                 NPC.frameCounter++;
@@ -97,7 +97,7 @@ namespace WiitaMod.NPCs
         {
             Texture2D glow = ModContent.Request<Texture2D>($"{Texture}_Glow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
          
-            Main.EntitySpriteDraw(glow, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY - 4),NPC.frame, Color.White * 0.75f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(glow, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY - 4),NPC.frame, Color.White * 0.75f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, NPC.spriteDirection == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
         }
     }
 }
