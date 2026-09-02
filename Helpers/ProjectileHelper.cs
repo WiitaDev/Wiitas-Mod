@@ -15,16 +15,13 @@ public static class ProjectileHelper
 
         projectile.tileCollide = false;
         projectile.alpha = 255;
-        projectile.position = projectile.Center;
+        Vector2 center = projectile.Center;
         projectile.width = Width;
         projectile.height = Height;
-        projectile.position.X -= projectile.width / 2;
-        projectile.position.Y -= projectile.height / 2;
+        projectile.Center = center;
+        projectile.penetrate = -1;
 
         projectile.Damage();
-
-        Main.projectileIdentity[projectile.owner, projectile.identity] = -1;
-
 
 
         if (dust)

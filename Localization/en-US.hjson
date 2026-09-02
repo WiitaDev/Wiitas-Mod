@@ -320,6 +320,11 @@ Mods: {
 				DisplayName: Paracrystallite
 				Tooltip: Breaks into homing shards after 10 hits
 			}
+
+			CrystallineRupture: {
+				DisplayName: Crystalline Rupture
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -366,8 +371,10 @@ Mods: {
 			BassSummon.DisplayName: Bass
 			CrystalShot.DisplayName: Crystal Shot
 			CrystalWhipProjectile.DisplayName: Shatter Gem
-			ParacrystalliteYoyoProjectile.DisplayName: Paracrystallite Yoyo Projectile
-			ParacrystalliteShardProjectile.DisplayName: Paracrystallite Shard Projectile
+			ParacrystalliteYoyoProjectile.DisplayName: Paracrystallite Yoyo
+			ParacrystalliteShardProjectile.DisplayName: Paracrystallite Shard
+			CrystallineRuptureCrystal.DisplayName: Crystalline Rupture Crystal
+			CrystallineRuptureHold.DisplayName: Crystalline Rupture Hold
 		}
 
 		Tiles: {

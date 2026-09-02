@@ -40,19 +40,14 @@ namespace WiitaMod.Systems
 
         public void UpdateShards(NPC npc)
         {
-            if(Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
                 shardLifetime = 480;
 
             if (shardStacks >= 4)
                 return;
 
-            Main.rand.SetSeed(npc.whoAmI * 1000);
-
-            for (int i = 0; i < shardStacks; i++)
-            {
-                ShardOffsets[i] = Main.rand.NextVector2FromRectangle(new Rectangle(-npc.width / 2, -npc.height / 2, npc.width, npc.height));
-                ShardRotations[i] = Main.rand.NextFloat(MathHelper.TwoPi);
-            }
+            ShardOffsets[shardStacks] = Main.rand.NextVector2FromRectangle(new Rectangle(-npc.width / 2, -npc.height / 2, npc.width, npc.height));
+            ShardRotations[shardStacks] = Main.rand.NextFloat(MathHelper.TwoPi);
         }
 
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
@@ -83,6 +78,7 @@ namespace WiitaMod.Systems
 
             if (stacks > 0)
             {
+                modifiers.HideCombatText();
                 int bonus = projectile.originalDamage * crystalBonus[stacks] / 100;
                 modifiers.FlatBonusDamage += bonus;
             }
@@ -95,9 +91,10 @@ namespace WiitaMod.Systems
 
             var crystal = npc.GetGlobalNPC<ModGlobalNPC>();
 
-
             if (crystal.shardStacks > 0)
             {
+                CombatText.NewText(npc.Hitbox, Color.DodgerBlue, damageDone, crystal.shardStacks == 4);
+
                 SoundEngine.PlaySound(SoundID.Item122.WithPitchOffset(0.7f).WithVolumeScale(0.6f), npc.Center);
                 SoundEngine.PlaySound(SoundID.NPCDeath56.WithPitchOffset(0.75f).WithVolumeScale(0.7f), npc.Center);
 
@@ -157,7 +154,7 @@ namespace WiitaMod.Systems
             {
                 crystal.shardStacks = 0;
 
-                if(Main.dedServ)
+                if (Main.dedServ)
                     crystal.SendShardUpdate(npc);
             }
 

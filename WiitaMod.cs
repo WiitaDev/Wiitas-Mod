@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using WiitaMod.Particles;
 using WiitaMod.Particles.ParticleSystems;
 using WiitaMod.Systems;
 using WiitaMod.Systems.Primitives;
@@ -107,6 +109,18 @@ namespace WiitaMod
 
                         if (crystal.shardStacks <= 0)
                             return;
+
+                        SoundEngine.PlaySound(SoundID.Item122.WithPitchOffset(0.7f).WithVolumeScale(0.6f), npc.Center);
+                        SoundEngine.PlaySound(SoundID.NPCDeath56.WithPitchOffset(0.75f).WithVolumeScale(0.7f), npc.Center);
+
+                        float[] crystalBonus = [1f, 1.15f, 1.25f, 2f, 3f];
+                        float mult = crystalBonus[crystal.shardStacks];
+
+                        for (int i = 0; i < 5 * mult * 1.5f; i++)
+                        {
+                            Particle particle = new GlowOrbParticle(npc.Center, Main.rand.NextVector2Circular(1.5f * mult, 1.5f * mult), false, (int)(40 * mult), Main.rand.NextFloat(0.6f, 0.8f) + mult * 0.15f, new Vector2(0.75f, 1f), Color.Lerp(Color.DodgerBlue, Color.Aquamarine, Main.rand.NextFloat()), true);
+                            ParticleManager.SpawnParticle(particle);
+                        }
 
                         crystal.shardStacks = 0;
                         crystal.shardLifetime = 0;
